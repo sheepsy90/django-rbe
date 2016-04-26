@@ -1,0 +1,63 @@
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/static/js/qrcode.min.js"></script>
+
+<style>
+.qrcode img {
+  width: 50px;
+  height: 50px;
+    margin: 0 auto;
+}
+.qrcode {
+    text-align: center;
+    margin: 0 auto;
+}
+
+    .vertical-space {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    .table td {
+   text-align: center;
+}
+</style>
+
+
+<div class="row vertical-space">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+      <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+          <input type="text" class="form-control" placeholder="Search for...">
+      </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+<div class="col-lg-3"></div>
+</div><!-- /.row -->
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+    <table class="table">
+        <tr>
+            <td>Registration date</td>
+            <td>Description</td>
+            <td>Identifier</td>
+            <td>QR code</td>
+        </tr>
+        {% for object in objects %}
+            <tr class="active">
+                <td>{{ object.registration_date }}</td>
+                <td>{{ object.short_description }}</td>
+                <td>{{ object.unique_identifier }}</td>
+                <td><div class="qrcode" style="width: 50px; height: 50px" id='qr_code_{{ object.unique_identifier }}'></div></td>
+                <script>new QRCode(document.getElementById("qr_code_{{ object.unique_identifier }}"), "{{ object.unique_identifier }}");</script>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <div class="col-sm-1"></div>
+ </div>
