@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 
-import inventory
+import inventory.views as iventory_view
 
 urlpatterns = patterns('',
-     url(r'overview/$', 'inventory.views.overview'),
-     #url(r'create/$', 'inventory.views.create'),
+     url(r'overview/$', iventory_view.overview),
+     url(r'details/(?P<object_id>[0-9]+)$', iventory_view.details),
 )

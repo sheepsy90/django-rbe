@@ -43,6 +43,7 @@
     <div class="col-sm-10">
     <table class="table">
         <tr>
+            <td>Link</td>
             <td>Registration date</td>
             <td>Description</td>
             <td>Identifier</td>
@@ -50,6 +51,7 @@
         </tr>
         {% for object in objects %}
             <tr class="active">
+                <td><a href="/inventory/details/{{ object.unique_identifier}}">Details</a></td>
                 <td>{{ object.registration_date }}</td>
                 <td>{{ object.short_description }}</td>
                 <td>{{ object.unique_identifier }}</td>
