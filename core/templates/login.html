@@ -1,0 +1,30 @@
+{%  extends 'base.html' %}
+
+{% block content%}
+    <div style="width:100%; text-align: center; margin: 20px auto;">
+    <form method="post" action="{% url 'login' %}" style="width: 50%; margin: 0 auto;">
+        {% csrf_token %}
+         {% for field in form %}
+            <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+             {% for error in field.errors %}
+                 <div class="alert alert-danger" role="alert">{{ error }}</div>
+             {% endfor %}
+            <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+             {{ field }}
+                {% if field.help_text %}
+                  <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div style="width: 100%; text-align: right; margin-top: 5px;">
+            <button class="btn btn-info" type="submit" value="login">Login</button>
+        </div>
+        {{ form.error }}
+    </form>
+
+    <div style="margin-top: 25px">
+        <a class="btn btn-sm btn-info" href="{% url 'password_reset' %}">Lost password?</a>
+        <a class="btn btn-sm btn-info" href="{% url 'register' %}">Register</a>
+    </div>
+</div>
+{% endblock %}

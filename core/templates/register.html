@@ -1,0 +1,33 @@
+{%  extends 'base.html' %}
+
+{% block content%}
+
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username}}</td>
+        </tr>
+        <tr>
+            <td>{{ form.email.label_tag }}</td>
+            <td>{{ form.email}}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password_repeat.label_tag }}</td>
+            <td>{{ form.password_repeat }}</td>
+        </tr>
+
+        {{ form.errors }}
+        {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+        </table>
+        <input type="submit" value="login" />
+        <input type="hidden" name="next" value="Register" />
+    </form>
+{% endblock %}

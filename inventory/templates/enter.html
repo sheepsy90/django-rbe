@@ -1,0 +1,54 @@
+{%  extends 'base.html' %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
+
+
+<style>
+
+    form {
+        width: 40%;
+        margin: 0 auto;
+    }
+
+    form label {
+        display: block;
+    }
+</style>
+
+<form action="/inventory/object" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+             {% for error in field.errors %}
+                 <div class="alert alert-danger" role="alert">{{ error }}</div>
+             {% endfor %}
+            <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+             {{ field }}
+                {% if field.help_text %}
+                  <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    <input type="submit" value="Submit" />
+</form>
+
+
+<script>
+    $('.datepicker').datepicker({
+        startDate: "today",
+        todayBtn: true,
+        autoclose: true,
+        todayHighlight: true
+    });
+
+</script>
+
+{% endblock %}

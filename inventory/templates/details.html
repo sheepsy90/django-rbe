@@ -1,9 +1,8 @@
+{%  extends 'base.html' %}
 
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="/static/js/qrcode.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block content %}
+
 
 <style>
 .qrcode img {
@@ -35,28 +34,30 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 centered"><div class="title">{{object.short_description}}</div></div>
-    </div>
-
-    <hr/>
-
-    {% if log|length == 0 %}
-        <div class="row">
-            <div class="col-xs-12 centered">Sorry no log entries available</div>
-        </div>
-    {% else %}
-        <div class="row">
-            <div class="col-xs-6 col-xs-offset-3 centered">
-                <ul class="list-group">
-                {% for entry in log %}
-                    <li class="list-group-item active">
-                        <h4 class="list-group-item-heading">{{ entry.file_date }}</h4>
-                        <p class="list-group-item-text">{{ entry.content }}</p>
-                    </li>
-                {% endfor %}
-                </ul>
+        <div class="col-xs-12 centered">
+            <div class="title">
+                <span >Title: </span>{{object.title}}
             </div>
         </div>
-    {% endif %}
-
+        <div class="col-xs-12 centered">
+            <div class="title">
+                <span >Description:</span>
+                {{object.description}}
+            </div>
+        </div>
+        <div class="col-xs-12 centered">
+            <div class="title">
+                <span >Entered by:</span>
+                {{object.entered_by}}
+            </div>
+        </div>
+        <div class="col-xs-12 centered">
+            <div class="title">
+                <span >Transportable:</span>
+                {{object.transport}}
+            </div>
+        </div>
+    </div>
 </body>
+
+{% endblock %}

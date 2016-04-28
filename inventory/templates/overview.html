@@ -1,8 +1,7 @@
+{%  extends 'base.html' %}
 
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="/static/js/qrcode.min.js"></script>
+
+{% block content %}
 
 <style>
 .qrcode img {
@@ -45,6 +44,7 @@
         <tr>
             <td>Link</td>
             <td>Registration date</td>
+            <td>Title</td>
             <td>Description</td>
             <td>Identifier</td>
             <td>QR code</td>
@@ -53,13 +53,17 @@
             <tr class="active">
                 <td><a href="/inventory/details/{{ object.unique_identifier}}">Details</a></td>
                 <td>{{ object.registration_date }}</td>
-                <td>{{ object.short_description }}</td>
+                <td>{{ object.title }}</td>
+                <td>{{ object.description }}</td>
                 <td>{{ object.unique_identifier }}</td>
                 <td><div class="qrcode" style="width: 50px; height: 50px" id='qr_code_{{ object.unique_identifier }}'></div></td>
                 <script>new QRCode(document.getElementById("qr_code_{{ object.unique_identifier }}"), "{{ object.unique_identifier }}");</script>
             </tr>
         {% endfor %}
     </table>
+    <div><a href="/inventory/object">Create</a></div>
     </div>
     <div class="col-sm-1"></div>
  </div>
+
+{% endblock %}
