@@ -5,7 +5,7 @@ import inventory
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', core.views.login),
+    url(r'^$', core.views.login, name='index'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^inventory/', include('inventory.urls')),

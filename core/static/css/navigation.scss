@@ -1,0 +1,49 @@
+// As hex codes */
+
+$color-primary-0: #328A2E;	// Main Primary color */
+$color-primary-1: #8DCF8A;
+$color-primary-2: #5AAC56;
+$color-primary-3: #156711;
+$color-primary-4: #034500;
+
+// As RGBa codes */
+
+$rgba-primary-0: rgba( 50,138, 46,1);	// Main Primary color */
+$rgba-primary-1: rgba(141,207,138,1);
+$rgba-primary-2: rgba( 90,172, 86,1);
+$rgba-primary-3: rgba( 21,103, 17,1);
+$rgba-primary-4: rgba(  3, 69,  0,1);
+
+.bg-primary-0 {background-color: $color-primary-0}
+.bg-primary-1 {background-color: $color-primary-1}
+.bg-primary-2 {background-color: $color-primary-2}
+.bg-primary-3 {background-color: $color-primary-3}
+.bg-primary-4 {background-color: $color-primary-4}
+
+.fg-black {color: black}
+
+#header {
+  .navbar {
+    border-radius: 0;
+    border: none;
+    margin-bottom: 0;
+  }
+  nav {
+    background: $color-primary-1;
+    a {
+      color: $rgba-primary-4;
+      font-weight: bold;
+    }
+    .navbar-brand {
+      font-size: 16px;
+      vertical-align: middle;
+    }
+
+    .dropdown-menu {
+      background-color: $color-primary-1;
+    }
+     .open a {
+       background-color: $color-primary-1;
+    }
+  }
+}
