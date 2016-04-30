@@ -17,6 +17,9 @@
     form label {
         display: block;
     }
+#id_transport {
+    text-align: left;
+}
 </style>
 
 <form action="/inventory/object" method="post">
@@ -25,29 +28,35 @@
 
     {% for field in form %}
         <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
-             {% for error in field.errors %}
-                 <div class="alert alert-danger" role="alert">{{ error }}</div>
-             {% endfor %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
             <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-             {{ field }}
-                {% if field.help_text %}
-                  <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
-                {% endif %}
-            </div>
+            {{ field }}
+            {% if field.help_text %}
+                <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
+            {% endif %}
         </div>
     {% endfor %}
-    </div>
     <input type="submit" value="Submit" />
 </form>
 
 
 <script>
-    $('.datepicker').datepicker({
-        startDate: "today",
-        todayBtn: true,
-        autoclose: true,
-        todayHighlight: true
+
+
+    $(document).ready(function(){
+        $('#inventory-tab').addClass('active');
+        $('#inventory-submit').addClass('active');
+
+        $('.datepicker').datepicker({
+            startDate: "today",
+            todayBtn: true,
+            autoclose: true,
+            todayHighlight: true
+        });
     });
+
 
 </script>
 

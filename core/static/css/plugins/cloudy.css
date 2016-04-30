@@ -1,0 +1,80 @@
+.bg-primary-0 {
+  background-color: #328a2e; }
+
+.bg-primary-1 {
+  background-color: #8dcf8a; }
+
+.bg-primary-2 {
+  background-color: #5aac56; }
+
+.bg-primary-3 {
+  background-color: #156711; }
+
+.bg-primary-4 {
+  background-color: #034500; }
+
+.fg-black {
+  color: black; }
+
+hr {
+  border-color: black; }
+
+#tag_cloud span:hover {
+  cursor: pointer;
+  text-shadow: 2px 2px 5px gray; }
+
+.selected_tag {
+  display: inline-block;
+  margin: 1px; }
+
+.selected_tag span:hover {
+  background-color: #d9534f;
+  cursor: pointer; }
+
+.jqcloud {
+  border: 1px dotted #156711; }
+
+div.jqcloud span {
+  color: #8dcf8a; }
+
+div.jqcloud span.w1 {
+  font-size: 100%; }
+
+div.jqcloud span.w2 {
+  font-size: 120%; }
+
+div.jqcloud span.w3 {
+  font-size: 140%; }
+
+div.jqcloud span.w4 {
+  font-size: 160%; }
+
+div.jqcloud span.w5 {
+  font-size: 180%; }
+
+div.jqcloud span.w6 {
+  font-size: 200%;
+  color: #5aac56; }
+
+div.jqcloud span.w7 {
+  font-size: 220%;
+  color: #5aac56; }
+
+div.jqcloud span.w8 {
+  font-size: 240%;
+  color: #5aac56; }
+
+div.jqcloud span.w9 {
+  font-size: 260%;
+  color: #328a2e; }
+
+div.jqcloud span.w10 {
+  font-size: 280%;
+  color: #328a2e; }
+
+.no-padding {
+  padding-left: 0;
+  padding-right: 0; }
+
+.full-width {
+  width: 100%; }

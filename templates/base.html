@@ -18,6 +18,8 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='/static/css/navigation.css'>
     <script src="/static/js/qrcode.min.js"></script>
+    <script src="/static/js/global.js"></script>
+    {% block header %}{% endblock %}
 </head>
 
 
@@ -46,7 +48,16 @@
             <button type="submit" class="btn btn-default">Submit</button>
           </form>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Inventory</a></li>
+            <li  ><a href="#"></a></li>
+              <li id="inventory-tab" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                  <li id="inventory-list"><a href="{% url 'inventory-list' %}">List View</a></li>
+                  <li id="inventory-discover"><a href="{% url 'inventory-discover' %}">Discover</a></li>
+                  <li id="inventory-submit"><a href="{% url 'inventory-submit' %}">Submit</a></li>
+              </ul>
+            </li>
+
             <li><a href="#">People</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account<b class="caret"></b></a>
@@ -61,6 +72,7 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
+    {% csrf_token %}
     {% block content %}{% endblock %}
 </div>
 

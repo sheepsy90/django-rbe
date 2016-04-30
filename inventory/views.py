@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.http.response import JsonResponse
 from django.shortcuts import render_to_response, render
 
 
@@ -50,3 +51,29 @@ def create(request):
         form = CreateObjectEntryForm()
 
     return render(request, 'enter.html', {'form': form})
+
+@login_required
+def cloud(request):
+
+    return JsonResponse({
+        'tags': {
+            'tool': 2,
+            'outdoor': 5,
+            'gardening': 2,
+            'math': 4,
+            'hammer': 1,
+            'electronics': 7,
+            'art': 3,
+            'hard-drive': 3
+        },
+        'objects': [{
+            'object_id': 1
+        }]
+    })
+
+@login_required
+def discover(request):
+    rc = RequestContext(request)
+    objects = Object.objects.all()
+    rc['objects'] = objects
+    return render_to_response('discover.html', rc)

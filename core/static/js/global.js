@@ -1,6 +1,5 @@
 function get_csrf_token(){
-    var csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    return csrf;
+    return $('[name=csrfmiddlewaretoken]').val();
 }
 
 function generateUUID() {

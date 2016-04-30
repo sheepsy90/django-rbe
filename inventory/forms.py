@@ -13,5 +13,5 @@ class CreateObjectEntryForm(ModelForm):
          widgets = {
              'title': TextInput({'class': 'form-control'}),
              'description': Textarea({'class': 'form-control'}),
-             'transport': CheckboxInput({'class': 'form-control'})
+             'transport': CheckboxInput({'class': 'checkbox-inline'})
          }
