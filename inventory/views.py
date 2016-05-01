@@ -41,6 +41,8 @@ def create(request):
             instance = form.save()
             instance.entered_by = request.user
             instance.save()
+
+
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:

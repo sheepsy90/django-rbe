@@ -4,14 +4,13 @@ from inventory.models import Object
 from django.forms import ModelForm
 
 
-
 class CreateObjectEntryForm(ModelForm):
 
-     class Meta:
+    class Meta:
          model = Object
-         fields = ['title', 'description', 'transport']
+         fields = ['title', 'description', 'transport', 'tags']
          widgets = {
              'title': TextInput({'class': 'form-control'}),
              'description': Textarea({'class': 'form-control'}),
-             'transport': CheckboxInput({'class': 'checkbox-inline'})
+             'transport': CheckboxInput({'class': 'checkbox-inline'}),
          }

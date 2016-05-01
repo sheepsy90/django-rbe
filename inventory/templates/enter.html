@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
 
+    {{ form.media }}
 
 <style>
 
@@ -21,7 +22,6 @@
     text-align: left;
 }
 </style>
-
 <form action="/inventory/object" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}

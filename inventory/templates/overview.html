@@ -24,6 +24,10 @@
 .odd td {
     background-color: #ccc !important;
 }
+
+.btn.glyphicon:hover {
+    cursor: pointer;
+}
 </style>
 
 {% csrf_token %}
@@ -36,7 +40,7 @@
             <th>Registration date</th>
             <th>Title</th>
             <th>Info Tags</th>
-            <th>Identifier</th>
+            <th>Added by</th>
             <th>QR code</th>
         </tr>
         {% for object in objects %}
@@ -50,7 +54,7 @@
                     {% endif %}
                     <div class="glyphicon glyphicon-tags" data-toggle="tooltip" title="The object has been tagged!"></div>
                 </td>
-                <td><div class="btn btn-default glyphicon glyphicon-user"></div></td>
+                <td><span class="glyphicon glyphicon-user"></span> {{ object.entered_by.username }}</td>
                 <td><div class="btn btn-default glyphicon glyphicon-qrcode"></div></td>
             </tr>
         {% endfor %}
@@ -59,8 +63,7 @@
     <div class="col-sm-1"></div>
  </div>
 <div class="row">
-    <div class="col-sm-10"></div>
-    <a href="/inventory/object"><button class="col-sm-1 btn btn-success" >Create</button></a>
+        <a href="/inventory/object"><button class="col-xs-offset-3 col-xs-6 col-sm-3 col-sm-offset-8 btn col-md-2 col-md-offset-9 btn-success" >Create</button></a>
 </div>
 
 <script>

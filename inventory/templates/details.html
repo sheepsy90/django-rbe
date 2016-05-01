@@ -1,18 +1,28 @@
 {%  extends 'base.html' %}
 
+{% block header %}
+    <link href="/static/css/inventory.css" rel="stylesheet">
+    <link href="/static/css/timeline.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
+
 
 {% block content %}
 
 
 <style>
+
 .qrcode img {
-  width: 50px;
-  height: 50px;
-    margin: 0 auto;
+    width: 100%;
+    height: auto;
+
 }
+
 .qrcode {
     text-align: center;
-    margin: 0 auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 20px;
 }
 
 .centered .title {
@@ -24,40 +34,137 @@
     margin-top: 20px;
 }
 
+.profile {
+    min-height: 0;
+}
+.well {
+    margin-bottom: 0;
+}
 </style>
 
 <body>
 
-    <div class="col-xs-12 space-top">
-          <div class="qrcode" style="width: 50px; height: 50px" id='qr_code_{{ object.unique_identifier }}'></div>
-        <script>new QRCode(document.getElementById("qr_code_{{ object.unique_identifier }}"), "{{ object.unique_identifier }}");</script>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+    	 <div class="well profile">
+            <div class="col-sm-12">
+                <div class="row">
+                    <h2>{{object.title}}</h2>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8">
+                        <p><strong>About: </strong> {{object.description}} </p>
+                        <p><strong>Transportable: </strong>
+                            {% if object.transport %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </p>
+                        <p><strong>Entered by: </strong> {{object.entered_by}}</p>
+                        <p><strong>Submitted: </strong> {{object.registration_date}}</p>
+                        <p><strong>Tags: </strong>
+                            {% for element in tags %}
+                                <span class="tags">{{ element.value }}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 text-center" style="vertical-align: middle">
+                            <div class="qrcode" style="width: auto;" id='qr_code_{{ object.unique_identifier }}'></div>
+                            <script> new QRCode(document.getElementById("qr_code_{{ object.unique_identifier }}"), "{{ object.unique_identifier }}");</script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 divider text-center">
+                <div class="col-xs-12 col-sm-4">
+                    <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Add Photo</button>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <button class="btn btn-info btn-block"><span class="fa fa-calendar"></span> Request Usage </button>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="btn-group dropdown btn-block">
+                      <button type="button" class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown"><span class="fa fa-gear"></span>
+                          Other
+                          <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu text-left" role="menu">
+                          <li><a href="#"><span class="fa fa-comment pull-right"></span>Add remark</a></li>
+                          <li><a href="#"><span class="fa fa-tags pull-right"></span> Modify tags </a></li>
+                          <li class="divider"></li>
+                          <li><a href="#"><span class="fa fa-chain-broken pull-right"></span> Mark object broken</a></li>
+                          <li><a href="#"><span class="fa fa-pie-chart pull-right"></span>Show statistics</a></li>
+                      </ul>
+                    </div>
+                </div>
+            </div>
+
+    	 </div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+    <div class="page-header">
+        <h2>Timeline</h2>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 centered">
-            <div class="title">
-                <span >Title: </span>{{object.title}}
-            </div>
+    <!-- Timeline -->
+    <div class="timeline">
+        <div class="line text-muted"></div>
+
+        <div class="separator text-muted">
+            <time>May 3, 2016</time>
         </div>
-        <div class="col-xs-12 centered">
-            <div class="title">
-                <span >Description:</span>
-                {{object.description}}
+
+        <article class="panel panel-primary">
+            <div class="panel-heading icon">
+                <i class="fa fa-wrench" aria-hidden="true"></i>
             </div>
-        </div>
-        <div class="col-xs-12 centered">
-            <div class="title">
-                <span >Entered by:</span>
-                {{object.entered_by}}
+
+            <div class="panel-heading">
+                <h2 class="panel-title">Request for using this item</h2>
             </div>
-        </div>
-        <div class="col-xs-12 centered">
-            <div class="title">
-                <span >Transportable:</span>
-                {{object.transport}}
+
+            <div class="panel-body">
+                User x, y has requested to use this item from  <strong>May 10, 2016</strong> to
+                <strong>May 17, 2016</strong>.
             </div>
+        </article>
+
+        <div class="separator text-muted">
+            <time>May 1, 2016</time>
         </div>
+
+        <article class="panel panel-default panel-outline">
+            <div class="panel-heading icon">
+                <i class="glyphicon glyphicon-picture"></i>
+            </div>
+
+            <div class="panel-body">
+                <strong>Photo added</strong>
+                <img class="img-responsive img-rounded" src="//placehold.it/350x150" />
+            </div>
+        </article>
+
+        <article class="panel panel-info panel-outline">
+            <div class="panel-heading icon">
+                <i class="glyphicon glyphicon-info-sign"></i>
+            </div>
+
+            <div class="panel-body">
+                <strong>Object created</strong>
+            </div>
+        </article>
     </div>
+</div>
+
+
+
 </body>
 
 {% endblock %}
