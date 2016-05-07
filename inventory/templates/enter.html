@@ -5,49 +5,55 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
-
-    {{ form.media }}
+<link href="/static/css/inventory.css" rel="stylesheet">
 
 <style>
 
     form {
-        width: 40%;
+        width: 80%;
         margin: 0 auto;
     }
 
     form label {
         display: block;
     }
-#id_transport {
-    text-align: left;
-}
+    #id_transport {
+        text-align: left;
+    }
 </style>
-<form action="/inventory/object" method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+<div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+    <form id="create_form" action="/inventory/object" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-    {% for field in form %}
-        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
-            {% for error in field.errors %}
-                <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-            <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}
-                <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
-            {% endif %}
-        </div>
-    {% endfor %}
-    <input type="submit" value="Submit" />
-</form>
-
+        {% for field in form %}
+            <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+                <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <input class="btn btn-success btn-block" type="submit" value="Submit" style="margin-top: 5px"/>
+    </form>
+</div>
 
 <script>
+
+
 
 
     $(document).ready(function(){
         $('#inventory-tab').addClass('active');
         $('#inventory-submit').addClass('active');
+
+        $(document).on("keypress", ":input:not(textarea)", function(event) {
+            return event.keyCode != 13;
+        });
 
         $('.datepicker').datepicker({
             startDate: "today",

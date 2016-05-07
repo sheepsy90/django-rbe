@@ -8,9 +8,9 @@ class CreateObjectEntryForm(ModelForm):
 
     class Meta:
          model = Object
-         fields = ['title', 'description', 'transport', 'tags']
+         fields = ['title', 'description', 'transport']
          widgets = {
              'title': TextInput({'class': 'form-control'}),
              'description': Textarea({'class': 'form-control'}),
-             'transport': CheckboxInput({'class': 'checkbox-inline'}),
+             'transport': CheckboxInput({'class': 'checkbox-inline'})
          }

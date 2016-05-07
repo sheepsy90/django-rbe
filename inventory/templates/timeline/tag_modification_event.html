@@ -1,0 +1,45 @@
+<article class="panel panel-primary">
+    <div class="panel-heading icon" style="background: white none; border: 1px solid #337ab7">
+        <i class="fa fa-tags {% if event.added %}added{% else %}removed{% endif %}" aria-hidden="true"></i>
+    </div>
+
+    <div class="panel-heading">
+        <h2 class="panel-title"><strong>{{ event.registration_date|date:'Y-m-d, H:i:s'}}</strong></h2>
+    </div>
+
+    <div class="panel-body">
+        User <strong>{{ event.triggered_user.username }}</strong> has
+        {% if event.added %}added{% else %}removed{% endif %} the tag
+        <strong>{{ event.tag_name }}</strong>
+        {% if event.added %}to{% else %}from{% endif %}
+        this object.
+    </div>
+</article>
+
+       {% comment %} <article class="panel panel-primary">
+            <div class="panel-heading icon">
+                <i class="fa fa-wrench" aria-hidden="true"></i>
+            </div>
+
+            <div class="panel-heading">
+                <h2 class="panel-title">Request for using this item</h2>
+            </div>
+
+            <div class="panel-body">
+                User x, y has requested to use this item from  <strong>May 10, 2016</strong> to
+                <strong>May 17, 2016</strong>.
+            </div>
+        </article>
+
+
+        <article class="panel panel-default panel-outline">
+            <div class="panel-heading icon">
+                <i class="glyphicon glyphicon-picture"></i>
+            </div>
+
+            <div class="panel-body">
+                <strong>Photo added</strong>
+                <img class="img-responsive img-rounded" src="//placehold.it/350x150" />
+            </div>
+        </article>
+{% endcomment %}

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'inventory'
 ]
 
-CRISPY_TEMPLATE_PACK = 'uni_form'
+FORCE_LOWERCASE_TAGS = True
+MAX_TAG_LENGTH = 64
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

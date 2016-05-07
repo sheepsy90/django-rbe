@@ -18,12 +18,15 @@
 
         bind_cloud_area($('#discover-cloud'), "{% url 'inventory-cloud' %}", function(element){
 
-            var e = $('<div class="btn btn-default full-width">Something</div>');
-            $(e).data('object_id', element['object_id']);
+            var id = element['id'];
+            var name = element['name'];
+
+            var e = $('<div class="btn btn-default full-width">' + name + '</div>');
+            $(e).data('object_id', element['id']);
 
             console.log(element);
             $(e).click(function(){
-               alert(1);
+                window.location = "/inventory/details/" + $(this).data('object_id');
             });
 
           return e;

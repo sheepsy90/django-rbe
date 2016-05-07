@@ -1,0 +1,13 @@
+<article class="panel panel-primary">
+    <div class="panel-heading icon">
+        <i class="fa fa-comment" aria-hidden="true"></i>
+    </div>
+
+    <div class="panel-heading">
+        <h2 class="panel-title"><strong>{{ event.triggered_user.username }}</strong> <strong>{{ event.registration_date|date:'Y-m-d, H:i:s'}}</strong></h2>
+    </div>
+
+    <div class="panel-body">
+        {{ event.comment_text }}
+    </div>
+</article>

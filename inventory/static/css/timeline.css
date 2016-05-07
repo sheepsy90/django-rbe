@@ -84,3 +84,8 @@
 .timeline .panel-outline .panel-heading:not(.icon),
 .timeline .panel-outline .panel-footer {
   display: none; }
+
+.timeline .added {
+  color: #5aac56; }
+.timeline .removed {
+  color: #a41515; }
