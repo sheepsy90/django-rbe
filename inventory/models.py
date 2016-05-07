@@ -38,7 +38,7 @@ class Event(models.Model):
     """ The parent model class for all events that can happen to the object """
     object = models.ForeignKey(Object, help_text='The object which the event happened to.')
     registration_date = models.DateTimeField(auto_now=True, help_text="The registration date of the event.")
-    triggered_user = models.ForeignKey(User, help_text="The user who triggered the event.")
+    triggered_user = models.ForeignKey(User, null=True, help_text="The user who triggered the event.")
     related_clazz = models.CharField(max_length=64, blank=True, help_text="The name of the related clazz that holds the additional data.")
 
     class Meta:
