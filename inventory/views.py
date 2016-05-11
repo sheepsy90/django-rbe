@@ -1,4 +1,5 @@
-from django.contrib.auth.decorators import login_required
+from core.views import user_confirmed
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.http.response import JsonResponse
@@ -9,10 +10,9 @@ from django.template import RequestContext
 from inventory.forms import CreateObjectEntryForm
 
 from inventory.models import Object, Tag, DummyEvent, TagModificationLogEvent, SimpleObjectCommentEvent
-import library
-from library.cloud import CloudFactory
 
 
+@user_confirmed
 @login_required
 def overview(request):
     rc = RequestContext(request)
@@ -22,6 +22,7 @@ def overview(request):
 
 
 @login_required
+@user_confirmed
 def details(request, object_id):
     rc = RequestContext(request)
     objects = Object.objects.filter(unique_identifier=object_id)
@@ -37,6 +38,7 @@ def details(request, object_id):
     return render_to_response('details.html', rc)
 
 
+@user_confirmed
 @login_required
 def create(request):
     if request.method == 'POST':
@@ -61,6 +63,8 @@ def create(request):
 
     return render(request, 'enter.html', {'form': form})
 
+
+@user_confirmed
 @login_required
 def cloud(request):
     chosen_tags = request.POST.get('chosen_tags', None)
@@ -84,14 +88,16 @@ def cloud(request):
         'objects': [{'id': obj.unique_identifier, 'name': obj.title} for obj in objts]
     })
 
-
 @login_required
+@user_confirmed
 def discover(request):
     rc = RequestContext(request)
     objects = Object.objects.all()
     rc['objects'] = objects
     return render_to_response('discover.html', rc)
 
+
+@user_confirmed
 @login_required
 def del_tag(request):
     object_id = request.POST.get('object_id')
@@ -107,6 +113,7 @@ def del_tag(request):
     return JsonResponse({'success': True, 'timeline_html': tme.render()})
 
 
+@user_confirmed
 @login_required
 def submit_comment(request):
     object_id = request.POST.get('object_id')
@@ -118,7 +125,9 @@ def submit_comment(request):
     return JsonResponse({'success': True, 'timeline_html': so.render()})
 
 
+
 @login_required
+@user_confirmed
 def add_tag(request):
     value = request.POST.get('value')
     obj_id = request.POST.get('object_id')

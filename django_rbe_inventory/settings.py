@@ -42,9 +42,6 @@ INSTALLED_APPS = [
     'inventory'
 ]
 
-FORCE_LOWERCASE_TAGS = True
-MAX_TAG_LENGTH = 64
-
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,8 +123,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
+STATIC_ROOT = 'static'
 
 
 LOGIN_URL = '/core/login'
 AFTER_LOGIN_PAGE = '/inventory/overview'
+
+
+CLOSED_NETWORK = True
+CLOSED_NETWORK_INFO = '/profile/not_confirmed'

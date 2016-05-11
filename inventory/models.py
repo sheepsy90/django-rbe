@@ -1,15 +1,10 @@
+from core.models import Tag
 from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import render_to_response
 
 
-class Tag(models.Model):
-    value = models.CharField(max_length=64, blank=True, unique=True)
 
-    def __str__(self):
-        return self.value
-
-# Create your models here.
 class Object(models.Model):
 
     unique_identifier = models.AutoField(primary_key=True, auto_created=True,

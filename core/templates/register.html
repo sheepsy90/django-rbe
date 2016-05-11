@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    {% if not closed_network %}
+    <style>
+        #id_reference_user {
+            display: none;
+        }
+    </style>
+    {% endif %}
+
     <div style="width:100%; text-align: center; margin: 20px auto;">
         <form method="post" action="{% url 'register' %}" style="width: 50%; margin: 0 auto;">
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" role="alert" style="margin-top: 4px;">{{ error }}</div>
+            {% endfor %}
             {% csrf_token %}
             {% for field in form %}
-                <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                <div id="{{ field.id_for_label }}" class="fieldWrapper {% if field.errors %}errors{% endif %}">
 
                     <label class="pull-left control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
@@ -21,7 +33,6 @@
             <div style="width: 100%; text-align: right; margin-top: 5px;">
                 <button class="btn fg-black bg-primary-1" type="submit" value="login">Register</button>
             </div>
-            {{ form.error }}
         </form>
 
         <div style="margin-top: 25px">

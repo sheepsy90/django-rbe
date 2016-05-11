@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='/static/css/profile_cards.css'>
+         <style>
+         .card .avatar, .card .info, .card .bottom {
+            padding-left: 1em;
+         }
+         .card.hovercard {
+             text-align: left;
+         }
+         .card .desc {
+             text-align: center;
+         }
+         
+         hr {
+             border-color: #aaa;
+         }
+         </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 col-xl-6 col-xl-offset-3 user-card-container">
+            <div class="user-card">
+                <div class="card hovercard">
+                    <div class="cardheader"></div>
+                    <div class="avatar">
+                        <img alt="" src="http://lorempixel.com/100/100/people/9/">
+                    </div>
+                    <div class="info">
+                        <div class="row">
+                            <div class="desc col-xs-12 col-md-4">{{ profile.user.username }}</div>
+                            <div class="desc col-xs-12 col-md-4">Joined: {{ profile.user.date_joined }}</div>
+                            <div class="desc col-xs-12 col-md-4">Invited by: {{ profile.invited_by }}</div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="desc col-xs-12">
+                                <div class="desc">{% for tag in profile.tags.all %} {{ tag }} {% endfor %}</div>
+                            </div>
+                            <div class="desc col-xs-12"> Tags</div>
+                            <div id="tags-container" class="desc col-xs-12">
+                                    {% for element in profile.tags.all %}
+                                        <span id="{{ element.id }}" class="tags">{{ element.value }}</span>
+                                    {% endfor %}
+                            </div>
+                            {% if user == profile.user %}
+                                <div class="col-xs-12">
+                                    <input id='add_tags' class="form-control" style="width: 100%; margin-top: 1em" type="text" placeholder="Add a tag for your profile..."/>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="desc col-xs-12">
+                                <div class="desc">People you invited</div>
+                            </div>
+                            <div class="desc col-xs-12">
+                                {% for inv in invited_users %}
+                                    <a class="desc col-xs-2">{{ inv.user.username }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#my-account').addClass('active');
+        $('#my-profile').addClass('active');
+    });
+</script>
+
+{% endblock %}

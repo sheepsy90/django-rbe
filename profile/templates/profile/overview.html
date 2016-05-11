@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='/static/css/profile_cards.css'>
+{% endblock %}
+
+{% block content %}
+    <style>
+    .card {
+        height: 280px;
+        overflow: hidden;
+    }
+    </style>
+
+<div class="container">
+	<div class="row">
+        {# Sort by to confirm profiles and therefore better known people #}
+        {% for profile in profiles %}
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 col-xl-1 user-card-container">
+                <div class="user-card">
+                    <div class="card hovercard">
+                        <div class="cardheader"></div>
+                        <div class="avatar">
+                            <img alt="" src="http://lorempixel.com/100/100/people/9/">
+                        </div>
+                        <div class="info">
+                            <div class="title">
+                                <a target="_blank" href="/profile/user/{{ profile.user.id }}">{{ profile.user.username }}</a>
+                            </div>
+                            <div class="desc">{{ profile.user.date_joined }}</div>
+                            <div class="desc">{{ profile.invited_by }}</div>
+                        </div>
+                        <div class="bottom">
+                            {% if user == profile.invited_by %}
+                            <a class="btn btn-primary btn-block btn-sm" href="/profile/confirm/{{ profile.user.id }}">
+                               <i class="fa fa-unlock" aria-hidden="true"></i> Confirm
+                            </a>
+                            {% endif %}
+                        </div>
+                        <div class="info">
+                            <div class="desc">{% for tag in profile.tags.all %} {{ tag }} {% endfor %}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+	</div>
+</div>
+{% endblock %}
