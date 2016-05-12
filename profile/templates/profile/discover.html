@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    {% include 'plugins/jqcloud.html' %}
+    <script src="/static/js/plugins/cloudy.js"></script>
+    <link href="/static/css/plugins/cloudy.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div id="cloudy" class="row">
+    <div id="discover-cloud" style="margin-top: 25px"></div>
+</div>
+<script>
+    $(document).ready(function(){
+
+        bind_cloud_area($('#discover-cloud'), "{% url 'profile_cloud' %}", function(element){
+
+            var id = element['id'];
+            var name = element['name'];
+
+            var e = $('<div class="btn btn-default full-width">' + name + '</div>');
+            $(e).data('object_id', element['id']);
+
+            console.log(element);
+            $(e).click(function(){
+                window.location = "/profile/user/" + $(this).data('object_id');
+            });
+
+          return e;
+        });
+
+        $('#discover-cloud').data('clear')();
+    });
+
+</script>
+
+{% include 'plugins/cloudy.html' %}
+{% endblock %}

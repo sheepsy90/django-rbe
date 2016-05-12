@@ -1,6 +1,6 @@
 import random
 import itertools
-from core.models import Profile
+from core.models import Profile, Tag
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 
@@ -11,6 +11,13 @@ class Command(BaseCommand):
 
         possibilities = list(itertools.product(['Anne', 'Robert', 'Marie', 'Tove', 'Jens', 'Ines', 'Lars', 'Karl'], ['Larson', 'Nilson', 'Weier', 'Mueller', 'Chu-Xi', 'Wa', 'Halakkai', 'Czetec']))
         random.shuffle(possibilities)
+
+        tags = ['banana', 'apple', 'fruit', 'ice', 'green', 'red']
+        tags_obj = []
+        for t in tags:
+            tg = Tag(value=t)
+            tg.save()
+            tags_obj.append(tg)
 
         usernames = [e[0] + " " + e[1] for e in possibilities[0:25]]
 
@@ -25,6 +32,13 @@ class Command(BaseCommand):
 
             p = Profile(user=u, invited_by=iby, is_confirmed=True)
             p.save()
+
+            num = random.randint(0, len(tags))
+            for e in random.sample(tags_obj, num):
+                p.tags.add(e)
+            p.save()
+
+
 
             users.append(u)
 

@@ -67,6 +67,7 @@
               <ul class="dropdown-menu">
                   <li id='my-profile'><a href="{% url 'profile-overview' %}">User's</a></li>
                   <li id='my-profile'><a href="/profile/user/{{ user.id }}">Profile</a></li>
+                  <li id='my-profile'><a href="{% url 'profile_discover' %}">Discover</a></li>
                   <li class="divider"></li>
                   <li><a href="{% url 'logout' %}">Logout</a></li>
               </ul>

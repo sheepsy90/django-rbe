@@ -14,10 +14,43 @@
          .card .desc {
              text-align: center;
          }
+          .card .left {
+            color: #737373;
+            font-size: 12px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+          }
+
+          .card .invited {
+            font-size: 12px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-decoration: underline;
+            color: #034500;
+          }
          
          hr {
              border-color: #aaa;
+             margin-bottom: 0;
          }
+         span.tags {
+            background: #1abc9c;
+            border-radius: 2px;
+            color: #f5f5f5;
+            font-weight: bold;
+            padding: 2px 4px;
+            margin: 2px;
+            display: inline-block;
+        }
+
+         span.tags:hover {
+            cursor: pointer;
+            background-color: indianred;
+         }
+
          </style>
 {% endblock %}
 
@@ -39,13 +72,10 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="desc col-xs-12">
-                                <div class="desc">{% for tag in profile.tags.all %} {{ tag }} {% endfor %}</div>
-                            </div>
-                            <div class="desc col-xs-12"> Tags</div>
+                            <div class="left col-xs-12"> Tags</div>
                             <div id="tags-container" class="desc col-xs-12">
                                     {% for element in profile.tags.all %}
-                                        <span id="{{ element.id }}" class="tags">{{ element.value }}</span>
+                                        <span onclick="del_tag(this)" id="{{ element.id }}" class="tags">{{ element.value }}</span>
                                     {% endfor %}
                             </div>
                             {% if user == profile.user %}
@@ -56,12 +86,12 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="desc col-xs-12">
-                                <div class="desc">People you invited</div>
+                            <div class="col-xs-12">
+                                <div class="left desc">People you invited</div>
                             </div>
-                            <div class="desc col-xs-12">
+                            <div class="desc col-xs-12" style="margin-top: 0.75em">
                                 {% for inv in invited_users %}
-                                    <a class="desc col-xs-2">{{ inv.user.username }}</a>
+                                    <a class="col-xs-2 invited" href="/profile/user/{{ inv.user.id  }}">{{ inv.user.username }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -73,10 +103,60 @@
 </div>
 
 <script>
+
+    function add_tag(value, tag_container){
+          $.ajax({
+                method: 'POST',
+                url: '{% url "profile_add_tag" %}',
+                data: {
+                    value: value,
+                    csrfmiddlewaretoken: get_csrf_token()
+                }
+            }).done(function(msg) {
+                if (msg['success']){
+                    var id = msg['id'];
+                    var e = $('<span></span>');
+                    $(e).addClass('tags');
+                    $(e).attr('id', id);
+                    $(e).attr('onclick', 'del_tag(this)');
+                    $(e).html(value);
+                    $(tag_container).append(e);
+              }
+        });
+    }
+
+     function del_tag(element){
+          var id = $(element).attr('id');
+          $.ajax({
+                method: 'POST',
+                url: '{% url "profile_del_tag" %}',
+                data: {
+                    tag_id: id,
+                    csrfmiddlewaretoken: get_csrf_token()
+                }
+            }).done(function(msg) {
+                if (msg['success']){
+                    $(element).remove()
+              }
+        });
+    }
+
     $(document).ready(function(){
         $('#my-account').addClass('active');
         $('#my-profile').addClass('active');
+        {% if user == profile.user %}
+            $('#add_tags').bind('keypress', function(e){
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    var text = $(this).val();
+                    add_tag(text, $("#tags-container"));
+                    $(this).val('');
+                }
+            });
+        {% endif %}
     });
+
+
 </script>
 
 {% endblock %}
