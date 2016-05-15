@@ -6,12 +6,16 @@ from django.conf import settings
 
 
 class RegistrationForm(Form):
-
     username = forms.CharField(widget=TextInput(attrs={'class': 'form-control'}))
-    email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}),
+                            help_text="Select an email address that you can confirm (feature not enabled yet)!")
+
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
-    password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
-    reference_user = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
+    password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}),
+                                      help_text="Choose a strong password")
+
+    reference_user = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control'}),
+                                     help_text="Put in the username or email of the person who introduced you.")
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()

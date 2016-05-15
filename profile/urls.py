@@ -12,4 +12,7 @@ urlpatterns = patterns('',
      url(r'del_tag', profile.views.profile_del_tag, name="profile_del_tag"),
      url(r'profile_cloud', profile.views.profile_cloud, name="profile_cloud"),
      url(r'discover', profile.views.discover, name="profile_discover"),
+     url(r'aboutme', profile.views.aboutme, name="profile_about_me_change"),
+     url(r'avatar_upload', profile.views.avatar_upload, name="profile_avatar_upload"),
+
 )

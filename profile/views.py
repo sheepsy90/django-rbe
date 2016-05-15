@@ -1,8 +1,14 @@
+import uuid
 from core.models import Profile, Tag
 from core.views import user_confirmed
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.db.models import Count
 from django.http import JsonResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 
 
@@ -24,7 +30,20 @@ def profile(request, user_id):
 
 @user_confirmed
 def confirm(request, user_id):
-    pass
+
+    user = User.objects.get(id=user_id)
+    pr = Profile.objects.get(user=user)
+
+    if pr.invited_by == request.user:
+        # can confirm
+        pr.is_confirmed = True
+        pr.save()
+        return HttpResponseRedirect('/profile/user/{}'.format(user_id))
+    else:
+        return HttpResponseRedirect('/profile/overview')
+
+
+
 
 @user_confirmed
 def overview(request):
@@ -105,3 +124,42 @@ def profile_cloud(request):
 def discover(request):
     rc = RequestContext(request)
     return render_to_response('profile/discover.html', rc)
+
+@login_required
+def aboutme(request):
+    new_about_me = request.POST.get('new_about_me')
+
+    if len(new_about_me) > 3000:
+        return JsonResponse({'success': False, 'reason': "Sorry! Not more than 3000 characters allowed!"})
+
+
+    prof = Profile.objects.get(user=request.user)
+    prof.about_me_text = new_about_me
+    prof.save()
+
+    return JsonResponse({'success': True})
+
+@login_required
+def avatar_upload(request):
+    print request.FILES
+
+    file = request.FILES[u'0']
+    ending = file.name.split('.')[-1]
+
+    if ending not in ['png', 'jpeg']:
+        return JsonResponse({'success': False, 'reason': "Unsupported file ending! allowed is png and jpeg!"})
+
+    random_uuid = str(uuid.uuid4())
+    prefix = ''
+
+    if settings.DEBUG:
+        prefix = '/core'
+
+    static_path_part = '/static/tmp/img/{}.{}'.format(random_uuid, ending)
+    default_storage.save(settings.BASE_DIR + prefix + static_path_part, ContentFile(file.read()))
+
+    prof = Profile.objects.get(user=request.user)
+    prof.avatar_link = static_path_part
+    prof.save()
+
+    return JsonResponse({'success': True, 'path': static_path_part})

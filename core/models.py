@@ -14,3 +14,5 @@ class Profile(models.Model):
     invited_by = models.ForeignKey(User, related_name='invited_by', null=True)
     tags = models.ManyToManyField(Tag, related_name='profile_tags')
     is_confirmed = models.BooleanField(default=False)
+    about_me_text = models.TextField(max_length=3000, default='')
+    avatar_link = models.URLField(blank=True)

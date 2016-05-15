@@ -15,7 +15,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='/static/css/navigation.css'>
     <script src="/static/js/qrcode.min.js"></script>
     <script src="/static/js/global.js"></script>
@@ -63,10 +63,10 @@
             </li>
 
             <li id='my-account' class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
               <ul class="dropdown-menu">
+                  <li id='my-profile'><a href="/profile/user/{{ user.id }}">My account</a></li>
                   <li id='my-profile'><a href="{% url 'profile-overview' %}">User's</a></li>
-                  <li id='my-profile'><a href="/profile/user/{{ user.id }}">Profile</a></li>
                   <li id='my-profile'><a href="{% url 'profile_discover' %}">Discover</a></li>
                   <li class="divider"></li>
                   <li><a href="{% url 'logout' %}">Logout</a></li>

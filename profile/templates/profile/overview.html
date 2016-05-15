@@ -37,7 +37,7 @@
                     <div class="card hovercard">
                         <div class="cardheader"></div>
                         <div class="avatar">
-                            <img alt="" src="http://lorempixel.com/100/100/people/9/">
+                            <img alt="" src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}">
                         </div>
                         <div class="info">
                             <div class="title">
@@ -47,7 +47,7 @@
                             <div class="desc">{{ profile.invited_by }}</div>
                         </div>
                         <div class="bottom">
-                            {% if user == profile.invited_by %}
+                            {% if user == profile.invited_by and not profile.is_confirmed %}
                             <a class="btn btn-primary btn-block btn-sm" href="/profile/confirm/{{ profile.user.id }}">
                                <i class="fa fa-unlock" aria-hidden="true"></i> Confirm
                             </a>

@@ -7,6 +7,9 @@
         #id_reference_user {
             display: none;
         }
+    .fieldWrapper {
+        text-align: left;
+    }
     </style>
     {% endif %}
 
@@ -34,9 +37,5 @@
                 <button class="btn fg-black bg-primary-1" type="submit" value="login">Register</button>
             </div>
         </form>
-
-        <div style="margin-top: 25px">
-            <a class="btn btn-sm fg-black bg-primary-1" href="{% url 'password_reset' %}">Lost password?</a>
-        </div>
     </div>
 {% endblock %}

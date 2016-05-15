@@ -31,6 +31,7 @@
             text-decoration: underline;
             color: #034500;
           }
+
          
          hr {
              border-color: #aaa;
@@ -46,11 +47,19 @@
             display: inline-block;
         }
 
-         span.tags:hover {
-            cursor: pointer;
-            background-color: indianred;
-         }
+         {% if user == profile.user %}
 
+             span.tags:hover {
+                cursor: pointer;
+                background-color: indianred;
+             }
+
+              .card .avatar img:hover {
+                cursor: pointer;
+                border-color: darkseagreen;
+
+              }
+         {% endif %}
          </style>
 {% endblock %}
 
@@ -62,7 +71,8 @@
                 <div class="card hovercard">
                     <div class="cardheader"></div>
                     <div class="avatar">
-                        <img alt="" src="http://lorempixel.com/100/100/people/9/">
+                        <img alt="" src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}">
+                        <input style="display: none" id="choose_file" type="file" multiple name="file_source" size="0" value="Upload">
                     </div>
                     <div class="info">
                         <div class="row">
@@ -84,6 +94,22 @@
                                 </div>
                             {% endif %}
                         </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="left desc">About yourself</div>
+                            </div>
+                            {% if user == profile.user %}
+                                <div class="col-xs-12">
+                                    <div id="save_about_me" style="display: none" class="col-xs-8 col-xs-offset-4 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-success">Save</div>
+                                    <div id="edit_about_me" class="col-xs-8 col-xs-offset-4 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-default">Edit</div>
+                                </div>
+                            {% endif %}
+                            <div class="desc col-xs-12" style="margin-top: 0.75em">
+                                <textarea id="about_me_area" maxlength="3000" style="width: 100%; overflow-y: auto; resize: none;" rows="12" disabled>{{ profile.about_me_text }}</textarea>
+                            </div>
+                        </div>
+
                         <hr>
                         <div class="row">
                             <div class="col-xs-12">
@@ -153,6 +179,76 @@
                     $(this).val('');
                 }
             });
+
+            $('#edit_about_me').click(function(){
+                $('#edit_about_me').hide();
+                $('#save_about_me').show();
+                $('#about_me_area').prop('disabled', false);
+            });
+
+            $('#save_about_me').click(function(){
+                $('#about_me_area').prop('disabled', true);
+                var new_about_me = $('#about_me_area').val();
+                $.ajax({
+                    method: 'POST',
+                    url: '{% url "profile_about_me_change" %}',
+                    data: {
+                        new_about_me: new_about_me,
+                        csrfmiddlewaretoken: get_csrf_token()
+                    }
+                }).done(function(msg) {
+                    if (msg['success']) {
+                        swal('Updated', 'Your about me text was saved!', 'success');
+                    } else {
+                        swal('Error', 'Your about me text was not update!', 'error');
+                    }
+                    $('#edit_about_me').show();
+                    $('#save_about_me').hide();
+                }).fail(function(){
+                    swal('Error', 'There was a problem contacting the servee!', 'error');
+                    $('#edit_about_me').show();
+                    $('#save_about_me').hide();
+                });
+            });
+
+            $(".card").find(".avatar").find("img").click(function(){
+                $(this).next().click();
+            });
+
+            $("#choose_file").bind('change', function (event) {
+                event.preventDefault();
+                var files = event.target.files;
+
+                if (files.length != 1){
+                    return swal('Error', 'You can only select one image!', 'error');
+                }
+
+                var data = new FormData();
+                $.each([files[0]], function (key, value) {
+                    data.append(key, value);
+                });
+
+                data.append('csrfmiddlewaretoken', get_csrf_token());
+
+           $.ajax({
+                url: '{% url "profile_avatar_upload" %}',
+                type: 'POST',
+                data: data,
+                cache: false,
+                dataType: 'json',
+                processData: false, // Don't process the files
+                contentType: false // Set content type to false as jQuery will tell the server its a query string request
+            }).done(function (msg) {
+                if (msg['success'] == true) {
+                    var path = msg['path'];
+                    $('.avatar').find('img').attr('src', path);
+                } else {
+                    return swal('Error', 'Could not upload your profile picture!', 'error');
+                }
+            }).fail(function () {
+                return swal('Error', 'Could not reach server!', 'error');
+            });
+        });
         {% endif %}
     });
 
