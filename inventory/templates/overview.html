@@ -10,22 +10,29 @@
 
 <style>
 
-.table td, .table th{
+.heading {
    text-align: center;
+    font-weight: bold;
 }
-.table th {
-    border-bottom: 1px solid #aaa;
+
+.entry {
+    text-align: center;
+    vertical-align: middle;
 }
 
 .glyphicon:hover {
     cursor: default;
 }
 
-.odd td {
+.odd {
     background-color: #ccc !important;
 }
 
 .btn.glyphicon:hover {
+    cursor: pointer;
+}
+
+.glyphicon-user:hover {
     cursor: pointer;
 }
 </style>
@@ -34,35 +41,31 @@
 <div class="row">
     <div class="col-sm-1"></div>
     <div class="col-sm-10">
-    <table class="table">
-        <tr>
-            <th>Details</th>
-            <th>Registration date</th>
-            <th>Title</th>
-            <th>Info Tags</th>
-            <th>Added by</th>
-            <th>QR code</th>
-        </tr>
+        <div class="row" style="border-bottom: 2px solid #555">
+            <div class="col-xs-2 heading">Details</div>
+            <div class="col-xs-3 heading">Registration date</div>
+            <div class="col-xs-3 heading">Title</div>
+            <div class="col-xs-2 heading">Info Tags</div>
+            <div class="col-xs-2 heading">Added by</div>
+        </div>
         {% for object in objects %}
-            <tr class="active {% if forloop.counter|divisibleby:2 %}odd{% else %}even{% endif %}">
-                <td><a class="btn btn-default glyphicon glyphicon-list-alt" href="/inventory/details/{{ object.unique_identifier}}"></a></td>
-                <td>{{ object.registration_date }}</td>
-                <td>{{ object.title }}</td>
-                <td>
+            <div class="row {% if forloop.counter|divisibleby:2 %}odd{% else %}even{% endif %}">
+                <div class="col-xs-2 entry"><a class="btn btn-sm btn-default glyphicon glyphicon-list-alt" href="/inventory/details/{{ object.unique_identifier}}"></a></div>
+                <div class="col-xs-3 entry">{{ object.registration_date }}</div>
+                <div class="col-xs-3 entry">{{ object.title }}</div>
+                <div class="col-xs-2 entry">
                     {% if not object.transport %}
                         <div class="glyphicon glyphicon-lock" data-toggle="tooltip" title="The object cannot be moved!"></div>
                     {% endif %}
                     <div class="glyphicon glyphicon-tags" data-toggle="tooltip" title="The object has been tagged!"></div>
-                </td>
-                <td><span class="glyphicon glyphicon-user"></span> {{ object.entered_by.username }}</td>
-                <td><div class="btn btn-default glyphicon glyphicon-qrcode"></div></td>
-            </tr>
+                </div>
+                <div class="col-xs-2 entry"><a href="/profile/user/{{ object.entered_by.id }}" class="glyphicon glyphicon-user"></a> </div>
+            </div>
         {% endfor %}
-    </table>
     </div>
     <div class="col-sm-1"></div>
  </div>
-<div class="row">
+<div class="row" style="margin-top: 1em; margin-bottom: 1em">
         <a href="/inventory/object"><button class="col-xs-offset-3 col-xs-6 col-sm-3 col-sm-offset-8 btn col-md-2 col-md-offset-9 btn-success" >Create</button></a>
 </div>
 

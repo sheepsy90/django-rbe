@@ -1,23 +1,29 @@
 from django import forms
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.forms import Form, Textarea, ModelForm
+from django.forms import Form
 from django.forms.widgets import PasswordInput, EmailInput, TextInput
+from django.conf import settings
 
 
 class RegistrationForm(Form):
-
     username = forms.CharField(widget=TextInput(attrs={'class': 'form-control'}))
-    email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
-    password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}),
+                            help_text="Select an email address that you can confirm (feature not enabled yet)!")
 
+    password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
+    password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}),
+                                      help_text="Choose a strong password")
+
+    reference_user = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control'}),
+                                     help_text="Put in the username or email of the person who introduced you.")
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
         password = cleaned_data.get("password")
         password_repeat = cleaned_data.get("password_repeat")
         email = cleaned_data.get("email")
+        reference_user = cleaned_data.get("reference_user")
+
         username = cleaned_data.get("username")
 
         if User.objects.filter(username=username).exists():
@@ -30,6 +36,10 @@ class RegistrationForm(Form):
             # Only do something if both fields are valid so far.
             if password != password_repeat:
                 raise forms.ValidationError("Passwords don't match!")
+
+        if settings.CLOSED_NETWORK:
+            if not User.objects.filter(username=reference_user).exists():
+                raise forms.ValidationError("User you referenced does not exists!")
 
 
 class LoginForm(Form):
