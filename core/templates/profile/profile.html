@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="desc col-xs-12 col-md-4">{{ profile.user.username }}</div>
                             <div class="desc col-xs-12 col-md-4">Joined: {{ profile.user.date_joined }}</div>
-                            <div class="desc col-xs-12 col-md-4">Invited by: {{ profile.invited_by }}</div>
+                            <div class="desc col-xs-12 col-md-4">Invited by: {{ profile.invited_by|default:' -- ' }}</div>
                         </div>
                         <hr>
                         <div class="row">
@@ -113,7 +113,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="left desc">People you invited</div>
+                                <div class="left desc">People invited:</div>
                             </div>
                             <div class="desc col-xs-12" style="margin-top: 0.75em">
                                 {% for inv in invited_users %}
@@ -121,6 +121,45 @@
                                 {% endfor %}
                             </div>
                         </div>
+
+                        {% if user == profile.user %}
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="left desc">Invitation keys</div>
+                                </div>
+                                <div class="desc col-xs-12" style="margin-top: 0.75em">
+                                    {% if registration_keys %}
+                                        <table id="reg_key_table" class="table">
+                                            <tr>
+                                                <th>Key</th>
+                                                <th>Email</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            {% for registration_key in registration_keys %}
+                                                <tr>
+                                                    <td>{{ registration_key.key }}</td>
+                                                    <td>{{ registration_key.email }}</td>
+                                                    <td>
+                                                        {% if not registration_key.used %}
+                                                            <a href="{% url 'revoke' registration_key.id %}" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span>Revoke</a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    {% else %}
+                                        No invitations!
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4 col-xs-offset-8">
+                                    <a href="{% url 'invite' %}"><button id="invite" class="btn btn-default btn-block">Invite</button></a>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

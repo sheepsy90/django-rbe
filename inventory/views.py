@@ -1,4 +1,4 @@
-from core.views import user_confirmed
+from core.auth_views import user_confirmed
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.http import HttpResponseRedirect

@@ -3,24 +3,24 @@
 {% block content %}
 
     {% if not closed_network %}
-    <style>
-        #id_reference_user {
-            display: none;
+        <style>
+            #id_reference_user {
+                display: none;
+            }
+        .fieldWrapper {
+            text-align: left;
         }
-    .fieldWrapper {
-        text-align: left;
-    }
-    </style>
+        </style>
     {% endif %}
 
-    <div style="width:100%; text-align: center; margin: 20px auto;">
-        <form method="post" action="{% url 'register' %}" style="width: 50%; margin: 0 auto;">
+    <div class="container" style="margin: 0 auto">
+        <form method="post" action="{% url 'register' '' %}" class="row">
             {% for error in form.non_field_errors %}
-                <div class="alert alert-danger" role="alert" style="margin-top: 4px;">{{ error }}</div>
+                <div class="alert alert-danger col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2" role="alert" style="margin-top: 4px;">{{ error }}</div>
             {% endfor %}
             {% csrf_token %}
             {% for field in form %}
-                <div id="{{ field.id_for_label }}" class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                <div id="{{ field.id_for_label }}" class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 fieldWrapper {% if field.errors %}errors{% endif %}">
 
                     <label class="pull-left control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
@@ -33,8 +33,8 @@
                 </div>
 
             {% endfor %}
-            <div style="width: 100%; text-align: right; margin-top: 5px;">
-                <button class="btn fg-black bg-primary-1" type="submit" value="login">Register</button>
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                <button class="btn fg-black bg-primary-1 btn-block" type="submit" value="login">Register</button>
             </div>
         </form>
     </div>

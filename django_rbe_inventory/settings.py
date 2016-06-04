@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'profile',
-    'inventory'
+    'core'
+    #'inventory'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,8 +126,14 @@ STATIC_ROOT = 'static'
 
 
 LOGIN_URL = '/core/login'
-AFTER_LOGIN_PAGE = '/inventory/overview'
+AFTER_LOGIN_PAGE = '/profile/user/'
 
 
 CLOSED_NETWORK = True
 CLOSED_NETWORK_INFO = '/profile/not_confirmed'
+CLOSED_NETWORK_INVITE_SEND = not DEBUG
+
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'root'
+DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django default
+SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
