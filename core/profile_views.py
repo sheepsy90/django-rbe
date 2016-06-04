@@ -177,7 +177,7 @@ def invite(request):
         if form.is_valid():
             registration_key = form.save(commit=False)
             registration_key.user = request.user
-            registration_key.key = str(uuid.uuid4())
+            registration_key.key = str(uuid.uuid4()).replace('-', '')
             registration_key.save()
 
             if CLOSED_NETWORK_INVITE_SEND:
