@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='/static/css/profile_cards.css'>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+<!DOCTYPE HTML>
+<title>OpenLayers Simplest Example</title>
+<div id="demoMap" style="height:100%"></div>
+<script src="/static/js/OpenLayers.js"></script>
+<!--<script src="/static/js/OpenLayers.light.js"></script>
+<script src="/static/js/OpenLayers.mobile.js"></script>-->
+<script>
+
+    $(document).ready(function(){
+        var map = new OpenLayers.Map("demoMap");
+        map.addLayer(new OpenLayers.Layer.OSM());
+
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+
+        map.zoomToMaxExtent();
+
+        $('body').data('map', map);
+        $('body').data('markers', markers);
+
+        {% for profile in profiles %}
+            mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }});
+        {% endfor %}
+    });
+
+
+    function mark_on_map(user_id, lon, lat){
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position = new OpenLayers.LonLat(lon, lat).transform(fromProjection, toProjection);
+
+        var marker = new OpenLayers.Marker(position);
+
+
+        marker.events.register('mouseover', marker, function(evt) {
+            $(evt.target).css('cursor', 'pointer')
+        });
+
+        marker.events.register('click', marker, function(evt) {
+            window.location = '/profile/user/' + user_id;
+        });
+
+        $('body').data('markers').addMarker(marker);
+    }
+
+</script>
+        </div>
+    </div>
+{% endblock %}

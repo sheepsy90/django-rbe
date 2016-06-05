@@ -13,5 +13,8 @@ urlpatterns = [
     url(r'aboutme', profile_views.aboutme, name="profile_about_me_change"),
     url(r'avatar_upload', profile_views.avatar_upload, name="profile_avatar_upload"),
     url(r'invite', profile_views.invite, name="invite"),
-    url(r'revoke/(?P<revoke_id>\d+)', profile_views.revoke, name="revoke")
+    url(r'revoke/(?P<revoke_id>\d+)', profile_views.revoke, name="revoke"),
+    url(r'update_location', profile_views.update_location, name="profile_update_location"),
+    url(r'clear_location', profile_views.clear_location, name="profile_clear_location"),
+    url(r'map', profile_views.map, name="profile_map")
 ]

@@ -197,3 +197,29 @@ def revoke(request, revoke_id):
     rk = RegistrationKey.objects.filter(id=revoke_id, user=request.user)
     rk.delete()
     return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+
+
+@login_required
+def update_location(request):
+    latitude = request.POST.get('latitude')
+    longitude = request.POST.get('longitude')
+
+    p = Profile.objects.get(user=request.user)
+    p.update_location(longitude, latitude)
+
+    return JsonResponse({'success': True})
+
+
+@login_required
+def clear_location(request):
+    p = Profile.objects.get(user=request.user)
+    p.clear_location()
+
+    return JsonResponse({'success': True})
+
+
+@login_required
+def map(request):
+    rc = RequestContext(request)
+    rc['profiles'] = Profile.objects.exclude(position_updated=None)
+    return render_to_response('profile/map.html', rc)

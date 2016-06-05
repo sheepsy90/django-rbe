@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -16,6 +17,21 @@ class Profile(models.Model):
     is_confirmed = models.BooleanField(default=False)
     about_me_text = models.TextField(max_length=3000, default='')
     avatar_link = models.URLField(blank=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    position_updated = models.DateTimeField(blank=True, null=True)
+
+    def update_location(self, longitude, latitude):
+        self.latitude = latitude
+        self.longitude = longitude
+        self.position_updated = datetime.datetime.now()
+        self.save()
+
+    def clear_location(self):
+        self.latitude = None
+        self.longitude = None
+        self.position_updated = None
+        self.save()
 
 
 class RegistrationKey(models.Model):

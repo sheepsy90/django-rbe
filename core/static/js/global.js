@@ -11,3 +11,7 @@ function generateUUID() {
     });
     return uuid;
 }
+
+function get_url(url_identifier){
+   return $('body').data('URLS')[url_identifier];
+}

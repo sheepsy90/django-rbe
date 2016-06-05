@@ -5,6 +5,7 @@ import core.auth_views
 
 import core.auth_urls
 import core.profile_urls
+import core.info_urls
 
 urlpatterns = [
     # Examples:
@@ -13,5 +14,6 @@ urlpatterns = [
 
     #url(r'^inventory/', include('inventory.urls')),
     url(r'^core/', include(core.auth_urls)),
-    url(r'^profile/', include(core.profile_urls))
+    url(r'^profile/', include(core.profile_urls)),
+    url(r'^info/', include(core.info_urls))
 ]
