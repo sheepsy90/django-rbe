@@ -24,7 +24,8 @@ hr {
   border: none;
   margin-bottom: 0; }
 #header nav {
-  background: #8dcf8a; }
+  background-image: linear-gradient(to top, #8dcf8a 0px, #5aac56 100%);
+  background-repeat: repeat-x; }
   #header nav a {
     color: #034500;
     font-weight: bold; }

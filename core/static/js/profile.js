@@ -63,7 +63,7 @@ function upload_profile_image(event) {
     }).done(function (msg) {
         if (msg['success'] == true) {
             var path = msg['path'];
-            $('.avatar').find('img').attr('src', path);
+            $('#user-picture').attr('src', path);
         } else {
             return swal('Error', 'Could not upload your profile picture!', 'error');
         }
