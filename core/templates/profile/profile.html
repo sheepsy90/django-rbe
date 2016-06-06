@@ -137,6 +137,7 @@
                             </div>
                         </div>
                     </div>
+                            {% if user == profile.user %}
 
                     <div class="panel-body separator-top blueish">
                         <div class="row">
@@ -146,7 +147,6 @@
 
                     <div class="panel-body">
                         <div class="row">
-                            {% if user == profile.user %}
                                 <div class="col-xs-12">
                                     <div class="left desc">Invitation keys</div>
                                 </div>
@@ -182,7 +182,6 @@
                                         <button id="invite" class="btn btn-default btn-block toppad">Invite</button>
                                     </a>
                                 </div>
-                            {% endif %}
                         </div>
                     </div>
 
@@ -218,6 +217,8 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
