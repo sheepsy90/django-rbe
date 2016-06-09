@@ -170,7 +170,6 @@
                         </div>
                     </div>
                     {% if user == profile.user %}
-
                         <div class="panel-body separator-top blueish">
                             <div class="row">
                                 <div class="col-xs-12"><h3>Private section</h3></div>
@@ -302,15 +301,13 @@
                             csrfmiddlewaretoken: get_csrf_token()
                         }
                     }).done(function (msg) {
-                        if (msg['success']) {
-                            swal('Updated', 'Your about me text was saved!', 'success');
-                        } else {
-                            swal('Error', 'Your about me text was not update!', 'error');
+                        if (!msg['success']) {
+                            swal('Error', 'Your about me text was not update!', 'error', 2000);
                         }
                         $('#edit_about_me').show();
                         $('#save_about_me').hide();
                     }).fail(function () {
-                        swal('Error', 'There was a problem contacting the servee!', 'error');
+                        swal('Error', 'There was a problem contacting the server!', 'error', 2000);
                         $('#edit_about_me').show();
                         $('#save_about_me').hide();
                     });

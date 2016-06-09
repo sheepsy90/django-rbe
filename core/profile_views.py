@@ -127,7 +127,7 @@ def avatar_upload(request):
     file = request.FILES[u'0']
     ending = file.name.split('.')[-1]
 
-    if ending not in ['png', 'jpeg']:
+    if ending not in ['png', 'jpg', 'jpeg']:
         return JsonResponse({'success': False, 'reason': "Unsupported file ending! allowed is png and jpeg!"})
 
     random_uuid = str(uuid.uuid4())
