@@ -13,10 +13,30 @@
 
 {% block content %}
 
+    <style>
+        {% if user != profile.user %}
+            .explain {
+                display: none;
+            }
+        {% else %}
+            .explain {
+                font-size: 12px;
+                font-style: italic;
+                color: #298fc2;
+            }
+            .larger {
+                font-size: 16px;
+                font-style: normal;
+            }
+        {% endif %}
+    </style>
 
     <div class="container">
         <div class="row">
-
+            <div class="explain col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-2 toppad larger">
+                This is your profile. You can upload an image of yourself and record your location if you want to.
+                This would be shown than in the global map that you can select in the navigation.
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-2 toppad">
                 <div class="panel panel-info">
                     <div class="panel-heading">
@@ -30,7 +50,6 @@
                     <div class="panel-body"
                          style="background-image: linear-gradient(to top, #d9edf7 0px, #c4e3f3 100%); background-repeat: repeat-x;">
                         <div class="row">
-
                             <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                                 <div style="padding: 2px; background-color: #333">
                                     <img id="user-picture" alt="User Pic"
@@ -71,8 +90,6 @@
                                             </button>
                                         {% endif %}
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -94,7 +111,11 @@
                                            type="text" placeholder="Add tags to your profile..."/>
                                 </div>
                             {% endif %}
-
+                            <div class="explain col-xs-12">
+                                Tags are short words that tell what you are experienced and interested in.
+                                It also can be topics you want to engage in or talk about. In the discover section
+                                those terms are used to find profiles.
+                            </div>
                         </div>
                     </div>
                     <div class="panel-body separator-top">
@@ -119,6 +140,11 @@
                                               style="width: 100%; overflow-y: auto; resize: none;" rows="12"
                                               disabled>{{ profile.about_me_text }}</textarea>
                             </div>
+                            <div class="explain col-xs-12">
+                                Write a short introduction about yourselves. How did you learn about the Resource Based
+                                Economy,
+                                what parts are you especially interested in and what can you contribute to drive change.
+                            </div>
                         </div>
                     </div>
 
@@ -126,6 +152,9 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="left desc">People invited:</div>
+                            </div>
+                            <div class="explain col-xs-12">
+                                Here you can see all the people that you have invited.
                             </div>
                             <div class="desc col-xs-12" style="margin-top: 0.75em">
                                 {% for inv in invited_users %}
@@ -135,18 +164,19 @@
                                     </a>
                                 {% endfor %}
                             </div>
+
                         </div>
                     </div>
-                            {% if user == profile.user %}
+                    {% if user == profile.user %}
 
-                    <div class="panel-body separator-top blueish">
-                        <div class="row">
-                            <div class="col-xs-12"><h3>Private section</h3></div>
+                        <div class="panel-body separator-top blueish">
+                            <div class="row">
+                                <div class="col-xs-12"><h3>Private section</h3></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="panel-body">
-                        <div class="row">
+                        <div class="panel-body">
+                            <div class="row">
                                 <div class="col-xs-12">
                                     <div class="left desc">Invitation keys</div>
                                 </div>
@@ -182,41 +212,51 @@
                                         <button id="invite" class="btn btn-default btn-block toppad">Invite</button>
                                     </a>
                                 </div>
+                                <div class="explain col-xs-12">
+                                    In order to invite people you need an email address that you submit after clicking
+                                    invite.
+                                    They will automatically receive an invite link via mail and can become part of the
+                                    network.
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="panel-body separator-top">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 ">
-                                <table class="table table-user-information">
-                                    <tbody>
-                                    <tr>
-                                        <td>Email:</td>
-                                        <td><input type="email" class="form-control" value="{{ profile.user.email }}" readonly>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>First name:</td>
-                                        <td><input type="text" class="form-control"
-                                                   value="{{ profile.user.first_name }}" readonly></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Last name:</td>
-                                        <td><input type="text" class="form-control"
-                                                   value="{{ profile.user.last_name }}" readonly></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-xs-12">
-                            <!--     <span class="pull-right">
-                            <a type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a type="button" class="btn btn-sm btn-primary"><i
-                                    class="glyphicon glyphicon-floppy-disk"></i></a>
-                        </span>-->
+                        <div class="panel-body separator-top">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 ">
+                                    <table class="table table-user-information">
+                                        <tbody>
+                                        <tr>
+                                            <td>Email:</td>
+                                            <td><input type="email" class="form-control"
+                                                       value="{{ profile.user.email }}" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>First name:</td>
+                                            <td><input type="text" class="form-control"
+                                                       value="{{ profile.user.first_name }}" readonly></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Last name:</td>
+                                            <td><input type="text" class="form-control"
+                                                       value="{{ profile.user.last_name }}" readonly></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="explain col-xs-12">
+                                    In this section you will be able to add/change personal information if you wish to.
+                                </div>
+                                <div class="col-xs-12">
+                                    <!--     <span class="pull-right">
+                                    <a type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <a type="button" class="btn btn-sm btn-primary"><i
+                                            class="glyphicon glyphicon-floppy-disk"></i></a>
+                                </span>-->
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% endif %}
 
                 </div>

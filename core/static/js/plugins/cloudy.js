@@ -106,6 +106,7 @@ function bind_cloud_area(root_element, tag_receive_url, generate_element){
     var stuff = $("#cloudy_mixin_templates").find('#cloudy-part').clone();
 
     $(stuff).attr('id', 'cloudy').show();
+    $(stuff).attr('class', 'container').show();
     $(root_element).empty().append(stuff);
 
 
