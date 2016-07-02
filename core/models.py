@@ -20,7 +20,6 @@ class Profile(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     position_updated = models.DateTimeField(blank=True, null=True)
-    zip = models.TextField(max_length=32, blank=True, null=True)
 
     def update_location(self, longitude, latitude):
         self.latitude = latitude
