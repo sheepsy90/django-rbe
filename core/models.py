@@ -20,6 +20,7 @@ class Profile(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     position_updated = models.DateTimeField(blank=True, null=True)
+    zip = models.TextField(max_length=32, blank=True, null=True)
 
     def update_location(self, longitude, latitude):
         self.latitude = latitude
@@ -41,3 +42,10 @@ class RegistrationKey(models.Model):
 
     class Meta:
         unique_together = [('user', 'email')]
+
+
+
+class PasswordResetKey(models.Model):
+    user = models.ForeignKey(User)
+    key = models.CharField(max_length=64, unique=True, help_text="The unique key for resetting password!")
+    valid_until = models.DateTimeField(help_text="The time until this key is valid!")

@@ -157,7 +157,7 @@ def send_invite_email(user, key, email):
             If you did not expect this email please just discard it, it was probably a typo.
 
             Otherwise you can get to the registration page by following the link to:
-             http://inventory.rbe.heleska.de/core/register/{}
+             https://rbe.heleska.de/core/register/{}
 
             Kind regards,
             RBE Network

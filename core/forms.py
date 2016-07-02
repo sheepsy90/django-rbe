@@ -61,3 +61,44 @@ class InviteForm(ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control'})
         }
+
+
+class PasswordChangeForm(Form):
+    old_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Enter your old password!")
+    new_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Enter a new password!")
+    repeat_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Repeat the new password for typo checking!")
+
+    def clean(self):
+        cleaned_data = super(PasswordChangeForm, self).clean()
+        password = cleaned_data.get("new_password")
+        password_repeat = cleaned_data.get("repeat_password")
+
+        if password != password_repeat:
+            raise forms.ValidationError({'new_password': "Passwords do not match!"})
+
+
+class PasswordReset(Form):
+    key = forms.CharField(widget=TextInput(attrs={'style': 'display: none;'}))
+    new_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Enter a new password!")
+    repeat_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Repeat the new password for typo checking!")
+
+    def clean(self):
+        cleaned_data = super(PasswordReset, self).clean()
+        password = cleaned_data.get("new_password")
+        password_repeat = cleaned_data.get("repeat_password")
+
+        if password != password_repeat:
+            raise forms.ValidationError({'new_password': "Passwords do not match!"})
+
+
+class PasswordResetRequest(Form):
+
+    email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}),
+                            help_text="Please enter your email address!")
+
+    def clean(self):
+        cleaned_data = super(PasswordResetRequest, self).clean()
+        email = cleaned_data.get("email")
+
+        if not email or len(email) < 6:
+            raise forms.ValidationError({'email': "Please enter an email address!"})

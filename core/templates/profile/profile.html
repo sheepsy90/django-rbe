@@ -249,6 +249,15 @@
                                             <td><input type="text" class="form-control"
                                                        value="{{ profile.user.last_name }}" readonly></td>
                                         </tr>
+                                        <tr>
+                                            <td>ZIP Code:</td>
+                                            <td><input type="text" class="form-control"
+                                                       value="{{ profile.zip }}" readonly></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="{% url 'change_password' %}"><button class="btn btn-default">Change password</button></a></td>
+                                            <td></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
