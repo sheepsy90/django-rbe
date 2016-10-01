@@ -25,18 +25,21 @@
         var markers = new OpenLayers.Layer.Markers( "Markers" );
         map.addLayer(markers);
 
-        map.zoomToMaxExtent();
 
         $('body').data('map', map);
         $('body').data('markers', markers);
 
         {% for profile in profiles %}
-            mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }});
+            {% if profile.user == user %}
+                mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }}, true);
+            {% else %}
+                mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }}, false);
+            {% endif %}
         {% endfor %}
     });
 
 
-    function mark_on_map(user_id, lon, lat){
+    function mark_on_map(user_id, lon, lat, centering){
         var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
         var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
         var position = new OpenLayers.LonLat(lon, lat).transform(fromProjection, toProjection);
@@ -53,6 +56,10 @@
         });
 
         $('body').data('markers').addMarker(marker);
+
+        if (centering){
+            $('body').data('map').setCenter(position, 3);
+        }
     }
 
 </script>

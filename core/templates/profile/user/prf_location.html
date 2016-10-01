@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="desc col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="explain">This shows the location on a map. To figure out where other people are please visit the world map.</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3" style="text-align: center">
+        <div id="demoMap" style="margin: 0 auto; width: 300px; height: 200px"></div>
+    </div>
+</div>
+{% if user == profile.user %}
+    <div class="row">
+    <div class="desc col-xs-12 col-sm-6 col-sm-offset-3">
+
+        {% if profile.position_updated %}
+            <div><span class="fa fa-map-marker"></span> {{ profile.longitude|default:'--' }} {{ profile.latitude|default:'--' }} </div>
+            <div><span class="fa fa-clock-o"></span> {{ profile.position_updated }}</div>
+        {% else %}
+            Location not set!
+        {% endif %}
+    </div>
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-right">
+            <button id='refresh_location' type="button"
+                    class="btn btn-block btn-sm btn-primary">
+                <span class="fa fa-refresh"></span><span> Update Location</span>
+            </button>
+            <button id='delete_location' type="button"
+                    class="btn btn-block btn-sm btn-primary">
+                <i class="fa fa-trash-o"></i><span> Delete Location</span>
+            </button>
+        </div>
+    </div>
+{% endif %}
+
+
+<script src="/static/js/OpenLayers.js"></script>
+<script>
+
+    $(document).ready(function(){
+        var map = new OpenLayers.Map("demoMap");
+
+        map.addLayer(new OpenLayers.Layer.OSM());
+
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        map.addLayer(markers);
+
+        $('body').data('map', map);
+        $('body').data('markers', markers);
+
+        focus_map({{ profile.longitude }}, {{ profile.latitude }})
+    });
+
+    function focus_map(lon, lat){
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position = new OpenLayers.LonLat(lon, lat).transform(fromProjection, toProjection);
+
+        var marker = new OpenLayers.Marker(position);
+        $('body').data('markers').addMarker(marker);
+        $('body').data('map').setCenter(position, 3);
+    }
+
+</script>
+
+

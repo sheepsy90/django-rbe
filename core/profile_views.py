@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 
 # Create your views here.
 from django.template import RequestContext
-from django_rbe_inventory.settings import AFTER_LOGIN_PAGE, CLOSED_NETWORK_INVITE_SEND, DEFAULT_FROM_EMAIL
+from django_rbe.settings import AFTER_LOGIN_PAGE, CLOSED_NETWORK_INVITE_SEND, DEFAULT_FROM_EMAIL
 
 
 @login_required

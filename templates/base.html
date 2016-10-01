@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" name="viewport">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>RBE Stockholm</title>
+    <title>RBE Connect</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
@@ -63,13 +63,14 @@
                       <button type="submit" class="btn btn-default">Submit</button>
                     </form>-->
                     <ul class="nav navbar-nav navbar-right">
-                        <li id='my-account' class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
+                        <li id='my-account'><a href="/profile/user/{{ user.id }}">My profile</a></li>
+                        <li id='other' class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li id='my-profile'><a href="/profile/user/{{ user.id }}">My account</a></li>
-                                <li id='my-profile'><a href="{% url 'profile-overview' %}">User's</a></li>
-                                <li id='my-profile'><a href="{% url 'profile_discover' %}">Discover</a></li>
-                                <li id='my-profile'><a href="{% url 'profile_map' %}">Map</a></li>
+                                <li id='user-list'><a href="{% url 'profile-overview' %}">Other Users</a></li>
+                                <li id='discover-skills'><a href="{% url 'profile_discover' %}">Discover Skills</a></li>
+                                <li id='world-map'><a href="{% url 'profile_map' %}">World Map</a></li>
+                                <li id='developer-info'><a href="{% url 'developer_info' %}">Developer Info</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>

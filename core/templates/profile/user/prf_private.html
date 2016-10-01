@@ -1,0 +1,78 @@
+
+<div class="panel-body separator-top" style="background-color: rgba(167, 245, 164, 0.54)">
+    <div class="row">
+        <div class="col-xs-12"><b>Private section</b></div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-xs-12" style="text-align: left">
+        <div class="left desc"><b>Invitation keys</b></div>
+    </div>
+
+</div>
+<div class="panel-body">
+    <div class="row">
+
+        <div class="desc col-xs-12" style="margin-top: 0.75em">
+            {% if registration_keys %}
+                <div id="reg_key_table">
+
+                    <div class="row">
+                        <div class="hidden-xs col-sm-6 bold">Key</div>
+                        <div class="col-xs-8 col-sm-4 bold">Email</div>
+                        <div class="col-xs-4 col-sm-2 bold">Actions</div>
+                    </div>
+                    {% for registration_key in registration_keys %}
+                        <div class="row">
+
+                            <div class="hidden-xs col-sm-6">{{ registration_key.key }}</div>
+                            <div class="col-xs-8 col-sm-4">{{ registration_key.email }}</div>
+                            <div class="col-xs-4 col-sm-2">  {% if not registration_key.used %}
+                                <a href="{% url 'revoke' registration_key.id %}"
+                                   class="btn btn-default"><span
+                                        class="glyphicon glyphicon-remove"></span>Revoke</a>
+                            {% endif %}</div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% else %}
+                No invitations!
+            {% endif %}
+        </div>
+        <div class="col-xs-12 col-sm-4 col-sm-offset-8">
+            <a href="{% url 'invite' %}">
+                <button id="invite" class="btn btn-default btn-block toppad">Invite</button>
+            </a>
+        </div>
+        <div class="explain col-xs-12" style="margin-top: 0.5em">
+            In order to invite people you need an email address that you submit after clicking
+            invite.
+            They will automatically receive an invite link via mail and can become part of the
+            network.
+        </div>
+    </div>
+</div>
+
+<div class="panel-body separator-top">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 ">
+            <table class="table table-user-information">
+                <tbody>
+                <tr>
+                    <td>Email:</td>
+                    <td><input type="email" class="form-control"
+                               value="{{ profile.user.email }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a href="{% url 'change_password' %}"><button class="btn btn-default">Change password</button></a></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

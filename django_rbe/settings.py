@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -37,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core'
+    'core',
+    'oidc_provider'
     #'inventory'
 ]
 
@@ -52,7 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_rbe_inventory.urls'
+ROOT_URLCONF = 'django_rbe.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_rbe_inventory.wsgi.application'
+WSGI_APPLICATION = 'django_rbe.wsgi.application'
 
 
 # Database
@@ -137,3 +139,11 @@ EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'root'
 DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django default
 SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
+
+
+# Openid provider settings
+
+SITE_URL = 'http://localhost:9001'
+OIDC_USERINFO = 'core.openid.user_info'
+
+OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'

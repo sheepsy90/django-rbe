@@ -9,274 +9,95 @@
         <link rel="stylesheet" type="text/css" href='/static/css/myprofile.css'>
     {% endif %}
     <script src="{% static 'js/profile.js' %}"></script>
+
+    <style>
+        .cnav-button:hover {
+            background-color: #5aac56;
+            color: #eee;
+        }
+        .cnav-button {
+            background-color: #eee;
+            color: #333;
+            border-color: #eee;
+            margin-top: 2px;
+        }
+
+        .cnav-button.active {
+            background-color: #5aac56;
+            color: #eee;
+        }
+        .explain {
+            color: #7c7c7c;
+            font-style: italic;
+        }
+
+    </style>
 {% endblock %}
 
 {% block content %}
+    <div id="profile" class="container" style="text-align: center; width: 100%;">
 
-    <style>
-        {% if user != profile.user %}
-            .explain {
-                display: none;
-            }
-        {% else %}
-            .explain {
-                font-size: 12px;
-                font-style: italic;
-                color: #298fc2;
-            }
-            .larger {
-                font-size: 16px;
-                font-style: normal;
-            }
-        {% endif %}
-    </style>
+    <div class="row">
+        <div class="col-xs-12" >
+            <ul >
 
-    <div class="container">
-        <div class="row">
-            <div class="explain col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-2 toppad larger">
-                This is your profile. You can upload an image of yourself and record your location if you want to.
-                This would be shown than in the global map that you can select in the navigation.
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-2 toppad">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title row">
-                            <div class="col-xs-6 text-left">{{ profile.user.username }}</div>
-                            <div class="col-xs-6 text-right">Joined: {{ profile.user.date_joined }}</div>
-                            <div class="col-xs-12 text-left">Invited by: {{ profile.invited_by|default:' -- ' }}</div>
-                        </h3>
-
-                    </div>
-                    <div class="panel-body"
-                         style="background-image: linear-gradient(to top, #d9edf7 0px, #c4e3f3 100%); background-repeat: repeat-x;">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                                <div style="padding: 2px; background-color: #333">
-                                    <img id="user-picture" alt="User Pic"
-                                         src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}"
-                                         class="img-responsive">
-                                </div>
-                                {% if user == profile.user %}
-                                <div>
-                                    <a style="margin-top: 4px" id="user-picture-btn" type="button"
-                                       class="btn btn-sm btn-block btn-primary">
-                                        <i class="fa fa-camera"></i>
-                                        <span>Change picture</span>
-                                    </a>
-                                    <input style="display: none" id="choose_file" type="file" multiple
-                                           name="file_source"
-                                           size="0" value="Upload">
-                                </div>
-                                {% endif %}
-                            </div>
-                            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9">
-                                <div class="row">
-                                    <div class="desc col-xs-12 col-sm-6">
-                                        <span class="fa fa-map-marker"></span>
-                                        {% if profile.position_updated %}
-                                            Location: {{ profile.longitude|default:'--' }}
-                                            {{ profile.latitude|default:'--' }} // {{ profile.position_updated }}
-                                        {% else %}
-                                            Location not set!
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 text-right">
-                                        {% if user == profile.user %}
-                                            <button id='refresh_location' type="button"
-                                                    class="btn btn-block btn-sm btn-primary">
-                                                <span class="fa fa-refresh"></span><span> Update Location</span>
-                                            </button>
-                                            <button id='delete_location' type="button"
-                                                    class="btn btn-block btn-sm btn-primary">
-                                                <i class="fa fa-trash-o"></i><span> Delete Location</span>
-                                            </button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                      <div class="explain col-xs-12">
-                                The location feature might not work for all suers right now due to different
-                                          behaviour in the web browsers. I am on it ;)
-                            </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="panel-body">
-                        <div class="row">
-                            <div id="tags-container" class="col-xs-12 text-center">
-                                {% for element in profile.tags.all %}
-                                    <span id="{{ element.id }}" class="tags">{{ element.value }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="left col-xs-12">Tags</div>
-
-                            {% if user == profile.user %}
-                                <div class="col-xs-12">
-                                    <input id='add_tags' class="form-control" style="width: 100%; margin-top: 1em"
-                                           type="text" placeholder="Add tags to your profile..."/>
-                                </div>
-                            {% endif %}
-                            <div class="explain col-xs-12">
-                                Tags are short words that tell what you are experienced and interested in.
-                                It also can be topics you want to engage in or talk about. In the discover section
-                                those terms are used to find profiles.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body separator-top">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="left desc">About yourself</div>
-                            </div>
-                            {% if user == profile.user %}
-                                <div class="col-xs-12">
-                                    <div id="save_about_me" style="display: none"
-                                         class="col-xs-8 col-xs-offset-4 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-success">
-                                        Save
-                                    </div>
-                                    <div id="edit_about_me"
-                                         class="col-xs-12 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-default">
-                                        Edit
-                                    </div>
-                                </div>
-                            {% endif %}
-                            <div class="desc col-xs-12" style="margin-top: 0.75em">
-                                    <textarea id="about_me_area" maxlength="3000"
-                                              style="width: 100%; overflow-y: auto; resize: none;" rows="12"
-                                              disabled>{{ profile.about_me_text }}</textarea>
-                            </div>
-                            <div class="explain col-xs-12">
-                                Write a short introduction about yourselves. How did you learn about the Resource Based
-                                Economy,
-                                what parts are you especially interested in and what can you contribute to drive change.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel-body separator-top">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="left desc">People invited:</div>
-                            </div>
-                            <div class="explain col-xs-12">
-                                Here you can see all the people that you have invited.
-                            </div>
-                            <div class="desc col-xs-12" style="margin-top: 0.75em">
-                                {% for inv in invited_users %}
-                                    <a class="col-xs-12 col-sm-6 col-md-4 col-lg-3 invited"
-                                       href="/profile/user/{{ inv.user.id }}">
-                                        <div class="btn btn-block btn-default">{{ inv.user.username }}</div>
-                                    </a>
-                                {% endfor %}
-                            </div>
-
-                        </div>
-                    </div>
-                    {% if user == profile.user %}
-                        <div class="panel-body separator-top blueish">
-                            <div class="row">
-                                <div class="col-xs-12"><h3>Private section</h3></div>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="left desc">Invitation keys</div>
-                                </div>
-                                <div class="desc col-xs-12" style="margin-top: 0.75em">
-                                    {% if registration_keys %}
-                                        <div id="reg_key_table">
-
-                                            <div class="row">
-                                                <div class="hidden-xs col-sm-6 bold">Key</div>
-                                                <div class="col-xs-8 col-sm-4 bold">Email</div>
-                                                <div class="col-xs-4 col-sm-2 bold">Actions</div>
-                                            </div>
-                                            {% for registration_key in registration_keys %}
-                                                <div class="row">
-
-                                                    <div class="hidden-xs col-sm-6">{{ registration_key.key }}</div>
-                                                    <div class="col-xs-8 col-sm-4">{{ registration_key.email }}</div>
-                                                    <div class="col-xs-4 col-sm-2">  {% if not registration_key.used %}
-                                                        <a href="{% url 'revoke' registration_key.id %}"
-                                                           class="btn btn-default"><span
-                                                                class="glyphicon glyphicon-remove"></span>Revoke</a>
-                                                    {% endif %}</div>
-                                                </div>
-
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        No invitations!
-                                    {% endif %}
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-sm-offset-8">
-                                    <a href="{% url 'invite' %}">
-                                        <button id="invite" class="btn btn-default btn-block toppad">Invite</button>
-                                    </a>
-                                </div>
-                                <div class="explain col-xs-12">
-                                    In order to invite people you need an email address that you submit after clicking
-                                    invite.
-                                    They will automatically receive an invite link via mail and can become part of the
-                                    network.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel-body separator-top">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 ">
-                                    <table class="table table-user-information">
-                                        <tbody>
-                                        <tr>
-                                            <td>Email:</td>
-                                            <td><input type="email" class="form-control"
-                                                       value="{{ profile.user.email }}" readonly>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>First name:</td>
-                                            <td><input type="text" class="form-control"
-                                                       value="{{ profile.user.first_name }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Last name:</td>
-                                            <td><input type="text" class="form-control"
-                                                       value="{{ profile.user.last_name }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="{% url 'change_password' %}"><button class="btn btn-default">Change password</button></a></td>
-                                            <td></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="explain col-xs-12">
-                                    In this section you will be able to add/change personal information if you wish to.
-                                </div>
-                                <div class="col-xs-12">
-                                    <!--     <span class="pull-right">
-                                    <a type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                                    <a type="button" class="btn btn-sm btn-primary"><i
-                                            class="glyphicon glyphicon-floppy-disk"></i></a>
-                                </span>-->
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                </div>
-            </div>
+            </ul>
         </div>
     </div>
 
+        <div class="row">
+            <div class="col-xs-12 col-sm-2 toppad">
+                {% include 'profile/user/prf_picture.html' %}
+                <div class="nav nav-pills toppad">
+                    <a class='cnav-button btn btn-block active' href="#3b" data-toggle="tab">About</a>
+                    <a class='cnav-button btn btn-block' href="#7b" data-toggle="tab">Location</a>
+                    <a class='cnav-button btn btn-block' href="#2b" data-toggle="tab">Tags</a>
+                    <a class='cnav-button btn btn-block' href="#4b" data-toggle="tab">Invitation</a>
+                    <a class='cnav-button btn btn-block' href="#5b" data-toggle="tab">OpenId</a>
+                    {% if user == profile.user %}
+                        <a class='cnav-button btn btn-block' href="#8b" data-toggle="tab">Private</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-10 toppad">
+                <div class="tab-content clearfix">
+                    <div class="tab-pane" id="2b">
+                        {% include 'profile/user/prf_tags.html' %}
+                    </div>
+                    <div class="tab-pane active" id="3b">
+                        {% include 'profile/user/prf_about.html' %}
+                    </div>
+                    <div class="tab-pane" id="7b">
+                        {% include 'profile/user/prf_location.html' %}
+                    </div>
+                    <div class="tab-pane" id="4b">
+                        {% include 'profile/user/prf_invitation.html' %}
+                    </div>
+                    <div class="tab-pane" id="5b">
+                        {% include 'profile/user/prf_openid.html' %}
+                    </div>
+                    {% if user == profile.user %}
+                        <div class="tab-pane" id="8b">
+                            {% include 'profile/user/prf_private.html' %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+
+  </div>
+
+
     <script>
         $(document).ready(function () {
+
+            $('.cnav-button').click(function(){
+                $(this).parent().children().removeClass('active');
+                $(this).addClass('active');
+            });
+
             $('#my-account').addClass('active');
             $('#my-profile').addClass('active');
             {% if user == profile.user %}
@@ -346,15 +167,6 @@
 
 
     </script>
-
-
-
-
-    <style>
-
-
-    </style>
-
 
 
 {% endblock %}

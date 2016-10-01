@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block content %}
+    <style>
+        .person_info {
+            border: 1px solid #eee;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+    </style>
+    <div class="container">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+            <h4>Invite based network</h4>
+            <p>This is an invite based system which means that you need to be invited by someone who is already part of the network.
+                The reason for that is to ensure that people are familiar with the concept and ideas in a reasonable
+                way. There is of course no precise definition of that and every member can define for themselves what is
+                a sufficient level to invite someone. More details and suggestions are given once you are going to
+                invite someone.
+            </p>
+            <p> Of course you have the possibility to easily find a person that is already part of the network and
+                near you. To find someone click the below button. The page will request your location in order to find someone
+                who you then can contact. </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3 col-xs-offset-8 col-md-2 col-md-offset-7" style="text-align: right">
+                <div id="find_close_by" class="btn btn-block btn-default">Find person near you</div>
+                <div id="person_info" style="display: none">
+                    Try to contact <span class="name"></span> on <a href="" class="fb-link">Facebook</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function(){
+            $("#find_close_by").click(function(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(suggest_close_by);
+                }
+            })
+        });
+
+    function present_person(person_data){
+        $("#person_info").find('.name').html(person_data['name']);
+        $("#person_info").find('.fb-link').attr('href', person_data['fb']);
+        $("#person_info").show();
+    }
+
+    function suggest_close_by(position) {
+        $.ajax({
+            method: 'POST',
+            url: get_url('suggest_close_by'),
+            data: {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                csrfmiddlewaretoken: get_csrf_token()
+            }
+        }).done(function (msg) {
+            if (msg['success']) {
+                present_person(msg['person'])
+            }
+        }).fail(function () {
+            return swal('Error', 'Could not reach server!', 'error');
+        });
+    }
+</script>
+{% endblock %}

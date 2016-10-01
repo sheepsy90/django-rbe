@@ -9,17 +9,22 @@ from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.mail import send_mail
 from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django_rbe_inventory.settings import AFTER_LOGIN_PAGE, LOGIN_URL, DEFAULT_FROM_EMAIL
+from django_rbe.settings import AFTER_LOGIN_PAGE, LOGIN_URL, DEFAULT_FROM_EMAIL
 
 from django.conf import settings
 
 
 def login(request):
+    next_redirect = request.GET.get('next')
+
     if request.user.is_authenticated():
-        return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+        if not next_redirect:
+            return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+        else:
+            return HttpResponseRedirect(next_redirect)
 
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -38,13 +43,17 @@ def login(request):
 
             else:
                 djauth.login(request, user)
-                return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(user.id))
+                next_redirect = request.POST.get('next')
+                if not next_redirect:
+                    return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+                else:
+                    return HttpResponseRedirect(next_redirect)
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
 
-    return render(request, 'authorizing/login.html', {'form': form})
+    return render(request, 'authorizing/login.html', {'form': form, 'next': next_redirect})
 
 
 @login_required
@@ -53,6 +62,10 @@ def logout(request):
     djauth.logout(request)
     return HttpResponseRedirect(LOGIN_URL, rc)
 
+
+def register_info(request):
+    rc = RequestContext(request)
+    return render_to_response('authorizing/register_info.html', rc)
 
 def register(request, registration_key):
     if request.method == 'POST':
@@ -131,6 +144,20 @@ def reset(request):
     else:
         return render(request, 'authorizing/reset_password.html', {'form': PasswordResetRequest()})
 
+
+def suggest_close_by(request):
+    latitude = request.POST.get('latitude')
+    longitude = request.POST.get('longitude')
+
+    # TODO - Change to real data not to my personal fake one
+
+    person = {
+        'name': 'Robert Kessler',
+        'fb': 'https://www.facebook.com/profile.php?id=100010614489059'
+    }
+
+    return JsonResponse({'success': True, 'person': person})
+
 @login_required
 def change_password(request):
     if request.method == 'POST':
@@ -180,3 +207,4 @@ def chpw(request, reset_key):
             form = PasswordReset(initial={'key': reset_key})
 
     return render(request, 'authorizing/chpw.html', {'form': form})
+

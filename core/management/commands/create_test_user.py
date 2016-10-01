@@ -7,6 +7,7 @@ class Command(BaseCommand):
     help = 'Creates a user for testing the system'
 
     def handle(self, *args, **options):
+        User.objects.filter(username='sheepy').delete()
         u = User.objects.create_superuser('sheepy', 'sheepy@test.de', 'aqwsderf')
         p = Profile(user=u, invited_by=None, is_confirmed=True)
         p.save()

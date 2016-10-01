@@ -1,0 +1,24 @@
+
+    <div class="row">
+        <div class="desc col-xs-12">
+                <textarea id="about_me_area" maxlength="3000"
+                          style="width: 100%; overflow-y: auto; resize: none;" rows="12" disabled>{{ profile.about_me_text }}</textarea>
+        </div>
+        {% if user == profile.user %}
+            <div class="col-xs-12" style="margin-top: 0.2em">
+                <div id="save_about_me" style="display: none"
+                     class="col-xs-8 col-xs-offset-4 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-success">
+                    Save
+                </div>
+                <div id="edit_about_me"
+                     class="col-xs-12 col-sm-4 col-sm-offset-8 col-md-2 col-md-offset-10 btn btn-sm btn-default">
+                    Edit
+                </div>
+            </div>
+        {% endif %}
+        <div class="explain col-xs-12">
+            Write a short introduction about yourselves. How did you learn about the Resource Based
+            Economy,
+            what parts are you especially interested in and what can you contribute to drive change.
+        </div>
+    </div>

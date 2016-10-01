@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-xs-12">
+    <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none; border-radius: 5px 5px 0 0">
+        {{ profile.user.username }}
+    </div>
+    <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none;">
+        Joined: {{ profile.user.date_joined|date:'Y-m-d' }}
+    </div>
+        <div style="padding: 1px; background-color: #aaa">
+            <img id="user-picture" alt="User Pic"
+                 src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}"
+                 class="img-responsive">
+        </div>
+        {% if user == profile.user %}
+        <div>
+            <a style="margin-top: 4px" id="user-picture-btn" type="button"
+               class="btn btn-sm btn-block btn-primary">
+                <i class="fa fa-camera"></i>
+                <span>Change picture</span>
+            </a>
+            <input style="display: none" id="choose_file" type="file" multiple name="file_source" size="0" value="Upload">
+        </div>
+        {% endif %}
+    </div>
+</div>
