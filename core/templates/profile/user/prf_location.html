@@ -47,7 +47,9 @@
         $('body').data('map', map);
         $('body').data('markers', markers);
 
-        focus_map({{ profile.longitude }}, {{ profile.latitude }})
+        {% if profile.longitude != None and profile.latitude != None %}
+            focus_map({{ profile.longitude }}, {{ profile.latitude }});
+        {% endif %}
     });
 
     function focus_map(lon, lat){
