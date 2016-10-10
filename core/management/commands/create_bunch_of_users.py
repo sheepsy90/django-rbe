@@ -15,8 +15,11 @@ class Command(BaseCommand):
         tags = ['banana', 'apple', 'fruit', 'ice', 'green', 'red']
         tags_obj = []
         for t in tags:
-            tg = Tag(value=t)
-            tg.save()
+            if not Tag.objects.filter(value=t).exists():
+                tg = Tag(value=t)
+                tg.save()
+            else:
+                tg = Tag.objects.filter(value=t).first()
             tags_obj.append(tg)
 
         usernames = [e[0] + " " + e[1] for e in possibilities[0:25]]
@@ -31,6 +34,9 @@ class Command(BaseCommand):
                 iby = random.choice(users)
 
             p = Profile(user=u, invited_by=iby, is_confirmed=True)
+            long = str(random.randint(-900, 900) / 10.0)
+            lang = str(random.randint(-1800, 1800) / 10.0)
+            p.update_location(long, lang)
             p.save()
 
             num = random.randint(0, len(tags))

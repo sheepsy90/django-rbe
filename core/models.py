@@ -33,7 +33,6 @@ class Profile(models.Model):
         self.position_updated = None
         self.save()
 
-
 class RegistrationKey(models.Model):
     user = models.ForeignKey(User)
     key = models.CharField(max_length=64, unique=True, help_text="The unique key for invite identification!")
@@ -41,8 +40,6 @@ class RegistrationKey(models.Model):
 
     class Meta:
         unique_together = [('user', 'email')]
-
-
 
 class PasswordResetKey(models.Model):
     user = models.ForeignKey(User)

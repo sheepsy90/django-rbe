@@ -47,13 +47,12 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-2 toppad">
-                {% include 'profile/user/prf_picture.html' %}
+                {% include 'user/prf_picture.html' %}
                 <div class="nav nav-pills toppad">
                     <a class='cnav-button btn btn-block active' href="#3b" data-toggle="tab">About</a>
                     <a class='cnav-button btn btn-block' href="#7b" data-toggle="tab">Location</a>
                     <a class='cnav-button btn btn-block' href="#2b" data-toggle="tab">Tags</a>
                     <a class='cnav-button btn btn-block' href="#4b" data-toggle="tab">Invitation</a>
-                    <a class='cnav-button btn btn-block' href="#5b" data-toggle="tab">OpenId</a>
                     {% if user == profile.user %}
                         <a class='cnav-button btn btn-block' href="#8b" data-toggle="tab">Private</a>
                     {% endif %}
@@ -62,23 +61,20 @@
             <div class="col-xs-12 col-sm-10 toppad">
                 <div class="tab-content clearfix">
                     <div class="tab-pane" id="2b">
-                        {% include 'profile/user/prf_tags.html' %}
+                        {% include 'user/prf_tags.html' %}
                     </div>
                     <div class="tab-pane active" id="3b">
-                        {% include 'profile/user/prf_about.html' %}
+                        {% include 'user/prf_about.html' %}
                     </div>
                     <div class="tab-pane" id="7b">
-                        {% include 'profile/user/prf_location.html' %}
+                        {% include 'user/prf_location.html' %}
                     </div>
                     <div class="tab-pane" id="4b">
-                        {% include 'profile/user/prf_invitation.html' %}
-                    </div>
-                    <div class="tab-pane" id="5b">
-                        {% include 'profile/user/prf_openid.html' %}
+                        {% include 'user/prf_invitation.html' %}
                     </div>
                     {% if user == profile.user %}
                         <div class="tab-pane" id="8b">
-                            {% include 'profile/user/prf_private.html' %}
+                            {% include 'user/prf_private.html' %}
                         </div>
                     {% endif %}
                 </div>

@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'location',
+    'profile',
+    'skills',
+    'public',
     'oidc_provider'
     #'inventory'
 ]
@@ -68,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.additional_template_vars'
             ],
         },
     },
@@ -127,6 +132,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 
 
+# Django OIDC Provider Settings
+SITE_URL = 'http://localhost:9001'
+#OIDC_USERINFO = 'core.openid.user_info'
+#OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
+
+
 LOGIN_URL = '/core/login'
 AFTER_LOGIN_PAGE = '/profile/user/'
 
@@ -140,10 +151,4 @@ EMAIL_HOST_USER = 'root'
 DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django default
 SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
 
-
-# Openid provider settings
-
-SITE_URL = 'http://localhost:9001'
-OIDC_USERINFO = 'core.openid.user_info'
-
-OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
+GOOGLE_ANALYTICS_ID = 'UA-61415516-2'

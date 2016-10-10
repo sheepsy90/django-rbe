@@ -53,7 +53,7 @@ def login(request):
     else:
         form = LoginForm()
 
-    return render(request, 'authorizing/login.html', {'form': form, 'next': next_redirect})
+    return render(request, 'auth/login.html', {'form': form, 'next': next_redirect})
 
 
 @login_required
@@ -65,7 +65,7 @@ def logout(request):
 
 def register_info(request):
     rc = RequestContext(request)
-    return render_to_response('authorizing/register_info.html', rc)
+    return render_to_response('auth/register_info.html', rc)
 
 def register(request, registration_key):
     if request.method == 'POST':
@@ -99,7 +99,7 @@ def register(request, registration_key):
     else:
         form = RegistrationForm(initial={'registration_key': registration_key})
 
-    return render(request, 'authorizing/register.html', {'form': form, 'closed_network': settings.CLOSED_NETWORK})
+    return render(request, 'auth/register.html', {'form': form, 'closed_network': settings.CLOSED_NETWORK})
 
 
 def reset(request):
@@ -109,7 +109,7 @@ def reset(request):
         form = PasswordResetRequest(request.POST)
 
         if not form.is_valid():
-            return render(request, 'authorizing/reset_password.html', {'form': form})
+            return render(request, 'auth/reset_password.html', {'form': form})
 
         u = User.objects.filter(email=email)
 
@@ -140,9 +140,9 @@ def reset(request):
                         RBE Network'''.format(u.first().username, reset_key, valid_until.isoformat()), DEFAULT_FROM_EMAIL, [email], fail_silently=True)
 
 
-        return render_to_response('authorizing/reset_password_email_send.html', {'email': email})
+        return render_to_response('auth/reset_password_email_send.html', {'email': email})
     else:
-        return render(request, 'authorizing/reset_password.html', {'form': PasswordResetRequest()})
+        return render(request, 'auth/reset_password.html', {'form': PasswordResetRequest()})
 
 
 def suggest_close_by(request):
@@ -182,7 +182,7 @@ def change_password(request):
     else:
         form = PasswordChangeForm()
 
-    return render(request, 'authorizing/change_password.html', {'form': form})
+    return render(request, 'auth/change_password.html', {'form': form})
 
 
 def chpw(request, reset_key):
@@ -199,12 +199,12 @@ def chpw(request, reset_key):
                 user.set_password(new_password)
                 user.save()
                 resettable.delete()
-                return render(request, 'authorizing/chpw.html', {'form': form, 'success': True})
+                return render(request, 'auth/chpw.html', {'form': form, 'success': True})
     else:
         resettable = PasswordResetKey.objects.filter(key=reset_key, valid_until__gte=datetime.datetime.now())
         form = None
         if resettable.exists():
             form = PasswordReset(initial={'key': reset_key})
 
-    return render(request, 'authorizing/chpw.html', {'form': form})
+    return render(request, 'auth/chpw.html', {'form': form})
 

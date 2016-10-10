@@ -6,42 +6,38 @@
 
         <div class="row">
             <div class="col-xs-12">
-            <h1>Request for Permission</h1>
-            <p>Client <strong>{{ client.name }}</strong> would like to access this information of you ...</p>
-</div>
+                <h1>Request for Permission</h1>
+                <p>Client <strong>{{ client.name }}</strong> would like to access this information of you ...</p>
+            </div>
         </div>
 
         <div class="row">
 
-<form method="post" action="{% url 'oidc_provider:authorize' %}">
+            <form method="post" action="{% url 'oidc_provider:authorize' %}">
 
-    {% csrf_token %}
+                {% csrf_token %}
 
-    {{ hidden_inputs }}
+                {{ hidden_inputs }}
 
 
-    {% for scope in scopes %}
-        <div class="col-xs-4">
-        <div class="panel panel-default ">
-          <div class="panel-heading">
-            <h3 class="panel-title">{{ scope.name }}</h3>
-          </div>
-          <div class="panel-body">
-            {{ scope.description }}
-          </div>
+                {% for scope in scopes %}
+                    <div class="col-xs-4">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ scope.name }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ scope.description }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div style="text-align: right" class="col-xs-12">
+                    <input class="btn btn-default" type="submit" value="Decline"/>
+                    <input class="btn btn-success" name="allow" type="submit" value="Authorize"/>
+                </div>
+            </form>
         </div>
-        </div>
-    {% endfor %}
-
-    <div style="text-align: right" class="col-xs-12">
-    <input class="btn btn-default" type="submit" value="Decline" />
-    <input class="btn btn-success" name="allow" type="submit" value="Authorize" />
-</div>
-</form>
-        </div>
-
     </div>
-
-
-
 {% endblock %}

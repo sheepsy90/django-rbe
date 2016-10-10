@@ -1,12 +1,9 @@
 import uuid
-from core.forms import InviteForm
-from core.models import Profile, Tag, RegistrationKey
-from django.conf import settings
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db.models import Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 
@@ -15,7 +12,10 @@ from django.core.mail import send_mail
 
 # Create your views here.
 from django.template import RequestContext
-from django_rbe.settings import AFTER_LOGIN_PAGE, CLOSED_NETWORK_INVITE_SEND, DEFAULT_FROM_EMAIL
+from django.conf import settings
+
+from profile.forms import InviteForm
+from profile.models import Profile, RegistrationKey
 
 
 @login_required
@@ -28,7 +28,7 @@ def profile(request, user_id):
         rc['profile'] = p
         rc['invited_users'] = Profile.objects.filter(invited_by=uf.first())
         rc['registration_keys'] = RegistrationKey.objects.filter(user=request.user)
-        return render_to_response('profile.html', rc)
+        return render_to_response('profile/profile.html', rc)
     else:
         return 404
 
@@ -37,74 +37,8 @@ def profile(request, user_id):
 def overview(request):
     rc = RequestContext(request)
     rc['profiles'] = Profile.objects.all()
-    return render_to_response('overview.html', rc)
+    return render_to_response('profile/overview.html', rc)
 
-
-@login_required
-def profile_add_tag(request):
-    value = request.POST.get('value')
-
-    value = value.strip().replace(' ', '_').lower()
-
-    t = Tag.objects.filter(value=value)
-    if t.exists():
-        tag_to_add = t.first()
-    else:
-        tag_to_add = Tag(value=value)
-        tag_to_add.save()
-
-    o = Profile.objects.filter(user=request.user)
-
-    if o.exists():
-        obj = o.first()
-        obj.tags.add(tag_to_add)
-        obj.save()
-
-        return JsonResponse({'success': True, 'id': tag_to_add.id})
-    else:
-        return JsonResponse({'success': False, 'reason': 'Object does not exist!'})
-
-
-@login_required
-def profile_del_tag(request):
-    tag_id = request.POST.get('tag_id')
-
-    t = Tag.objects.get(id=tag_id)
-    o = Profile.objects.get(user=request.user)
-
-    o.tags.remove(t)
-    o.save()
-
-    return JsonResponse({'success': True})
-
-
-@login_required
-def profile_cloud(request):
-    chosen_tags = request.POST.get('chosen_tags', None)
-
-    if chosen_tags is None:
-        return JsonResponse({'success': False, 'reason': "Something"})
-
-    if chosen_tags == '':
-        tags = dict([(e.value, e.object_count) for e in Tag.objects.all().annotate(object_count=Count('profile_tags')) if e.object_count > 0])
-    else:
-        chosen_tags_lst = chosen_tags.split(',')
-        tags = dict([(e.value, e.object_count) for e in Tag.objects.filter(value__in=chosen_tags_lst).annotate(object_count=Count('profile_tags'))])
-
-    sorted_tags = sorted(tags.items(), key=lambda e: -int(e[1]))
-    max_tags = sorted_tags[0:5]
-
-    objts = Profile.objects.filter(tags__value__in=[e[0] for e in max_tags]).distinct()
-
-    return JsonResponse({
-        'tags': tags,
-        'objects': [{'id': obj.user.id, 'name': obj.user.username} for obj in objts]
-    })
-
-@login_required
-def discover(request):
-    rc = RequestContext(request)
-    return render_to_response('discover.html', rc)
 
 @login_required
 def aboutme(request):
@@ -162,7 +96,7 @@ def send_invite_email(user, key, email):
             Kind regards,
             RBE Network
         '''.format(user.username, key),
-        DEFAULT_FROM_EMAIL,
+        settings.DEFAULT_FROM_EMAIL,
         [email],
         fail_silently=True,
     )
@@ -180,46 +114,20 @@ def invite(request):
             registration_key.key = str(uuid.uuid4()).replace('-', '')
             registration_key.save()
 
-            if CLOSED_NETWORK_INVITE_SEND:
+            if settings.CLOSED_NETWORK_INVITE_SEND:
                 send_invite_email(request.user, registration_key.key, registration_key.email)
 
-            return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+            return HttpResponseRedirect(settings.AFTER_LOGIN_PAGE + str(request.user.id))
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = InviteForm()
 
-    return render(request, 'invite.html', {'form': form})
+    return render(request, 'profile/invite.html', {'form': form})
 
 
 @login_required
 def revoke(request, revoke_id):
     rk = RegistrationKey.objects.filter(id=revoke_id, user=request.user)
     rk.delete()
-    return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
-
-
-@login_required
-def update_location(request):
-    latitude = request.POST.get('latitude')
-    longitude = request.POST.get('longitude')
-
-    p = Profile.objects.get(user=request.user)
-    p.update_location(longitude, latitude)
-
-    return JsonResponse({'success': True})
-
-
-@login_required
-def clear_location(request):
-    p = Profile.objects.get(user=request.user)
-    p.clear_location()
-
-    return JsonResponse({'success': True})
-
-
-@login_required
-def map(request):
-    rc = RequestContext(request)
-    rc['profiles'] = Profile.objects.exclude(position_updated=None)
-    return render_to_response('world_map.html', rc)
+    return HttpResponseRedirect(settings.AFTER_LOGIN_PAGE + str(request.user.id))

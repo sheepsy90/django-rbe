@@ -1,5 +1,4 @@
 from collections import Counter
-from inventory.models import Object
 
 
 class CloudFactory(object):

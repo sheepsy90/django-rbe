@@ -9,16 +9,16 @@ import core.info_urls
 import core.developer_urls
 
 urlpatterns = [
-    # Examples:
+    # The admin urls and the standard index page url
     url(r'^$', core.auth_views.login, name='index'),
     url(r'^admin/', include(admin.site.urls)),
 
-    #url(r'^inventory/', include('inventory.urls')),
+    # The URLs for the specific area
     url(r'^core/', include(core.auth_urls)),
     url(r'^profile/', include(core.profile_urls)),
     url(r'^info/', include(core.info_urls)),
-
-    url(r'^', include('oidc_provider.urls', namespace='oidc_provider')),
-
     url(r'^developer/', include(core.developer_urls)),
+
+    # The openid/oauth2 provider urls
+    url(r'^', include('oidc_provider.urls', namespace='oidc_provider')),
 ]
