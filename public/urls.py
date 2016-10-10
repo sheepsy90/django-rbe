@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
-import core.info_views as info_views
+import public.views
 
 urlpatterns = [
-    url(r'general', info_views.general, name="information")
+    url(r'general', public.views.general, name="information"),
+    url(r'developer', public.views.developer, name="developer")
 ]

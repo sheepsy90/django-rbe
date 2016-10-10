@@ -61,7 +61,9 @@
                                 <li id='user-list'><a href="{% url 'profile-overview' %}">Other Users</a></li>
                                 <li id='discover-skills'><a href="{% url 'profile_discover' %}">Discover Skills</a></li>
                                 <li id='world-map'><a href="{% url 'world_map' %}">World Map</a></li>
-                                <li id='developer-info'><a href="{% url 'developer_info' %}">Developer Info</a></li>
+                                <li class="divider"></li>
+                                <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
+                                <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
@@ -71,7 +73,8 @@
             {% else %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li id='my-profile'><a href="{% url 'information' %}">Info</a></li>
+                        <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
+                        <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
                     </ul>
                 </div>
             {% endif %}
