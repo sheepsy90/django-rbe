@@ -76,7 +76,7 @@ function upload_profile_image(event) {
 function updateLocation(position) {
     $.ajax({
         method: 'POST',
-        url: get_url('profile_update_location'),
+        url: get_url('update_location'),
         data: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -94,7 +94,7 @@ function updateLocation(position) {
 function clear_location() {
     $.ajax({
         method: 'POST',
-        url: get_url('profile_clear_location'),
+        url: get_url('clear_location'),
         data: {
             csrfmiddlewaretoken: get_csrf_token()
         }

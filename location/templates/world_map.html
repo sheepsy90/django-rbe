@@ -2,20 +2,16 @@
 {% load static %}
 {% get_static_prefix as STATIC_PREFIX %}
 
-{% block header %}
-    <link rel="stylesheet" type="text/css" href='/static/css/profile_cards.css'>
-{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div id="demoMap" style="height:100%"></div>
+    </div>
+</div>
 
-    <div class="container">
-        <div class="row">
-<!DOCTYPE HTML>
-<title>OpenLayers Simplest Example</title>
-<div id="demoMap" style="height:100%"></div>
 <script src="/static/js/OpenLayers.js"></script>
-<!--<script src="/static/js/OpenLayers.light.js"></script>
-<script src="/static/js/OpenLayers.mobile.js"></script>-->
 <script>
 
     $(document).ready(function(){
@@ -29,13 +25,16 @@
         $('body').data('map', map);
         $('body').data('markers', markers);
 
-        {% for profile in profiles %}
-            {% if profile.user == user %}
-                mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }}, true);
-            {% else %}
-                mark_on_map({{ profile.user.id }}, {{ profile.longitude }}, {{ profile.latitude }}, false);
-            {% endif %}
+        {% for location in locations %}
+            mark_on_map({{ location.user.id }}, {{ location.longitude }}, {{ location.latitude }}, false);
         {% endfor %}
+
+        {% if user.location.position_updated %}
+            mark_on_map({{ user.id }}, {{ user.location.longitude }}, {{ location.latitude }}, true);
+        {% else %}
+            mark_on_map({{ user.id }}, 0 , 0, true);
+        {% endif %}
+
     });
 
 
@@ -63,6 +62,5 @@
     }
 
 </script>
-        </div>
-    </div>
+
 {% endblock %}

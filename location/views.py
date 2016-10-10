@@ -75,5 +75,5 @@ def change_precision(request):
 @login_required(login_url='/index')
 def world_map(request):
     rc = RequestContext(request)
-    rc['locations'] = Location.objects.exclude(position_updated=None)
-    return render_to_response('templates/world_map.html', rc)
+    rc['locations'] = Location.objects.exclude(position_updated=None).exclude(user=request.user)
+    return render_to_response('world_map.html', rc)

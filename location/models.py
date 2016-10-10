@@ -10,6 +10,9 @@ class LocationPrecision:
 
 class Location(models.Model):
 
+    class Meta:
+        db_table = 'geo_location'
+
     user = models.OneToOneField(User)
     latitude = models.FloatField(blank=True, null=True, help_text="Latitude of the user")
     longitude = models.FloatField(blank=True, null=True, help_text="Longitude of the user")
