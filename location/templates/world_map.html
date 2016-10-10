@@ -30,7 +30,7 @@
         {% endfor %}
 
         {% if user.location.position_updated %}
-            mark_on_map({{ user.id }}, {{ user.location.longitude }}, {{ location.latitude }}, true);
+            mark_on_map({{ user.id }}, {{ user.location.longitude }}, {{ user.location.latitude }}, true);
         {% else %}
             mark_on_map({{ user.id }}, 0 , 0, true);
         {% endif %}
