@@ -152,3 +152,8 @@ DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django 
 SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
 
 GOOGLE_ANALYTICS_ID = 'UA-61415516-2'
+
+try:
+    import production_settings
+except:
+    pass
