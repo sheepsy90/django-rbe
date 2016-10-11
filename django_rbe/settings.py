@@ -151,7 +151,7 @@ EMAIL_HOST_USER = 'root'
 DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django default
 SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
 
-GOOGLE_ANALYTICS_ID = 'UA-61415516-2'
+GOOGLE_ANALYTICS_ID = None
 
 # Overwrite some of the properties to production parameters
 try:
