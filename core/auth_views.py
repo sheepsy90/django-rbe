@@ -1,5 +1,8 @@
 import datetime
 import uuid
+
+from django.core.urlresolvers import reverse
+
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
 from core.models import Profile, RegistrationKey, PasswordResetKey
 import django.contrib.auth as djauth
@@ -12,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django_rbe.settings import AFTER_LOGIN_PAGE, LOGIN_URL, DEFAULT_FROM_EMAIL
+from django_rbe.settings import LOGIN_URL, DEFAULT_FROM_EMAIL
 
 from django.conf import settings
 
@@ -22,7 +25,7 @@ def login(request):
 
     if request.user.is_authenticated():
         if not next_redirect:
-            return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+            return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
         else:
             return HttpResponseRedirect(next_redirect)
 
@@ -45,7 +48,7 @@ def login(request):
                 djauth.login(request, user)
                 next_redirect = request.POST.get('next')
                 if not next_redirect:
-                    return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+                    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
                 else:
                     return HttpResponseRedirect(next_redirect)
 

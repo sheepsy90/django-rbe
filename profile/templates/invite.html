@@ -3,46 +3,56 @@
 {% block content %}
 
     <div class="container" style="margin: 1em auto">
-        <div class="row">
-            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-                <p><b>Notes about invitations:</b></p>
-                <p>Please make sure that you invite only people which whom you had at
-                    least a short conversation. The network is meant to be a connection between people
-                who have a basic understanding of the concepts of a Resource Based Economy. If you come
-                across people who want to learn more about the ideas and concepts please refer them first
-                to the educational material that is available on the respective web pages.</p>
-            </div>
-        </div>
-        <div class="row">
-             <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-                <hr>
-             </div>
-        </div>
+        {%  if form %}
 
-
-        <form method="post" action="{% url 'invite' %}" class="row">
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2" role="alert" style="margin-top: 4px;">{{ error }}</div>
-            {% endfor %}
-            {% csrf_token %}
-            {% for field in form %}
-                <div id="{{ field.id_for_label }}" class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 fieldWrapper {% if field.errors %}errors{% endif %}">
-
-                    <label class="pull-left control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger" role="alert">{{ error }}</div>
-                    {% endfor %}
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                    <p><b>Notes about invitations:</b></p>
+                    <p>Please make sure that you invite only people which whom you had at
+                        least a short conversation. The network is meant to be a connection between people
+                    who have a basic understanding of the concepts of a Resource Based Economy. If you come
+                    across people who want to learn more about the ideas and concepts please refer them first
+                    to the educational material that is available on the respective web pages.</p>
                 </div>
-
-            {% endfor %}
-            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-                <button id="invite" class="btn fg-black bg-primary-1 btn-block" type="submit" value="login" disabled>Send invite</button>
             </div>
-        </form>
+            <div class="row">
+                 <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                    <hr>
+                 </div>
+            </div>
+
+
+            <form method="post" action="{% url 'invite' %}" class="row">
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2" role="alert" style="margin-top: 4px;">{{ error }}</div>
+                {% endfor %}
+                {% csrf_token %}
+                {% for field in form %}
+                    <div id="{{ field.id_for_label }}" class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 fieldWrapper {% if field.errors %}errors{% endif %}">
+
+                        <label class="pull-left control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <span id="help_{{ field.id_for_label }}" class="help-block">{{ field.help_text|safe }}</span>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                {% endfor %}
+                <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                    <button id="invite" class="btn fg-black bg-primary-1 btn-block" type="submit" value="login" disabled>Send invite</button>
+                </div>
+            </form>
+        {% else %}
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                    <p><b>The invitation was send out</b></p>
+                    <p>Please remind the person you invited to check their spam folder as well as fill their profile.</p>
+                </div>
+            </div>
+        {% endif %}
     </div>
     <script>
     $(document).ready(function(){

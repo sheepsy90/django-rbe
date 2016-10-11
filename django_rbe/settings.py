@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.core.urlresolvers import reverse
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -139,7 +140,6 @@ SITE_URL = 'http://localhost:9001'
 
 
 LOGIN_URL = '/core/login'
-AFTER_LOGIN_PAGE = '/profile/user/'
 
 
 CLOSED_NETWORK = True
@@ -153,7 +153,8 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
 
 GOOGLE_ANALYTICS_ID = 'UA-61415516-2'
 
+# Overwrite some of the properties to production parameters
 try:
-    import production_settings
+    from .production_settings import *
 except:
     pass

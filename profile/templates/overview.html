@@ -27,7 +27,7 @@
                         </div>
                         <div class="info">
                             <div class="title">
-                                <a target="_blank" href="/profile/user/{{ profile.user.id }}">{{ profile.user.username }}</a>
+                                <a target="_blank" href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
                             </div>
                             <div class="desc">{{ profile.user.date_joined }}</div>
                         </div>

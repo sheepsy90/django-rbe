@@ -1,43 +1,51 @@
 import uuid
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, render
-
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+
+from core.models import Profile, RegistrationKey
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+from django.shortcuts import render_to_response, render
 
 
 # Create your views here.
 from django.template import RequestContext
-from django.conf import settings
 
 from profile.forms import InviteForm
-from profile.models import Profile, RegistrationKey
 
 
 @login_required
 def profile(request, user_id):
-    uf = User.objects.filter(id=user_id)
-
-    if uf.exists():
-        rc = RequestContext(request)
-        p = Profile.objects.get(user=uf.first())
-        rc['profile'] = p
-        rc['invited_users'] = Profile.objects.filter(invited_by=uf.first())
-        rc['registration_keys'] = RegistrationKey.objects.filter(user=request.user)
-        return render_to_response('profile/profile.html', rc)
+    # TODO differe between foreign and other profile in waht is given to the tempalte in the first palce
+    if user_id:
+        uf = User.objects.filter(id=user_id)
+        if uf.exists():
+            uf = uf.first()
+        else:
+            return 404
     else:
-        return 404
+        uf = request.user
+
+    rc = RequestContext(request)
+    p = Profile.objects.get(user=uf)
+    rc['profile'] = p
+    rc['invited_users'] = Profile.objects.filter(invited_by=uf)
+    rc['registration_keys'] = RegistrationKey.objects.filter(user=request.user)
+    return render_to_response('profile.html', rc)
 
 
 @login_required
 def overview(request):
     rc = RequestContext(request)
     rc['profiles'] = Profile.objects.all()
-    return render_to_response('profile/overview.html', rc)
+    return render_to_response('overview.html', rc)
 
 
 @login_required
@@ -80,6 +88,9 @@ def avatar_upload(request):
     return JsonResponse({'success': True, 'path': static_path_part})
 
 
+
+
+
 def send_invite_email(user, key, email):
     send_mail(
         '[RBE Network] Invite',
@@ -109,6 +120,7 @@ def invite(request):
         form = InviteForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+            #TODO - restrict double invites across the whole network
             registration_key = form.save(commit=False)
             registration_key.user = request.user
             registration_key.key = str(uuid.uuid4()).replace('-', '')
@@ -117,17 +129,19 @@ def invite(request):
             if settings.CLOSED_NETWORK_INVITE_SEND:
                 send_invite_email(request.user, registration_key.key, registration_key.email)
 
-            return HttpResponseRedirect(settings.AFTER_LOGIN_PAGE + str(request.user.id))
+            return render(request, 'invite.html', {})
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = InviteForm()
 
-    return render(request, 'profile/invite.html', {'form': form})
+    return render(request, 'invite.html', {'form': form})
 
 
 @login_required
 def revoke(request, revoke_id):
     rk = RegistrationKey.objects.filter(id=revoke_id, user=request.user)
     rk.delete()
-    return HttpResponseRedirect(settings.AFTER_LOGIN_PAGE + str(request.user.id))
+    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
+
+

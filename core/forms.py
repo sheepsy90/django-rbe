@@ -54,15 +54,6 @@ class LoginForm(Form):
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
 
 
-class InviteForm(ModelForm):
-    class Meta:
-        model = RegistrationKey
-        fields = ('email',)
-        widgets = {
-            'email': forms.EmailInput(attrs={'class': 'form-control'})
-        }
-
-
 class PasswordChangeForm(Form):
     old_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Enter your old password!")
     new_password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), help_text="Enter a new password!")

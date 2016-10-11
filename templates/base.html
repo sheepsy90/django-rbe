@@ -54,7 +54,7 @@
             {% if user.is_authenticated %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li id='my-account'><a href="/profile/user/{{ user.id }}">My profile</a></li>
+                        <li id='my-account'><a href="{% url 'profile' user.id %}">My profile</a></li>
                         <li id='other' class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
                             <ul class="dropdown-menu">
