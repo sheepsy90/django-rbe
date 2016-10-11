@@ -1,3 +1,10 @@
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+from core.models import Profile, Tag
 
 
 @login_required
@@ -64,4 +71,4 @@ def profile_cloud(request):
 @login_required
 def discover(request):
     rc = RequestContext(request)
-    return render_to_response('profile/discover.html', rc)
+    return render_to_response('discover.html', rc)
