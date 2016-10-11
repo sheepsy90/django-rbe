@@ -4,7 +4,7 @@ import uuid
 from django.core.urlresolvers import reverse
 
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
-from core.models import Profile, RegistrationKey, PasswordResetKey
+from core.models import Profile, PasswordResetKey
 import django.contrib.auth as djauth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -12,12 +12,14 @@ from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.mail import send_mail
 from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django_rbe.settings import LOGIN_URL, DEFAULT_FROM_EMAIL
 
 from django.conf import settings
+
+from profile.models import InvitationKey
 
 
 def login(request):
@@ -86,7 +88,7 @@ def register(request, registration_key):
             user = djauth.authenticate(username=username, password=password)
 
             if settings.CLOSED_NETWORK:
-                rk = RegistrationKey.objects.get(key=registration_key)
+                rk = InvitationKey.objects.get(key=registration_key)
                 p = Profile(user=u, invited_by=rk.user)
                 p.save()
                 rk.delete()
@@ -96,7 +98,7 @@ def register(request, registration_key):
 
             djauth.login(request, user)
 
-            return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(p.user.id))
+            return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -175,7 +177,7 @@ def change_password(request):
 
             if user == request.user:
                 request.user.set_password(new_password)
-                return HttpResponseRedirect(AFTER_LOGIN_PAGE + str(request.user.id))
+                return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
             else:
                 errors = form._errors.setdefault("old_password", ErrorList())
                 errors.append(u"The current password was not correct!")

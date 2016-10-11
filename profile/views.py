@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
-from core.models import Profile, RegistrationKey
+from core.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -19,6 +19,7 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
 from profile.forms import InviteForm
+from profile.models import InvitationKey
 
 
 @login_required
@@ -37,7 +38,7 @@ def profile(request, user_id):
     p = Profile.objects.get(user=uf)
     rc['profile'] = p
     rc['invited_users'] = Profile.objects.filter(invited_by=uf)
-    rc['registration_keys'] = RegistrationKey.objects.filter(user=request.user)
+    rc['invitation_keys'] = InvitationKey.objects.filter(user=request.user)
     return render_to_response('profile.html', rc)
 
 
@@ -140,7 +141,7 @@ def invite(request):
 
 @login_required
 def revoke(request, revoke_id):
-    rk = RegistrationKey.objects.filter(id=revoke_id, user=request.user)
+    rk = InvitationKey.objects.filter(id=revoke_id, user=request.user)
     rk.delete()
     return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
 

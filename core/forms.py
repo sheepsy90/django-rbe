@@ -1,10 +1,10 @@
-from core.models import RegistrationKey
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import Form
-from django.forms.models import ModelForm
 from django.forms.widgets import PasswordInput, EmailInput, TextInput
 from django.conf import settings
+
+from profile.models import InvitationKey
 
 
 class RegistrationForm(Form):
@@ -42,7 +42,7 @@ class RegistrationForm(Form):
                 validation_errors.update({'password_repeat': "Passwords don't match!"})
 
         if settings.CLOSED_NETWORK:
-            if not RegistrationKey.objects.filter(key=registration_key).exists():
+            if not InvitationKey.objects.filter(key=registration_key).exists():
                 validation_errors.update({'registration_key': "The registration key is not valid!"})
 
         if validation_errors:
