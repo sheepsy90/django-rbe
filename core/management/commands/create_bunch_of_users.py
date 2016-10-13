@@ -1,8 +1,14 @@
 import random
 import itertools
+
+import datetime
+
 from core.models import Profile, Tag
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
+
+from location.models import Location
+
 
 class Command(BaseCommand):
     help = 'Creates a user for testing the system'
@@ -34,10 +40,13 @@ class Command(BaseCommand):
                 iby = random.choice(users)
 
             p = Profile(user=u, invited_by=iby, is_confirmed=True)
+            p.save()
+
             long = str(random.randint(-900, 900) / 10.0)
             lang = str(random.randint(-1800, 1800) / 10.0)
-            p.update_location(long, lang)
-            p.save()
+
+            l = Location(user=u, longitude=long, latitude=lang, position_updated=datetime.datetime.today())
+            l.save()
 
             num = random.randint(0, len(tags))
             for e in random.sample(tags_obj, num):

@@ -8,8 +8,8 @@
 <hr>
 <div class="row">
     <div id="tags-container" class="col-xs-12 text-center" style="margin-top: 1.5em">
-        {% for element in profile.tags.all %}
-            <span id="{{ element.id }}" class="tags">{{ element.value }}</span>
+        {% for element in profile.user.userslugs_set.all %}
+            <span id="{{ element.id }}" class="tags">{{ element.slug.value }}</span>
         {% empty %}
             This profile has no tags entered yet.
         {% endfor %}

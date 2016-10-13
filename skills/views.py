@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from core.models import Profile, Tag
+from skills.models import SlugPhrase, UserSlugs
 
 
 @login_required
@@ -13,37 +14,23 @@ def profile_add_tag(request):
 
     value = value.strip().replace(' ', '_').lower()
 
-    t = Tag.objects.filter(value=value)
-    if t.exists():
-        tag_to_add = t.first()
-    else:
-        tag_to_add = Tag(value=value)
-        tag_to_add.save()
+    t = SlugPhrase.objects.get_or_create(value=value)[0]
+    sp = UserSlugs.objects.get_or_create(user=request.user, slug=t)[0]
 
-    o = Profile.objects.filter(user=request.user)
-
-    if o.exists():
-        obj = o.first()
-        obj.tags.add(tag_to_add)
-        obj.save()
-
-        return JsonResponse({'success': True, 'id': tag_to_add.id})
-    else:
-        return JsonResponse({'success': False, 'reason': 'Object does not exist!'})
+    return JsonResponse({'success': True, 'id': sp.id})
 
 
 @login_required
 def profile_del_tag(request):
     tag_id = request.POST.get('tag_id')
 
-    t = Tag.objects.get(id=tag_id)
-    o = Profile.objects.get(user=request.user)
+    try:
+        us = UserSlugs.objects.get(id=tag_id)
+        us.delete()
+        return JsonResponse({'success': True})
 
-    o.tags.remove(t)
-    o.save()
-
-    return JsonResponse({'success': True})
-
+    except UserSlugs.DoesNotExist:
+        return JsonResponse({'success': True})
 
 @login_required
 def profile_cloud(request):
@@ -53,19 +40,19 @@ def profile_cloud(request):
         return JsonResponse({'success': False, 'reason': "Something"})
 
     if chosen_tags == '':
-        tags = dict([(e.value, e.object_count) for e in Tag.objects.all().annotate(object_count=Count('profile_tags')) if e.object_count > 0])
+        tags = dict([(e.value, e.object_count) for e in SlugPhrase.objects.all().annotate(object_count=Count('userslugs')) if e.object_count > 0])
     else:
         chosen_tags_lst = chosen_tags.split(',')
-        tags = dict([(e.value, e.object_count) for e in Tag.objects.filter(value__in=chosen_tags_lst).annotate(object_count=Count('profile_tags'))])
+        tags = dict([(e.value, e.object_count) for e in SlugPhrase.objects.filter(value__in=chosen_tags_lst).annotate(object_count=Count('userslugs'))])
 
     sorted_tags = sorted(tags.items(), key=lambda e: -int(e[1]))
     max_tags = sorted_tags[0:5]
 
-    objts = Profile.objects.filter(tags__value__in=[e[0] for e in max_tags]).distinct()
+    user_slugs = UserSlugs.objects.filter(slug__value__in=[e[0] for e in max_tags]).distinct()
 
     return JsonResponse({
         'tags': tags,
-        'objects': [{'id': obj.user.id, 'name': obj.user.username} for obj in objts]
+        'objects': [{'id': us.user.id, 'name': us.user.username} for us in user_slugs]
     })
 
 @login_required

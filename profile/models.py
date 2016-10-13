@@ -10,3 +10,7 @@ class InvitationKey(models.Model):
     class Meta:
         unique_together = [('user', 'email')]
         db_table = 'invitation_key'
+
+
+class UserProfile(models.Model):
+    pass
