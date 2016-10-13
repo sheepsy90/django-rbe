@@ -3,11 +3,12 @@ import itertools
 
 import datetime
 
-from core.models import Profile, Tag
+from core.models import Profile
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 
 from location.models import Location
+from skills.models import SlugPhrase, UserSlugs
 
 
 class Command(BaseCommand):
@@ -21,11 +22,7 @@ class Command(BaseCommand):
         tags = ['banana', 'apple', 'fruit', 'ice', 'green', 'red']
         tags_obj = []
         for t in tags:
-            if not Tag.objects.filter(value=t).exists():
-                tg = Tag(value=t)
-                tg.save()
-            else:
-                tg = Tag.objects.filter(value=t).first()
+            tg = SlugPhrase.objects.get_or_create(value=t)
             tags_obj.append(tg)
 
         usernames = [e[0] + " " + e[1] for e in possibilities[0:25]]
@@ -50,10 +47,7 @@ class Command(BaseCommand):
 
             num = random.randint(0, len(tags))
             for e in random.sample(tags_obj, num):
-                p.tags.add(e)
-            p.save()
-
-
+                UserSlugs(user=u, slug=e).save()
 
             users.append(u)
 

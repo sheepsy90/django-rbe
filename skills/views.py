@@ -3,8 +3,6 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
-from core.models import Profile, Tag
 from skills.models import SlugPhrase, UserSlugs
 
 
