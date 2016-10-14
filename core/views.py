@@ -4,7 +4,7 @@ import uuid
 from django.core.urlresolvers import reverse
 
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
-from core.models import Profile, PasswordResetKey
+from core.models import PasswordResetKey
 import django.contrib.auth as djauth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User

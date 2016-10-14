@@ -3,11 +3,11 @@ import itertools
 
 import datetime
 
-from core.models import Profile
 from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from location.models import Location
+from profile.models import UserProfile
 from skills.models import SlugPhrase, UserSlugs
 
 
@@ -36,7 +36,7 @@ class Command(BaseCommand):
             if len(users) > 0 and random.random() > 0.3:
                 iby = random.choice(users)
 
-            p = Profile(user=u, invited_by=iby, is_confirmed=True)
+            p = UserProfile(user=u, invited_by=iby, is_confirmed=True)
             p.about_me_text = "Some about me"
             p.save()
 

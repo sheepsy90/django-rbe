@@ -1,9 +1,9 @@
 from django.core.mail import send_mail
 
-from core.models import Profile
 from django.core.management.base import BaseCommand
 
 from django_rbe.settings import DEFAULT_FROM_EMAIL
+from profile.models import UserProfile
 
 
 class Command(BaseCommand):
@@ -19,7 +19,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        all_profiles = Profile.objects.all()
+        all_profiles = UserProfile.objects.all()
         do_sendouts = options['sendout']
 
         for profile in all_profiles:
