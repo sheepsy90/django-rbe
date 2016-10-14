@@ -3,8 +3,8 @@ from django.db import models
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='user')
-    invited_by = models.ForeignKey(User, related_name='invited_by', null=True)
+    user = models.OneToOneField(User, related_name='u')
+    invited_by = models.ForeignKey(User, related_name='iy', null=True)
     is_confirmed = models.BooleanField(default=False)
     about_me_text = models.TextField(max_length=3000, default='')
     avatar_link = models.URLField(blank=True)

@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
-from core.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -19,7 +18,7 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
 from profile.forms import InviteForm
-from profile.models import InvitationKey
+from profile.models import InvitationKey, UserProfile
 
 
 @login_required
@@ -35,9 +34,9 @@ def profile(request, user_id):
         uf = request.user
 
     rc = RequestContext(request)
-    p = Profile.objects.get(user=uf)
+    p = UserProfile.objects.get(user=uf)
     rc['profile'] = p
-    rc['invited_users'] = Profile.objects.filter(invited_by=uf)
+    rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
     rc['invitation_keys'] = InvitationKey.objects.filter(user=request.user)
     return render_to_response('profile.html', rc)
 
@@ -45,7 +44,7 @@ def profile(request, user_id):
 @login_required
 def overview(request):
     rc = RequestContext(request)
-    rc['profiles'] = Profile.objects.all()
+    rc['profiles'] = UserProfile.objects.all()
     return render_to_response('overview.html', rc)
 
 
@@ -56,7 +55,7 @@ def aboutme(request):
     if len(new_about_me) > 3000:
         return JsonResponse({'success': False, 'reason': "Sorry! Not more than 3000 characters allowed!"})
 
-    prof = Profile.objects.get(user=request.user)
+    prof = UserProfile.objects.get(user=request.user)
     prof.about_me_text = new_about_me
     prof.save()
 
@@ -82,7 +81,7 @@ def avatar_upload(request):
     static_path_part = '/static/tmp/img/{}.{}'.format(random_uuid, ending)
     default_storage.save(settings.BASE_DIR + prefix + static_path_part, ContentFile(file.read()))
 
-    prof = Profile.objects.get(user=request.user)
+    prof = UserProfile.objects.get(user=request.user)
     prof.avatar_link = static_path_part
     prof.save()
 

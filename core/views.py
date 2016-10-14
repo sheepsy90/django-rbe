@@ -19,7 +19,7 @@ from django_rbe.settings import LOGIN_URL, DEFAULT_FROM_EMAIL
 
 from django.conf import settings
 
-from profile.models import InvitationKey
+from profile.models import InvitationKey, UserProfile
 
 
 def login(request):
@@ -89,11 +89,11 @@ def register(request, registration_key):
 
             if settings.CLOSED_NETWORK:
                 rk = InvitationKey.objects.get(key=registration_key)
-                p = Profile(user=u, invited_by=rk.user)
+                p = UserProfile(user=u, invited_by=rk.user)
                 p.save()
                 rk.delete()
             else:
-                p = Profile(user=u, invited_by=None)
+                p = UserProfile(user=u, invited_by=None)
                 p.save()
 
             djauth.login(request, user)
