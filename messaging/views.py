@@ -77,7 +77,7 @@ def compose(request, recipient_user_id):
     else:
 
         try:
-            user = User.objects.get(id=recipient_user_id)
+            user = User.objects.get(id=int(recipient_user_id))
             form = ComposeForm(initial={
                 'recipient_id': recipient_user_id,
                 'recipient_name': user.username

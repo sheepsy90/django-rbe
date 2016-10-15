@@ -36,6 +36,11 @@
                     	<div class="testimonial-writer-designation">{{ message.sent_time }}</div>
                     </div>
                 </div>
+                {% if user != message.sender %}
+                    <div class="col-xs-12 col-sm-4 col-sm-offset-8">
+                        <a class='btn btn-block btn-danger' href="{%  url 'compose' message.sender.user.id %}">Reply</a>
+                    </div>
+                {% endif %}
             </div>
             {% elif denied %}
                 <h4 class="text-center">You cannot read someone else's messages ;)</h4>

@@ -96,6 +96,8 @@ def register(request, registration_key):
                 p = UserProfile(user=u, invited_by=None)
                 p.save()
 
+            # TODO send initial welcome emssage
+
             djauth.login(request, user)
 
             return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))

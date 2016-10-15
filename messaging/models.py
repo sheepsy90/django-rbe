@@ -22,26 +22,31 @@ class Message(models.Model):
 
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """
-        send_mail(
-            '[RBE Network] New message',
-            '''
-                Hey {username},
+        try:
+            send_mail(
+                '[RBE Network] New message',
+                '''
+                    Hey {username},
 
-                you got a message from someone on the RBE Network. To check it out please visit:
-                https://rbe.heleska.de/messaging/message/{message_id}
+                    you got a message from someone on the RBE Network. To check it out please visit:
+                    https://rbe.heleska.de/messaging/message/{message_id}
 
-                The feature to disable those emails will be soon implemented.
-                ----
+                    The feature to disable those emails will be soon implemented.
+                    ----
 
-                If you did not expect this email please just discard it, it was probably a typo.
+                    If you did not expect this email please just discard it, it was probably a typo.
 
-                Kind regards,
-                RBE Network
-                https://rbe.heleska.de
-            '''.format(**{
-                'username': self.recipient.username,
-                'message_id': self.id
-            }), settings.DEFAULT_FROM_EMAIL, [self.recipient.email], fail_silently=True,)
+                    Kind regards,
+                    RBE Network
+                    https://rbe.heleska.de
+                '''.format(**{
+                    'username': self.recipient.username,
+                    'message_id': self.id
+                }), settings.DEFAULT_FROM_EMAIL, [self.recipient.email])
+        except Exception:
+            print "Could not send email to {}".format(self.recipient.email)
+
+
 
     @staticmethod
     def create_message(sender, recipient, subject, message_text):
