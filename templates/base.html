@@ -54,7 +54,18 @@
             {% if user.is_authenticated %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
+                        {% if message_context %}
+                            <li id='messages'>
+                                <a href="{% url 'inbox' %}">Messages
+                                    {% if message_context.unread_count  %}
+                                        <span class="badge">{{ message_context.unread_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
                         <li id='my-account'><a href="{% url 'profile' user.id %}">My profile</a></li>
+
+
                         <li id='other' class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
                             <ul class="dropdown-menu">

@@ -36,7 +36,7 @@ class Command(BaseCommand):
             if len(users) > 0 and random.random() > 0.3:
                 iby = random.choice(users)
 
-            p = UserProfile(user=u, invited_by=iby, is_confirmed=True)
+            p = UserProfile(user=u, invited_by=iby)
             p.about_me_text = "Some about me"
             p.save()
 

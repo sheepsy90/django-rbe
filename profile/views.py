@@ -23,17 +23,17 @@ from profile.models import InvitationKey, UserProfile
 
 @login_required
 def profile(request, user_id):
+    rc = RequestContext(request)
     # TODO differe between foreign and other profile in waht is given to the tempalte in the first palce
     if user_id:
         uf = User.objects.filter(id=user_id)
         if uf.exists():
             uf = uf.first()
         else:
-            return 404
+            return render_to_response('profile.html', rc)
     else:
         uf = request.user
 
-    rc = RequestContext(request)
     p = UserProfile.objects.get(user=uf)
     rc['profile'] = p
     rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)

@@ -9,8 +9,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         User.objects.filter(username='sheepy').delete()
+        User.objects.filter(username='sheepy2').delete()
+
         u = User.objects.create_superuser('sheepy', 'sheepy@test.de', 'aqwsderf')
-        p = UserProfile(user=u, invited_by=None, is_confirmed=True)
+        p = UserProfile(user=u, invited_by=None)
+        p.save()
+
+        u = User.objects.create_superuser('sheepy2', 'sheepy@test.de', 'aqwsderf')
+        p = UserProfile(user=u, invited_by=None)
         p.save()
 
         self.stdout.write(self.style.SUCCESS('Successfully create test user!'))

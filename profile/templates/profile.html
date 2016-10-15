@@ -37,13 +37,7 @@
 {% block content %}
     <div id="profile" class="container" style="text-align: center; width: 100%;">
 
-    <div class="row">
-        <div class="col-xs-12" >
-            <ul >
-
-            </ul>
-        </div>
-    </div>
+    {% if profile %}
 
         <div class="row">
             <div class="col-xs-12 col-sm-2 toppad">
@@ -55,6 +49,9 @@
                     <a class='cnav-button btn btn-block' href="#4b" data-toggle="tab">Invitation</a>
                     {% if user == profile.user %}
                         <a class='cnav-button btn btn-block' href="#8b" data-toggle="tab">Private</a>
+                    {% else %}
+                        <a class='btn btn-block btn-danger' href="{%  url 'compose' profile.user.id %}">Send message</a>
+
                     {% endif %}
                 </div>
             </div>
@@ -82,10 +79,11 @@
 
         </div>
 
-
+    {% else %}
+        <h4>Profile not found</h4>
+    {% endif %}
   </div>
-
-
+    {% if profile %}
     <script>
         $(document).ready(function () {
 
@@ -163,6 +161,7 @@
 
 
     </script>
+    {% endif %}
 
 
 {% endblock %}

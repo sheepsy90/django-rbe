@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'profile',
     'skills',
     'public',
+    'messaging',
     'oidc_provider'
     #'inventory'
 ]
@@ -73,7 +74,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.additional_template_vars'
+                'core.context_processors.additional_template_vars',
+                'messaging.context_processors.messaging_context'
             ],
         },
     },
