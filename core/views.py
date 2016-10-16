@@ -9,16 +9,17 @@ import django.contrib.auth as djauth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import NON_FIELD_ERRORS
-from django.core.mail import send_mail
 from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
 from django.http.response import JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django_rbe.settings import LOGIN_URL, DEFAULT_FROM_EMAIL
+from django_rbe.settings import LOGIN_URL
 
 from django.conf import settings
 
+from library.log import rbe_logger
+from library.mail.PasswordResetMail import PasswordResetMail
 from profile.models import InvitationKey, UserProfile
 
 
@@ -131,21 +132,12 @@ def reset(request):
             pwrk = PasswordResetKey(user=u.first(), key=reset_key, valid_until=valid_until)
             pwrk.save()
 
-            send_mail('[RBE Network] Password reset',
-                      '''Hey {},
-
-                        this is an password reset to the RBE Network.
-
-                        If you did not expect this email please just discard it, it was probably a typo.
-
-                        Otherwise you can get to the password reset page following the link to:
-                        https://rbe.heleska.de/core/chpw/{}
-
-                        The link will be valid until: {}
-
-                        Kind regards,
-                        RBE Network'''.format(u.first().username, reset_key, valid_until.isoformat()), DEFAULT_FROM_EMAIL, [email], fail_silently=True)
-
+            try:
+                prm = PasswordResetMail()
+                prm.send(recipient_list=[email], username=u.first().username, reset_key=reset_key, valid_until=valid_until.isoformat())
+            except Exception as e:
+                rbe_logger.error("Could not send the password forgot email to {}".format(email))
+                rbe_logger.exception(e)
 
         return render_to_response('auth/reset_password_email_send.html', {'email': email})
     else:

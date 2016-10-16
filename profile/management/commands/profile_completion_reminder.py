@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django_rbe.settings import DEFAULT_FROM_EMAIL
 from profile.models import UserProfile
 
-
+""" TODO FIX THIS COMMAND """
 class Command(BaseCommand):
     help = 'Make sendouts to everyone who does not filled their profile with a text.'
 

@@ -146,14 +146,12 @@ LOGIN_URL = '/core/login'
 
 CLOSED_NETWORK = True
 CLOSED_NETWORK_INFO = '/profile/not_confirmed'
-CLOSED_NETWORK_INVITE_SEND = not DEBUG
 
-EMAIL_HOST = 'localhost'
-EMAIL_HOST_USER = 'root'
-DEFAULT_FROM_EMAIL = 'RBE-Stockholm <noreply+rbe.heleska@heleska.de>'  # Django default
-SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error notifications
 
 GOOGLE_ANALYTICS_ID = None
+GMAIL_USER = None
+GMAIL_PASSWORD = None
+DEFAULT_FROM_EMAIL = None
 
 # Overwrite some of the properties to production parameters
 try:

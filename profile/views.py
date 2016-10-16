@@ -3,7 +3,6 @@ import uuid
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -17,6 +16,8 @@ from django.shortcuts import render_to_response, render
 # Create your views here.
 from django.template import RequestContext
 
+from library.log import rbe_logger
+from library.mail.InvitationMail import InvitationEmail
 from profile.forms import InviteForm
 from profile.models import InvitationKey, UserProfile
 
@@ -88,31 +89,6 @@ def avatar_upload(request):
     return JsonResponse({'success': True, 'path': static_path_part})
 
 
-
-
-
-def send_invite_email(user, key, email):
-    send_mail(
-        '[RBE Network] Invite',
-        '''
-            Hey,
-
-            this is an invite to the RBE Network from {}.
-
-            If you did not expect this email please just discard it, it was probably a typo.
-
-            Otherwise you can get to the registration page by following the link to:
-             https://rbe.heleska.de/core/register/{}
-
-            Kind regards,
-            RBE Network
-        '''.format(user.username, key),
-        settings.DEFAULT_FROM_EMAIL,
-        [email],
-        fail_silently=True,
-    )
-
-
 @login_required
 def invite(request):
     if request.method == 'POST':
@@ -126,12 +102,14 @@ def invite(request):
             registration_key.key = str(uuid.uuid4()).replace('-', '')
             registration_key.save()
 
-            if settings.CLOSED_NETWORK_INVITE_SEND:
-                send_invite_email(request.user, registration_key.key, registration_key.email)
-
-            return render(request, 'invite.html', {})
-
-    # if a GET (or any other method) we'll create a blank form
+            try:
+                ie = InvitationEmail()
+                ie.send(recipient_list=[registration_key.email], username=request.user.username, key=registration_key.key)
+                return render(request, 'invite.html', {})
+            except Exception as e:
+                rbe_logger.error("Could not send invite email to {}".format(registration_key.email))
+                rbe_logger.exception(e)
+                form.add_error(None, 'Could not send invite email. Technical Error.')
     else:
         form = InviteForm()
 

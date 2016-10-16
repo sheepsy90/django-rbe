@@ -1,7 +1,8 @@
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from django.db import models
+
+from library.log import rbe_logger
+from library.mail.NewMessageEmail import NewMessageEmail
 
 
 class MessageStatus:
@@ -23,30 +24,10 @@ class Message(models.Model):
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """
         try:
-            send_mail(
-                '[RBE Network] New message',
-                '''
-                    Hey {username},
-
-                    you got a message from someone on the RBE Network. To check it out please visit:
-                    https://rbe.heleska.de/messaging/message/{message_id}
-
-                    The feature to disable those emails will be soon implemented.
-                    ----
-
-                    If you did not expect this email please just discard it, it was probably a typo.
-
-                    Kind regards,
-                    RBE Network
-                    https://rbe.heleska.de
-                '''.format(**{
-                    'username': self.recipient.username,
-                    'message_id': self.id
-                }), settings.DEFAULT_FROM_EMAIL, [self.recipient.email])
-        except Exception:
-            print "Could not send email to {}".format(self.recipient.email)
-
-
+            nme = NewMessageEmail()
+            nme.send(recipient_list=[self.recipient.email], username=self.recipient.username, message_id=self.id)
+        except :
+            rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 
     @staticmethod
     def create_message(sender, recipient, subject, message_text):

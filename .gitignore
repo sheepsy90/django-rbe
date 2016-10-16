@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 .idea/
+django_rbe/production_settings.py
 
 # C extensions
 *.so
