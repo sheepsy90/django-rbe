@@ -10,6 +10,10 @@ def developer(request):
     rc = RequestContext(request)
     return render_to_response('public/developer.html', rc)
 
+def faq(request):
+    rc = RequestContext(request)
+    return render_to_response('public/faq.html', rc)
+
 
 
 """ parking this here for the moment

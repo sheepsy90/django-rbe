@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                    <div class="panel-group" id="faqAccordion" style="margin-top: 1em">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse"
+                                 data-parent="#faqAccordion" data-target="#question0">
+                                <h4 class="panel-title">
+                                    <a href="#" class="ing">Q: What is RBE Connect?</a>
+                                </h4>
+
+                            </div>
+                            <div id="question0" class="panel-collapse collapse" style="height: 0px;">
+                                <div class="panel-body">
+                                    <h5><span class="label label-primary">Answer</span></h5>
+
+                                    <p>RBE Connect is a website that makes communication and coordination between people advocating for
+                                        a Resource Based Economy easier. It provides the possibility for users to record their location to find people nearby,
+                                        record skills and interests such that the right person for the right question can be found and it also allows
+                                        people to start initial communication via messages.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default ">
+                            <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse"
+                                 data-parent="#faqAccordion" data-target="#question1">
+                                <h4 class="panel-title">
+                                    <a href="#" class="ing">Q: Is the platform for everyone?</a>
+                                </h4>
+
+                            </div>
+                            <div id="question1" class="panel-collapse collapse" style="height: 0px;">
+                                <div class="panel-body">
+                                    <h5><span class="label label-primary">Answer</span></h5>
+
+                                    <p>Yes, it is definitely okay if you join us even if you don't know exactly yet what an RBE is and what it aims for.
+                                       It helps a lot though if you inform yourself and try to usnerstand what the general concepts of an RBE consists of.
+                                       Once you have an overview the basics it is easier for you to decide where and how to help, given you like the concept.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default ">
+                            <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse"
+                                 data-parent="#faqAccordion" data-target="#question2">
+                                <h4 class="panel-title">
+                                    <a href="#" class="ing">Q: Why should I join yet another page?</a>
+                                </h4>
+
+                            </div>
+                            <div id="question2" class="panel-collapse collapse" style="height: 0px;">
+                                <div class="panel-body">
+                                    <h5><span class="label label-primary">Answer</span></h5>
+
+                                    <p>This is a valid question and currently the honest answer is probably that there is no big reason to do so.
+                                       Nevertheless this page aims to become the central instance for user profiles regarding active people advocating for
+                                       an RBE. This means that the basic functionality is covered with this page and additional functionalities like Events,
+                                       forums, lectures and everything one can think of will be surrounded to this page and also not all provided by one person.
+                                       </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default ">
+                            <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse"
+                                 data-parent="#faqAccordion" data-target="#question3">
+                                <h4 class="panel-title">
+                                    <a href="#" class="ing">Q: How can I build additional tools that use RBE Connect?</a>
+                                </h4>
+
+                            </div>
+                            <div id="question3" class="panel-collapse collapse" style="height: 0px;">
+                                <div class="panel-body">
+                                    <h5><span class="label label-primary">Answer</span></h5>
+
+                                    <p>Building additional tools that make user of RBE Connect is great. If you thinking about doing so please contact
+                                       me (Robert Kessler http://heleska.de) and we can talk about the technical details. In general you will get an Oauth2
+                                        access which allows you to query the API for user information and also update certain things. Note that the users
+                                        need to agree that your tool has access to their profile and user specific data will only be given on consent.
+                                        Some more abstract information can be obtained without the specific users though.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/panel-group-->
+            </div>
+        </div>
+    </div>
+{% endblock %}
