@@ -11,11 +11,11 @@ class Command(BaseCommand):
         User.objects.filter(username='sheepy').delete()
         User.objects.filter(username='sheepy2').delete()
 
-        u = User.objects.create_superuser('sheepy', 'sheepy@test.de', 'aqwsderf')
+        u = User.objects.create_superuser('sheepy', 'sheepy@heleska.de', 'aqwsderf')
         p = UserProfile(user=u, invited_by=None)
         p.save()
 
-        u = User.objects.create_superuser('sheepy2', 'sheepy@test.de', 'aqwsderf')
+        u = User.objects.create_superuser('sheepy2', 'sheepy@heleska.de', 'aqwsderf')
         p = UserProfile(user=u, invited_by=None)
         p.save()
 

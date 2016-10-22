@@ -1,0 +1,13 @@
+{% extends 'emails/base_email.html' %}
+{% block content %}
+Hey,
+<br>
+this is an invite to the RBE Network from {{ username }}.<br>
+<br>
+If you did not expect this email please just discard it, it was probably a typo.<br>
+<br>
+Otherwise you can get to the registration page by following the link to:<br>
+<a href="https://rbe.heleska.de/core/register/{{ key }}">https://rbe.heleska.de/core/register/{{ key }}</a><br>
+<br>
+Kind regards
+{% endblock %}

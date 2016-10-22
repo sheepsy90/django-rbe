@@ -20,6 +20,7 @@ from django.conf import settings
 
 from library.log import rbe_logger
 from library.mail.PasswordResetMail import PasswordResetMail
+from library.mail.WelcomeMail import WelcomeMail
 from profile.models import InvitationKey, UserProfile
 
 
@@ -40,6 +41,10 @@ def login(request):
 
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+
+            if '@' in username and '.' in username:
+                uqs = User.objects.filter(email=username)
+                username = uqs.first().username
 
             user = djauth.authenticate(username=username, password=password)
 
@@ -69,11 +74,11 @@ def logout(request):
     return HttpResponseRedirect(LOGIN_URL, rc)
 
 
-def register_info(request):
-    rc = RequestContext(request)
-    return render_to_response('auth/register_info.html', rc)
-
 def register(request, registration_key):
+    if settings.CLOSED_NETWORK:
+        rc = RequestContext(request)
+        return render_to_response('auth/register_info.html', rc)
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = RegistrationForm(request.POST)
@@ -97,7 +102,12 @@ def register(request, registration_key):
                 p = UserProfile(user=u, invited_by=None)
                 p.save()
 
-            # TODO send initial welcome emssage
+            try:
+                wcm = WelcomeMail()
+                wcm.send(username=user.username, recipient_list=[email])
+                rbe_logger.info("Send welcome message to {}".format(email))
+            except Exception as e:
+                rbe_logger.exception(e)
 
             djauth.login(request, user)
 

@@ -8,17 +8,17 @@
         <div id="demoMap" style="margin: 0 auto; width: 300px; height: 200px"></div>
     </div>
 </div>
+
 {% if user == profile.user %}
     <div class="row">
     <div class="desc col-xs-12 col-sm-6 col-sm-offset-3">
 
-        {% if profile.user.location.position_updated %}
+        {% if profile.user.location and profile.user.location.position_updated %}
             <div><span class="fa fa-map-marker"></span> {{ profile.user.location.longitude|default:'--' }} {{ profile.user.location.latitude|default:'--' }} </div>
             <div><span class="fa fa-clock-o"></span> {{ profile.user.location.position_updated }}</div>
         {% else %}
             Location not set!
         {% endif %}
-    {{ profile.user.location }}
     </div>
         <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-right">
             <button id='refresh_location' type="button"
@@ -48,7 +48,7 @@
         $('body').data('map', map);
         $('body').data('markers', markers);
 
-        {% if profile.user.location.longitude != None and profile.user.location.latitude != None %}
+        {% if profile.user.location and profile.user.location.longitude != None and profile.user.location.latitude != None %}
             focus_map({{ profile.user.location.longitude }}, {{ profile.user.location.latitude }});
         {% endif %}
     });

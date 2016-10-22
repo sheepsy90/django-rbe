@@ -24,4 +24,6 @@ def create_logger(file_path, logger_name=None, logger_level=20):
         # Add handlers to logger
         logger.addHandler(file_log)
 
+    return logger
+
 rbe_logger = create_logger('rbe_network.log')

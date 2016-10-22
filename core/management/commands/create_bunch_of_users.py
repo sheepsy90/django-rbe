@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
         users = []
         for name in usernames:
-            u = User.objects.create_user(name, '{}@test.de'.format(name.replace(' ', '_')), 'aqwsderf')
+            u = User.objects.create_user(name, '{}@heleska.de'.format(name.replace(' ', '_')), 'aqwsderf')
 
             iby = None
 

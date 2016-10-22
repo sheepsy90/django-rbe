@@ -144,8 +144,8 @@ SITE_URL = 'http://localhost:9001'
 LOGIN_URL = '/core/login'
 
 
-CLOSED_NETWORK = True
-CLOSED_NETWORK_INFO = '/profile/not_confirmed'
+CLOSED_NETWORK = False
+#CLOSED_NETWORK_INFO = '/profile/not_confirmed'
 
 
 GOOGLE_ANALYTICS_ID = None

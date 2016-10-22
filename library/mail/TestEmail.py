@@ -1,3 +1,5 @@
+from django.shortcuts import render_to_response
+
 from library.mail.GoogleEmailCommand import GoogleEmail
 
 
@@ -7,15 +9,8 @@ class TestEmail(GoogleEmail):
     def subject(self):
         return "This is a test email"
 
-    @property
-    def body(self):
-        return """
-        <html>
-          <head></head>
-          <body>
-            <p>Hi!<br>
-               This is a test email to check whether it works or not!<br>
-            </p>
-          </body>
-        </html>
-        """
+    def body(self, variables):
+        variables.update({'valid_until': 'someone', 'key': 3, 'username': 'hannes'})
+        return render_to_response('emails/invitation_mail.html', variables).content
+
+

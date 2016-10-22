@@ -26,7 +26,8 @@ class GoogleEmail(object):
         msg['To'] = ','.join(kwargs['recipient_list'])
         msg['Subject'] = self.subject
 
-        body = MIMEText(self.body.format(**kwargs), 'html')
+        body_html = self.body(variables=kwargs)
+        body = MIMEText(body_html, 'html')
         msg.attach(body)
         self.smtpserver.sendmail(settings.DEFAULT_FROM_EMAIL, kwargs['recipient_list'], msg.as_string())
 
@@ -34,8 +35,7 @@ class GoogleEmail(object):
     def subject(self):
         raise NotImplementedError("Please define a subject")
 
-    @property
-    def body(self):
+    def body(self, variables):
         raise NotImplementedError("Please define a body text")
 
 

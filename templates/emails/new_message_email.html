@@ -1,0 +1,12 @@
+{% extends 'emails/base_email.html' %}
+{% block content %}
+Hey {{ username }},<br>
+<br>
+you got a message from someone on the RBE Connect. To check it out please visit:<br>
+<a href="https://rbe.heleska.de/messaging/message/{{ message_id }}">https://rbe.heleska.de/messaging/message/{{ message_id }}</a><br>
+<br>
+The feature to disable those emails will be soon implemented.<br>
+----<br>
+If you did not expect this email please just discard it, it was probably a typo.<br>
+Kind regards<br>
+{% endblock %}

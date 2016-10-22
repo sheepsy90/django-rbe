@@ -7,4 +7,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         gec = TestEmail()
-        gec.send(recipient_list=['8kessler@informatik.uni-hamburg.de'])
+        gec.send(recipient_list=['rbe.heleska@gmail.com'])

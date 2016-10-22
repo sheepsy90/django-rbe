@@ -16,7 +16,7 @@ class RegistrationForm(Form):
     password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}),
                                       help_text="Choose a strong password")
 
-    registration_key = forms.CharField(max_length=64, required=True, widget=TextInput(attrs={'class': 'form-control'}),
+    registration_key = forms.CharField(max_length=64, required=False, widget=TextInput(attrs={'class': 'form-control'}),
                                        help_text="Put in the registration key.")
 
     def clean(self):
