@@ -10,4 +10,4 @@ class Command(BaseCommand):
         uqs = User.objects.all()
         for element in uqs:
             gec = WelcomeMail()
-            gec.send(username=element.username, recipient_list=['rbe.heleska@gmail.com'])
+            gec.send(username=element.username, recipient_list=[element.email])
