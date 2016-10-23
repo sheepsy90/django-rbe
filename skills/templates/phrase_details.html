@@ -22,7 +22,7 @@
                 {% for user_slug in slug_phrase.userslugs_set.all %}
                 <div style="display: inline-block" id="tb-testimonial" class="col-xs-3 testimonial testimonial-default">
                     <div class="testimonial-desc">
-                        <a href="{% url 'profile' user_slug.user.id %}"><img src="{{ user_slug.user.avatar_link|default:'/static/img/unknown.png' }}"/></a>
+                        <a href="{% url 'profile' user_slug.user.id %}"><img src="{{ user_slug.user.user.avatar_link|default:'/static/img/unknown.png' }}"/></a>
                         <div>{{ user_slug.user.username }}</div>
 
                     </div>
