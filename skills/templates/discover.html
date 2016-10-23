@@ -40,7 +40,7 @@
                 {% for element in all_objects %}
                     <a href="{% url 'phrase_details' element.id %}">
                         <h4 style="text-align: center; cursor: pointer; display: inline-block; margin: 0.2em">
-                            <span class="label label-warning">{{ element }} <span class="badge">{{ element.object_count }}</span></span>
+                            <span class="label label-warning">{{ element.value }} <span class="badge">{{ element.object_count }}</span></span>
                         </h4>
                     </a>
                 {% endfor %}
