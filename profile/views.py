@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -45,7 +46,19 @@ def profile(request, user_id):
 @login_required
 def overview(request):
     rc = RequestContext(request)
-    rc['profiles'] = UserProfile.objects.all()
+
+    user_list = UserProfile.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(user_list, 18)
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    rc['profiles'] = users
     return render_to_response('overview.html', rc)
 
 
