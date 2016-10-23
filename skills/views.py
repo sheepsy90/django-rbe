@@ -56,4 +56,16 @@ def profile_cloud(request):
 @login_required
 def discover(request):
     rc = RequestContext(request)
+    rc['all_objects'] = sorted(SlugPhrase.objects.all().annotate(object_count=Count('userslugs')), key=lambda x: -x.object_count)
     return render_to_response('discover.html', rc)
+
+@login_required
+def phrase_details(request, phrase_id):
+    rc = RequestContext(request)
+
+    try:
+        rc['slug_phrase'] = SlugPhrase.objects.get(id=phrase_id)
+    except SlugPhrase.DoesNotExist:
+        print "aaaaas"
+
+    return render_to_response('phrase_details.html', rc)

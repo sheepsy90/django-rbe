@@ -3,28 +3,29 @@
 {% block content %}
     <div class="container">
         <div class="row" style="margin-top: 1em">
-            <p class="col-xs-12 col-md-6 col-md-offset-3" style="font-size: 24px; font-weight: bold">RBE Connection</p>
+            <p class="col-xs-12 col-md-6 col-md-offset-3" style="font-size: 24px; font-weight: bold">RBE Network</p>
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <p>This page is currently completely independent from any of the following listed associations.
-                    It tries to connect people who consider themselves advocates for one or more of those organizations
-                    and simply
-                    shall be a better tool to coordinate actions.</p>
+                <p>The main purpose of this page is to connect people who consider themselves advocates for a
+                    Resource Based Economy or certain aspects of it. With creating a profile you will have the
+                    possibilities to add a text about yourself, list specific interests and skills you have as well
+                    as sharing your location so that other people can contact you.</p>
 
-                <p>
-                    It is an invite based system which means that you need to be invited by someone who is already part
-                    of the network.
-                    The reason for that is to ensure that people are familiar with the concept and ideas in a reasonable
-                    way.
-                    There is of course no precise definition of that and every member can define for themselves what is
-                    a
-                    sufficient level to invite someone. More details and suggestions are given once you are going to
-                    invite someone.
+                <p>The medium term goal of this project is to create a single hub that connect all tools that
+                    are useful for organizing activism, learning about the concepts of a Resource Based Economy,
+                    learning about science and technology and objective inquiry and reason on aailable data.
                 </p>
 
-                <p>
-                    If you are interested in joining please contact me at <b>rbe DOT heleska [at] gmail DOT com</b>.
+                <p> The system is open for registration to anyone and once registered you can see other people's
+                    profile, their skills and their location. You can then start a conversation with people by sending
+                    them message - either because they are close to you or because they have skills or interests that you
+                    want to talk about with them.
+                </p>
+
+                <p> If you have any question please contact me at <b>rbe DOT heleska [at] gmail DOT com</b> or have a
+                    look at the <a href="{% url 'faq' %}">FAQ</a>. If you are a developer you might want to check out
+                    the development guide in order to build surrounding tools that people can make use of.
                 </p>
 
                 <p>
@@ -52,6 +53,8 @@
                                                                                    src="/static/img/tvp.jpg"></a>
                     <a target="_blank" href="http://www.thezeitgeistmovement.com"><img class="col-xs-12 col-md-6"
                                                                                        src="/static/img/tzm.jpg"></a>
+                    <a target="_blank" href="http://www.eosprojects.com/"><img class="col-xs-12 col-md-6"
+                                                                                       src="/static/img/eos.png"></a>
                 </div>
             </div>
         </div>
@@ -60,14 +63,5 @@
                 <hr>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <p>
-                    Another good point to visit for additional information is this
-                    <a target="_blank" href="https://www.facebook.com/groups/940712199334150/">facebook group</a>
-                </p>
-            </div>
-        </div>
-
     </div>
 {% endblock %}

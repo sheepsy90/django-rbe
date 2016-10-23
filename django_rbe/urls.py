@@ -15,7 +15,7 @@ import public.views
 urlpatterns = [
     # The admin urls and the standard index page url
     url(r'^$', core.views.login, name='index'),
-    url(r'^faq$', public.views.faq, name='index'),
+    url(r'^faq$', public.views.faq, name='faq'),
     url(r'^admin/', include(admin.site.urls)),
 
     # The URLs for the specific area
