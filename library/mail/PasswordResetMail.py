@@ -12,4 +12,4 @@ class PasswordResetMail(GoogleEmail):
         return '[RBE Network] Password reset'
 
     def body(self, variables):
-        return render_to_response('emails/password_reset_mail.html', variables)
+        return render_to_response('emails/password_reset_mail.html', variables).content
