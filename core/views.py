@@ -217,3 +217,7 @@ def chpw(request, reset_key):
 
     return render(request, 'auth/chpw.html', {'form': form})
 
+
+def error_page(request):
+    rc = RequestContext(request)
+    return render_to_response('general/error_page.html', rc)

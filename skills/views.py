@@ -1,8 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import JsonResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
+
+from library.log import rbe_logger
 from skills.models import SlugPhrase, UserSlugs
 
 
@@ -55,9 +59,14 @@ def profile_cloud(request):
 
 @login_required
 def discover(request):
-    rc = RequestContext(request)
-    rc['all_objects'] = sorted(SlugPhrase.objects.all().annotate(object_count=Count('userslugs')), key=lambda x: -x.object_count)
-    return render_to_response('discover.html', rc)
+    try:
+        rc = RequestContext(request)
+        rc['all_objects'] = sorted(SlugPhrase.objects.all().annotate(object_count=Count('userslugs')), key=lambda x: -x.object_count)
+        return render_to_response('discover.html', rc)
+    except Exception as e:
+        rbe_logger.exception(e)
+        return HttpResponseRedirect(reverse('error_page'))
+
 
 @login_required
 def phrase_details(request, phrase_id):
@@ -66,6 +75,6 @@ def phrase_details(request, phrase_id):
     try:
         rc['slug_phrase'] = SlugPhrase.objects.get(id=phrase_id)
     except SlugPhrase.DoesNotExist:
-        print "aaaaas"
+        pass
 
     return render_to_response('phrase_details.html', rc)
