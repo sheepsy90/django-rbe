@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block header %}
-
+<style>
+.label-warning:hover {
+    background-color: orange;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -36,13 +40,13 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2">
+            <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2" style="text-align: center">
                 {% for element in all_objects %}
+                    {% if element.object_count > 0 %}
                     <a href="{% url 'phrase_details' element.id %}">
-                        <h4 style="text-align: center; cursor: pointer; display: inline-block; margin: 0.2em">
-                            <span class="label label-warning">{{ element.value }} <span class="badge">{{ element.object_count }}</span></span>
-                        </h4>
+                        <div style="text-align: center; font-size:16px; cursor: pointer; display: inline-block; margin: 0.2em" class="label label-warning">{{ element.value }} <span class="badge">{{ element.object_count }}</span></div>
                     </a>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
