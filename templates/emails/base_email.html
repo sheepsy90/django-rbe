@@ -74,7 +74,8 @@ document.write("<script async src='/browser-sync/browser-sync-client.js?v=2.17.2
                                                                                     <td width="100%"
                                                                                         style="font-family:Helvetica, Arial, sans-serif">
                                                                                         <img src="https://rbe.heleska.de/static/img/logo.png"
-                                                                                             width="100" alt="RBE Connect">
+                                                                                             width="100"
+                                                                                             alt="RBE Connect">
                                                                                     </td>
                                                                                 </tr>
                                                                                 </tbody>
@@ -103,15 +104,26 @@ document.write("<script async src='/browser-sync/browser-sync-client.js?v=2.17.2
                                                 </tr>
                                                 </tbody>
                                             </table>
+                                            {% block additional_sections %}{% endblock %}
                                             <div style="height:20px;background-color:transparent">&nbsp;</div>
                                             <table cellpadding="0" cellspacing="0" width="100%"
                                                    style="align:center;text-align:center;border:0px;border-spacing:0px;background-color:#ffffff;padding:20px;border-radius:5px">
                                                 <tbody>
                                                 <tr>
                                                     <td width="100%" style="font-family:Helvetica, Arial, sans-serif">
-                                                        <span><a href="https://rbe.heleska.de/faq" style="pointer-events:auto;cursor:pointer;color:#0074C8;font-family:Helvetica, Arial, sans-serif;font-size:13px;font-weight:400;line-height:1.4em;text-align:left;text-decoration:none;display:block">
-                                                            Any questions? Check the FAQ to clarify &#8594;</a></span></td>
+                                                        <span><a href="https://rbe.heleska.de"
+                                                                 style="pointer-events:auto;cursor:pointer;color:#0074C8;font-family:Helvetica, Arial, sans-serif;font-size:13px;font-weight:400;line-height:1.4em;text-align:left;text-decoration:none;display:block">
+                                                            Continue to RBE Connect &#8594;</a></span>
+                                                    </td>
                                                 </tr>
+                                                <tr>
+                                                    <td width="100%" style="font-family:Helvetica, Arial, sans-serif">
+                                                <span><a href="https://rbe.heleska.de/faq"
+                                                         style="pointer-events:auto;cursor:pointer;color:#0074C8;font-family:Helvetica, Arial, sans-serif;font-size:13px;font-weight:400;line-height:1.4em;text-align:left;text-decoration:none;display:block">
+                                                Any questions? Check the FAQ to clarify &#8594;</a></span>
+                                                    </td>
+                                                </tr>
+
                                                 </tbody>
                                             </table>
                                             <table cellpadding="0" cellspacing="0" width="100%"
@@ -142,7 +154,8 @@ document.write("<script async src='/browser-sync/browser-sync-client.js?v=2.17.2
                                                             <tbody>
                                                             <tr>
                                                                 <td style="background-color:#f5f5f7;text-align:left">
-                                                                    <img src="https://rbe.heleska.de/static/img/logo.png" width="100" alt="RBE Connect">
+                                                                    <img src="https://rbe.heleska.de/static/img/logo.png"
+                                                                         width="100" alt="RBE Connect">
                                                             </tr>
                                                             </tbody>
                                                         </table>
@@ -170,7 +183,8 @@ document.write("<script async src='/browser-sync/browser-sync-client.js?v=2.17.2
                                                                                                 Stockholm<br>
                                                                                                 Schweden<br><br>
                                                                                                 <b>Kontakt</b><br>
-                                                                                                Email: rbe.heleska@gmail.com<br><br>
+                                                                                                Email:
+                                                                                                rbe.heleska@gmail.com<br><br>
                                                                                             </wrapper>
                                                                                         </p>
                                                                                     </td>

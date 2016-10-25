@@ -19,7 +19,7 @@ class Command(BaseCommand):
         possibilities = list(itertools.product(['Anne', 'Robert', 'Marie', 'Tove', 'Jens', 'Ines', 'Lars', 'Karl'], ['Larson', 'Nilson', 'Weier', 'Mueller', 'Chu-Xi', 'Wa', 'Halakkai', 'Czetec']))
         random.shuffle(possibilities)
 
-        tags = ['banana', 'apple', 'fruit', 'ice', 'green', 'red']
+        tags = ['banana', 'apple', 'fruit', 'ice', 'green', 'red', 'Anne', 'Robert', 'Marie', 'Tove', 'Jens', 'Ines', 'Lars', 'Karl', 'Larson', 'Nilson', 'Weier', 'Mueller', 'Chu-Xi', 'Wa', 'Halakkai', 'Czetec']
         tags_obj = []
         for t in tags:
             tg = SlugPhrase.objects.get_or_create(value=t)[0]

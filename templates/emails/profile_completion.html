@@ -1,0 +1,26 @@
+{% extends 'emails/base_email.html' %}
+{% block content %}
+Hey {{ username }},<br>
+<br>
+    In order to have a useful network of people advocating for a resource based economy,
+    it is important that everyone states basic information about themselves.<br><br>
+    This can be useful when a new project is starting in a certain region or if groups or individuals seek to
+    learn new skills or need an informed opinion of an expert.<br>
+    <br>
+    In order to ensure that the network has a high quality it would be nice if you can complete your profile
+    in the following areas.<br>
+    <br>
+    Kind regards<br>
+    // RBE Network
+{% endblock %}
+
+
+{% block additional_sections %}
+    {% if location_missing %}
+        {% include 'emails/fragments/location_fill_segment.html' %}
+    {% endif %}
+
+    {% if about_missing %}
+        {% include 'emails/fragments/about_fill_segment.html' %}
+    {% endif %}
+{% endblock %}
