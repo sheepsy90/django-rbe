@@ -30,7 +30,7 @@
             	</div>
                 <div class="testimonial-desc">
                     {{ message.sender.userprofile }}
-                    <a href="{% url 'profile' message.sender.user.id %}"><img src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}"/></a>
+                    <a href="{% url 'profile' message.sender.id %}"><img src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}"/></a>
                     <div class="testimonial-writer">
                     	<div class="testimonial-writer-name">{{ message.sender.username }}</div>
                     	<div class="testimonial-writer-designation">{{ message.sent_time }}</div>
@@ -38,7 +38,7 @@
                 </div>
                 {% if user != message.sender %}
                     <div class="col-xs-12 col-sm-4 col-sm-offset-8">
-                        <a class='btn btn-block btn-danger' href="{%  url 'compose' message.sender.user.id %}">Reply</a>
+                        <a class='btn btn-block btn-danger' href="{%  url 'compose' message.sender.id %}">Reply</a>
                     </div>
                 {% endif %}
             </div>
