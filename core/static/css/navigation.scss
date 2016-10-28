@@ -1,13 +1,13 @@
 // As hex codes */
 @import './global';
 
-#header {
+#header, footer {
   .navbar {
     border-radius: 0;
     border: none;
     margin-bottom: 0;
   }
-  nav {
+  .navbar, nav {
     background-image: linear-gradient(to top, $color-primary-1 0px, $color-primary-2 100%); background-repeat: repeat-x;
     a {
       color: $rgba-primary-4;
