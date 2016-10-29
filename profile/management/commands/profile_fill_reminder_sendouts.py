@@ -19,7 +19,7 @@ class Command(BaseCommand):
             return False
 
     def handle(self, *args, **options):
-        all_users = User.objects.filter(username='sheepy')
+        all_users = User.objects.filter(username='sheepsy90')
 
         for user in all_users:
             location_missing = not self.has_location(user)
