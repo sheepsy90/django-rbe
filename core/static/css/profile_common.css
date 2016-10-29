@@ -1,0 +1,16 @@
+.last-online {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block; }
+
+.green {
+  background-color: #4cae4c; }
+
+.red {
+  background-color: red; }
+
+.yellow {
+  background-color: #f5dd5d; }
+
+/*# sourceMappingURL=profile_common.css.map */
