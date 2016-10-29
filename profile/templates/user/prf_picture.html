@@ -1,9 +1,14 @@
 <div class="row">
     <div class="col-xs-12">
-    <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none; border-radius: 5px 5px 0 0">
+
+        <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none; border-radius: 5px 5px 0 0">
         {{ profile.user.username }}
     </div>
     <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none;">
+       <span class="last-online {{ profile.last_online_class }}"></span>
+                                    Last Online: {{ profile.user.last_login|date:"Y-m-d" }}
+    </div>
+        <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none;">
         Joined: {{ profile.user.date_joined|date:'Y-m-d' }}
     </div>
         <div style="padding: 1px; background-color: #aaa">

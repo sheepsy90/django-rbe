@@ -8,62 +8,67 @@
 
 {% block content %}
     <style>
-    .card {
-        height: 180px;
-        overflow: hidden;
-    }
+        .card {
+            height: 180px;
+            overflow: hidden;
+        }
+
     </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12" style="text-align: center">
-        {% if profiles.has_other_pages %}
-          <ul class="pagination">
-            {% if profiles.has_previous %}
-              <li><a href="?page={{ profiles.previous_page_number }}">&laquo;</a></li>
-            {% else %}
-              <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in profiles.paginator.page_range %}
-                {% if i|add:'-2' <= profiles.number and profiles.number <= i|add:2 %}
-                  {% if profiles.number == i %}
-                    <li class="active"><span>{{ profiles.number }} <span class="sr-only">(current)</span></span></li>
-                  {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
-                  {% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12" style="text-align: center">
+                {% if profiles.has_other_pages %}
+                    <ul class="pagination">
+                        {% if profiles.has_previous %}
+                            <li><a href="?page={{ profiles.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in profiles.paginator.page_range %}
+                            {% if i|add:'-2' <= profiles.number and profiles.number <= i|add:2 %}
+                                {% if profiles.number == i %}
+                                    <li class="active"><span>{{ profiles.number }} <span
+                                            class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if profiles.has_next %}
+                            <li><a href="?page={{ profiles.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
                 {% endif %}
-            {% endfor %}
-            {% if profiles.has_next %}
-              <li><a href="?page={{ profiles.next_page_number }}">&raquo;</a></li>
-            {% else %}
-              <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-          </ul>
-        {% endif %}
+            </div>
         </div>
-    </div>
-	<div class="row">
-        {# Sort by to confirm profiles and therefore better known people #}
-        {% for profile in profiles %}
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 col-xl-1 user-card-container">
-                <div class="user-card">
-                    <div class="card hovercard">
-                        <div class="cardheader"></div>
-                        <div class="avatar">
-                            <img alt="" src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}">
-                        </div>
-                        <div class="info">
-                            <div class="title">
-                                <a target="_blank" href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
+        <div class="row">
+            {# Sort by to confirm profiles and therefore better known people #}
+            {% for profile in profiles %}
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 col-xl-1 user-card-container">
+                    <div class="user-card">
+                        <div class="card hovercard">
+                            <div class="cardheader"></div>
+                            <div class="avatar">
+                                <img alt="" src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}">
                             </div>
-                            <div class="desc">{{ profile.user.date_joined }}</div>
+                            <div class="info">
+                                <div class="title">
+                                    <a target="_blank"
+                                       href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
+                                </div>
+                                <div class="desc">
+                                    <span class="last-online {{ profile.last_online_class }}"></span>
+                                    Last Online: {{ profile.user.last_login|date:"Y-m-d" }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-	</div>
+            {% endfor %}
+        </div>
 
 
-</div>
+    </div>
 {% endblock %}
