@@ -47,7 +47,7 @@ def profile(request, user_id):
 def overview(request):
     rc = RequestContext(request)
 
-    user_list = UserProfile.objects.all()
+    user_list = UserProfile.objects.all().order_by('-user__last_login')
     page = request.GET.get('page', 1)
 
     paginator = Paginator(user_list, 18)
