@@ -23,4 +23,8 @@ Hey {{ username }},<br>
     {% if about_missing %}
         {% include 'emails/fragments/about_fill_segment.html' %}
     {% endif %}
+
+    {% if languages_missing %}
+        {% include 'emails/fragments/language_fill_segment.html' %}
+    {%  endif %}
 {% endblock %}
