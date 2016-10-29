@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
             u1, u2 = random.sample(all_profiles, 2)
 
-            m = Message.create_message(u1, u2, random.choice(subjects), random.choice(bodies))
+            m = Message.create_message(u1, u2, random.choice(subjects), random.choice(bodies), silent=True)
 
             if random.random() > 0.9:
                 m.status = MessageStatus.READ

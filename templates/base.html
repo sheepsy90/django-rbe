@@ -9,7 +9,7 @@
 
     <title>RBE Connect</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
@@ -30,11 +30,24 @@
 
 <body style="margin-bottom: 2em">
 <div id="header">
-    <nav class="navbar navbar-default hidden-xs" role="navigation">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- The navbar -->
             <div class="navbar-header">
                 {% if user.is_authenticated %}
+                    <div class="hidden-sm hidden-md hidden-lg" style="display: inline;">
+                        <a href="{% url 'profile' user.id %}" class="btn" title="My profile"><i
+                                class="fa fa-2x fa-user-circle-o green-text"></i></a>
+                        <a href="{% url 'world_map' %}" class="btn" title="World Map"><i
+                                class="fa fa-2x fa-globe green-text"></i></a>
+                        <a href="{% url 'inbox' %}" class="btn" title="Messages"><i
+                                class="fa fa-2x fa-envelope green-text"></i>  {% if message_context %}
+                            {% if message_context.unread_count %}
+                                <span class="badge">{{ message_context.unread_count }}</span>
+                            {% endif %}
+                        {% endif %}</a>
+                    </div>
                     <button type="button" class="navbar-toggle" data-toggle="collapse"
                             data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
@@ -49,30 +62,51 @@
                         </button>
                     </a>
                 {% endif %}
+
                 <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
             </div>
+
+
             {% if user.is_authenticated %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        {% if message_context %}
-                            <li id='messages'>
-                                <a href="{% url 'inbox' %}">Messages
-                                    {% if message_context.unread_count %}
-                                        <span class="badge">{{ message_context.unread_count }}</span>
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li id='my-account'><a href="{% url 'profile' user.id %}">My profile</a></li>
+                        <li class="hidden-xs"><a href="{% url 'profile' user.id %}" class="fa-nav-adjust"
+                                                 title="My profile"><i class="fa fa-2x fa-user-circle-o green-text"></i></a>
+                        </li>
+                        <li class="hidden-xs"><a href="{% url 'inbox' %}" class="fa-nav-adjust" title="Messages"><i
+                                class="fa fa-2x fa-envelope green-text"></i>
+                            {% if message_context %}
+                                {% if message_context.unread_count %}
+                                    <span class="badge">{{ message_context.unread_count }}</span>
+                                {% endif %}
+                            {% endif %}</a>
+                        </li>
+                        <li class="hidden-xs"><a href="{% url 'world_map' %}" class="fa-nav-adjust" title="World Map"><i
+                                class="fa fa-2x fa-globe green-text"></i></a></li>
+                        <li class="hidden-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
+                                                 title="Other Users"><i class="fa fa-2x fa-users green-text"></i></a>
+                        </li>
+                        <li class="hidden-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
+                                                 title="Skills & Interests"><i class="fa fa-2x fa-tags green-text"></i></a>
+                        </li>
 
+                        <!-- visible on mobile in the navigation -->
+                        <li class="visible-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
+                                                  title="Other Users"><i class="fa fa-users green-text"></i> Other Users</a>
+                        </li>
+                        <li class="visible-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
+                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i>
+                            Skills & Interests</a></li>
+                        <li class="visible-xs divider"></li>
+                        <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
+                        </li>
+                        <li class="visible-xs" id='general_info'><a href="{% url 'information' %}">General Info</a></li>
+                        <li class="visible-xs divider"></li>
+                        <li class="visible-xs"><a href="{% url 'logout' %}">Logout</a></li>
 
-                        <li id='other' class="dropdown">
+                        <li id='other' class="hidden-xs dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li id='user-list'><a href="{% url 'profile-overview' %}">Other Users</a></li>
-                                <li id='discover-skills'><a href="{% url 'profile_discover' %}">Discover Skills</a></li>
-                                <li id='world-map'><a href="{% url 'world_map' %}">World Map</a></li>
-                                <li class="divider"></li>
                                 <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
                                 <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                                 <li class="divider"></li>
@@ -92,47 +126,9 @@
         </div>
     </nav>
     {% csrf_token %}
-    <div style="height: 50px;" class=" hidden-sm hidden-md hidden-lg"></div>
+    <div style="height: 50px;" class=""></div>
     {% block content %}{% endblock %}
     {% include 'gtracking_snippet.html' %}
-<footer>
-    <div class="navbar navbar-default navbar-fixed-top hidden-sm hidden-md hidden-lg">
-        <div class="container">
-            <div class="navbar-collapse collapse" id="footer-body">
-                <ul class="nav navbar-nav navbar-right">
-                        <li id='my-account'><a href="{% url 'profile' user.id %}">My profile</a></li>
-                        <li id='other' class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li id='user-list'><a href="{% url 'profile-overview' %}">Other Users</a></li>
-                                <li id='discover-skills'><a href="{% url 'profile_discover' %}">Discover Skills</a></li>
-                                <li id='world-map'><a href="{% url 'world_map' %}">World Map</a></li>
-                                <li class="divider"></li>
-                                <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
-                                <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-            </div>
-          	<div class="navbar-header">
-
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#footer-body">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <ul class="footer-bar-btns visible-xs">
-                    <li style="display: inline-block"><a href="{% url 'world_map' %}" class="btn" title="World Map"><i class="fa fa-2x fa-globe green-text"></i></a></li>
-                    <li style="display: inline-block"><a href="{% url 'inbox' %}" class="btn" title="Messages"><i class="fa fa-2x fa-envelope green-text"></i></a></li>
-                    <li style="display: inline-block"><a href="{% url 'profile-overview' %}" class="btn" title="Users"><i class="fa fa-2x fa-users green-text"></i></a></li>
-                </ul>
-            </div>
-
-        </div>
-    </div>
-</footer>
 </div>
 
 {% include 'url_script.html' %}

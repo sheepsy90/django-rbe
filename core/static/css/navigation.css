@@ -38,5 +38,8 @@ hr {
     background-color: #8DCF8A; }
   #header .navbar .dropdown-menu > .active > a, #header .navbar .dropdown-menu > .active > a:focus, #header .navbar .dropdown-menu > .active > a:hover, #header nav .dropdown-menu > .active > a, #header nav .dropdown-menu > .active > a:focus, #header nav .dropdown-menu > .active > a:hover, footer .navbar .dropdown-menu > .active > a, footer .navbar .dropdown-menu > .active > a:focus, footer .navbar .dropdown-menu > .active > a:hover, footer nav .dropdown-menu > .active > a, footer nav .dropdown-menu > .active > a:focus, footer nav .dropdown-menu > .active > a:hover {
     background: #dbdbdb none; }
+#header .fa-nav-adjust, footer .fa-nav-adjust {
+  padding-bottom: 10px;
+  padding-top: 10px; }
 
 /*# sourceMappingURL=navigation.css.map */

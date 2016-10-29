@@ -30,7 +30,7 @@ class Message(models.Model):
             rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 
     @staticmethod
-    def create_message(sender, recipient, subject, message_text):
+    def create_message(sender, recipient, subject, message_text, silent=False):
         """ Method that actually creates the message and then triggers the informing of the user
             This later makes also some assumption when we add thread based messages.
             :param sender: the user sending the message
@@ -42,7 +42,8 @@ class Message(models.Model):
 
         m = Message(sender=sender, recipient=recipient, subject=subject, message_text=message_text)
         m.save()
-        m.inform_recipient()
+        if not silent:
+            m.inform_recipient()
         return m
 
 
