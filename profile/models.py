@@ -1,4 +1,6 @@
 import datetime
+
+from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -33,3 +35,12 @@ class UserProfile(models.Model):
             return 'yellow'
         else:
             return 'green'
+
+
+class LanguageSpoken(models.Model):
+    user = models.ForeignKey(User)
+    language = models.CharField(max_length=10, choices=LANGUAGES)
+
+    @property
+    def language_display(self):
+        return dict(LANGUAGES)[self.language]

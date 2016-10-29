@@ -1,6 +1,7 @@
 import uuid
 
 from django.conf import settings
+from django.conf.global_settings import LANGUAGES
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -20,7 +21,7 @@ from django.template import RequestContext
 from library.log import rbe_logger
 from library.mail.InvitationMail import InvitationEmail
 from profile.forms import InviteForm
-from profile.models import InvitationKey, UserProfile
+from profile.models import InvitationKey, UserProfile, LanguageSpoken
 
 
 @login_required
@@ -136,3 +137,41 @@ def revoke(request, revoke_id):
     return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
 
 
+@login_required
+def language_add(request):
+    lang = request.POST.get('lang')
+
+    if not lang or lang not in dict(LANGUAGES):
+        return JsonResponse({'success': False, 'reason': "Language code not known!"})
+
+    ls, created = LanguageSpoken.objects.get_or_create(user=request.user, language=lang)
+
+    if created:
+        return JsonResponse({'success': True, 'language_display': dict(LANGUAGES)[lang]})
+    else:
+        return JsonResponse({'success': False, 'reason': 'Language already present'})
+
+
+@login_required
+def language_remove(request):
+    """ Removes a language that the suer has registered """
+    lang = request.POST.get('lang')
+
+    if not lang or lang not in dict(LANGUAGES):
+        return JsonResponse({'success': False, 'reason': "Language code not known!"})
+
+    try:
+        ls = LanguageSpoken.objects.get(user=request.user, language=lang)
+        ls.delete()
+        return JsonResponse({'success': True})
+    except LanguageSpoken.DoesNotExist:
+        # Language doesn't exists for some reason so we assume we deleted it
+        return JsonResponse({'success': True})
+    except Exception as e:
+        rbe_logger.exception(e)
+        return JsonResponse({'success': False, 'reason': "Could not remove language"})
+
+
+def language_overview(request, language_code):
+    rc = RequestContext(request)
+    return render_to_response('language.html', rc)

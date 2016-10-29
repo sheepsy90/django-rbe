@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href='/static/css/profile_common.css'>
 
     <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/language.js' %}"></script>
 
     <style>
         .cnav-button:hover {
@@ -63,6 +64,7 @@
                         {% include 'user/prf_tags.html' %}
                     </div>
                     <div class="tab-pane active" id="3b">
+                        {% include 'user/prf_languages.html' %}
                         {% include 'user/prf_about.html' %}
                     </div>
                     <div class="tab-pane" id="7b">

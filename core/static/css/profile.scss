@@ -37,6 +37,22 @@ span.tags {
   display: inline-block;
 }
 
+.lang_button {
+  margin-bottom: 4px;
+}
+
+.form-group label {
+    float: left;
+    text-align: left;
+    font-weight: normal;
+}
+
+.form-group select {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+
  .user-row {
   margin-bottom: 14px;
 }

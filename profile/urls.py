@@ -9,5 +9,8 @@ urlpatterns = [
     url(r'user/(?P<user_id>\d*)$', profile.views.profile, name='profile'),
     url(r'invite', profile.views.invite, name="invite"),
     url(r'revoke/(?P<revoke_id>\d+)', profile.views.revoke, name="revoke"),
+    url(r'language_remove', profile.views.language_remove, name="language_remove"),
+    url(r'language_add', profile.views.language_add, name="language_add"),
+    url(r'language_overview/(?P<language_code>\w*)', profile.views.language_overview, name="language_overview"),
 
 ]

@@ -1,3 +1,5 @@
+from django.conf.global_settings import LANGUAGES
+
 from messaging.models import MessageStatus, Message
 
 
@@ -10,6 +12,12 @@ def messaging_context(request):
         }
     return {
         'message_context': messaging_context
+    }
+
+
+def languages(request):
+    return {
+        'languages': sorted(LANGUAGES, key=lambda x: x[1])
     }
 
 
