@@ -29,7 +29,7 @@ class Command(BaseCommand):
             if location_missing or about_missing or languages_missing:
                 gec = ProfileCompletionEmail()
                 gec.send(username=user.username, recipient_list=[user.email], location_missing=location_missing, about_missing=about_missing, languages_missing=languages_missing)
-                rbe_logger.info("Sending email to {} for profile fill reminder on Loc:{} / About:{}".format(user.email, location_missing, about_missing))
+                rbe_logger.info("Sending email to {} for profile fill reminder on Loc:{} / About:{} / Languages:{}".format(user.email, location_missing, about_missing, languages_missing))
             else:
                 rbe_logger.info("Skipping email {} - already filled profile.".format(user.email))
 
