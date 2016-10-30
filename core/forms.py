@@ -7,7 +7,7 @@ from django.forms.widgets import PasswordInput, EmailInput, TextInput
 class RegistrationForm(Form):
     username = forms.CharField(widget=TextInput(attrs={'class': 'form-control'}))
     email = forms.CharField(widget=EmailInput(attrs={'class': 'form-control'}),
-                            help_text="Select an email address that you can confirm (feature not enabled yet)!")
+                            help_text="Select an email address that you can confirm!")
 
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}))
     password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}),

@@ -75,10 +75,6 @@ def logout(request):
 
 
 def register(request, registration_key):
-    if settings.CLOSED_NETWORK:
-        rc = RequestContext(request)
-        return render_to_response('auth/register_info.html', rc)
-
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = RegistrationForm(request.POST)
@@ -110,7 +106,7 @@ def register(request, registration_key):
     else:
         form = RegistrationForm(initial={'registration_key': registration_key})
 
-    return render(request, 'auth/register.html', {'form': form, 'closed_network': settings.CLOSED_NETWORK})
+    return render(request, 'auth/register.html', {'form': form})
 
 
 def reset(request):
