@@ -21,7 +21,7 @@ from django.conf import settings
 from library.log import rbe_logger
 from library.mail.PasswordResetMail import PasswordResetMail
 from library.mail.WelcomeMail import WelcomeMail
-from profile.models import InvitationKey, UserProfile
+from profile.models import UserProfile
 
 
 def login(request):
@@ -88,19 +88,12 @@ def register(request, registration_key):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
-            registration_key = form.cleaned_data.get('registration_key')
 
             u = User.objects.create_user(username=username, email=email, password=password)
             user = djauth.authenticate(username=username, password=password)
 
-            if settings.CLOSED_NETWORK:
-                rk = InvitationKey.objects.get(key=registration_key)
-                p = UserProfile(user=u, invited_by=rk.user)
-                p.save()
-                rk.delete()
-            else:
-                p = UserProfile(user=u, invited_by=None)
-                p.save()
+            p = UserProfile(user=u, invited_by=None)
+            p.save()
 
             try:
                 wcm = WelcomeMail()

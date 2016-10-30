@@ -37,6 +37,11 @@ span.tags {
 .lang_button {
   margin-bottom: 4px; }
 
+/* Small Devices, Tablets */
+@media (max-width: 768px) {
+  .lang_button {
+    display: block;
+    width: 100%; } }
 .form-group label {
   float: left;
   text-align: left;

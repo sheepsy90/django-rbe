@@ -12,16 +12,14 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response
 
 
 # Create your views here.
 from django.template import RequestContext
 
 from library.log import rbe_logger
-from library.mail.InvitationMail import InvitationEmail
-from profile.forms import InviteForm
-from profile.models import InvitationKey, UserProfile, LanguageSpoken
+from profile.models import UserProfile, LanguageSpoken
 
 
 @login_required
@@ -40,7 +38,6 @@ def profile(request, user_id):
     p = UserProfile.objects.get(user=uf)
     rc['profile'] = p
     rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
-    rc['invitation_keys'] = InvitationKey.objects.filter(user=request.user)
     return render_to_response('profile.html', rc)
 
 
@@ -101,40 +98,6 @@ def avatar_upload(request):
     prof.save()
 
     return JsonResponse({'success': True, 'path': static_path_part})
-
-
-@login_required
-def invite(request):
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = InviteForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            #TODO - restrict double invites across the whole network
-            registration_key = form.save(commit=False)
-            registration_key.user = request.user
-            registration_key.key = str(uuid.uuid4()).replace('-', '')
-            registration_key.save()
-
-            try:
-                ie = InvitationEmail()
-                ie.send(recipient_list=[registration_key.email], username=request.user.username, key=registration_key.key)
-                return render(request, 'invite.html', {})
-            except Exception as e:
-                rbe_logger.error("Could not send invite email to {}".format(registration_key.email))
-                rbe_logger.exception(e)
-                form.add_error(None, 'Could not send invite email. Technical Error.')
-    else:
-        form = InviteForm()
-
-    return render(request, 'invite.html', {'form': form})
-
-
-@login_required
-def revoke(request, revoke_id):
-    rk = InvitationKey.objects.filter(id=revoke_id, user=request.user)
-    rk.delete()
-    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
 
 
 @login_required

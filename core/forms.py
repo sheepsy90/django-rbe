@@ -2,9 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import Form
 from django.forms.widgets import PasswordInput, EmailInput, TextInput
-from django.conf import settings
-
-from profile.models import InvitationKey
 
 
 class RegistrationForm(Form):
@@ -16,15 +13,11 @@ class RegistrationForm(Form):
     password_repeat = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}),
                                       help_text="Choose a strong password")
 
-    registration_key = forms.CharField(max_length=64, required=False, widget=TextInput(attrs={'class': 'form-control'}),
-                                       help_text="Put in the registration key.")
-
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
         password = cleaned_data.get("password")
         password_repeat = cleaned_data.get("password_repeat")
         email = cleaned_data.get("email")
-        registration_key = cleaned_data.get("registration_key")
 
         username = cleaned_data.get("username")
 
@@ -40,10 +33,6 @@ class RegistrationForm(Form):
             # Only do something if both fields are valid so far.
             if password != password_repeat:
                 validation_errors.update({'password_repeat': "Passwords don't match!"})
-
-        if settings.CLOSED_NETWORK:
-            if not InvitationKey.objects.filter(key=registration_key).exists():
-                validation_errors.update({'registration_key': "The registration key is not valid!"})
 
         if validation_errors:
             raise forms.ValidationError(validation_errors)
