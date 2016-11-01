@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 
 from location.models import Location
 from profile.models import UserProfile
-from skills.models import SlugPhrase, UserSlugs
+from skills.models import SlugPhrase, UserSkill
 
 
 class Command(BaseCommand):
@@ -48,7 +48,7 @@ class Command(BaseCommand):
 
             num = random.randint(0, len(tags))
             for e in random.sample(tags_obj, num):
-                UserSlugs(user=u, slug=e).save()
+                UserSkill(user=u, slug=e, level=random.randint(1,5)).save()
 
             users.append(u)
 
