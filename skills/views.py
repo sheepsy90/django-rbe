@@ -108,9 +108,11 @@ def create_skill(request):
     if not skill_name:
         return JsonResponse({'success': False, 'reason': "Skill name not given!"})
 
-    if len(skill_name) > 128:
-        return JsonResponse({'success': False, 'reason': "Skill name not given!"})
+    if len(skill_name) > 50:
+        return JsonResponse({'success': False, 'reason': "Skill to long! Max 50 characters!"})
 
+    skill_name = skill_name.lower()
+    skill_name = skill_name.replace(' ', '_')
     sp, created = SlugPhrase.objects.get_or_create(value=skill_name)
 
     try:
