@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'public',
     'messaging',
     'oidc_provider'
-    #'inventory'
 ]
 
 MIDDLEWARE_CLASSES = [
