@@ -42,6 +42,12 @@ span.tags {
   .lang_button {
     display: block;
     width: 100%; } }
+.clickable {
+  cursor: pointer; }
+
+.clickable:hover {
+  background-color: #aaa; }
+
 .form-group label {
   float: left;
   text-align: left;

@@ -20,6 +20,7 @@ from django.template import RequestContext
 
 from library.log import rbe_logger
 from profile.models import UserProfile, LanguageSpoken
+from skills.models import UserSkill
 
 
 @login_required
@@ -38,6 +39,7 @@ def profile(request, user_id):
     p = UserProfile.objects.get(user=uf)
     rc['profile'] = p
     rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
+    rc['user_skills'] = UserSkill.objects.filter(user=uf).order_by('-level')
     return render_to_response('profile.html', rc)
 
 

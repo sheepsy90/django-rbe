@@ -49,6 +49,14 @@ span.tags {
 }
 
 
+  .clickable {
+      cursor: pointer;
+  }
+
+  .clickable:hover {
+      background-color: #aaa;
+  }
+
 
 .form-group label {
     float: left;
