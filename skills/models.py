@@ -10,14 +10,11 @@ class SlugPhrase(models.Model):
         return self.value
 
 
-class UserSlugs(models.Model):
-    user = models.ForeignKey(User)
-    slug = models.ForeignKey(SlugPhrase)
-
-
 class UserSkill(models.Model):
     user = models.ForeignKey(User)
     slug = models.ForeignKey(SlugPhrase)
     level = models.IntegerField(default=3, validators=[MaxValueValidator(5), MinValueValidator(1)])
     latest_change = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return u"{} // {}".format(self.user.username, self.slug)
