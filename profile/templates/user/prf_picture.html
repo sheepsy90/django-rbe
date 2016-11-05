@@ -4,10 +4,12 @@
         <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none; border-radius: 5px 5px 0 0">
         {{ profile.user.username }}
     </div>
+    {% if profile.user.lastseen %}
     <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none;">
-       <span class="last-online {{ profile.last_online_class }}"></span>
-                                    Last Online: {{ profile.user.last_login|date:"Y-m-d" }}
+       <span class="last-online {{ profile.user.lastseen.last_online_class }}"></span>
+                                    Last Online: {{ profile.user.lastseen.date_time|date:"Y-m-d" }}
     </div>
+    {% endif %}
         <div style="padding: 2px; background-color: #fff; border: 1px solid #aaa; border-bottom: none;">
         Joined: {{ profile.user.date_joined|date:'Y-m-d' }}
     </div>

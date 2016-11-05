@@ -62,8 +62,8 @@
                                        href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
                                 </div>
                                 <div class="desc">
-                                    <span class="last-online {{ profile.last_online_class }}"></span>
-                                    Last Online: {{ profile.user.last_login|date:"Y-m-d" }}</div>
+                                    <span class="last-online {{ profile.user.lastseen.last_online_class }}"></span>
+                                    Last Online: {{ profile.user.lastseen.date_time|date:"Y-m-d" }}</div>
                             </div>
                         </div>
                     </div>

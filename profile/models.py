@@ -11,21 +11,6 @@ class UserProfile(models.Model):
     about_me_text = models.TextField(max_length=3000, default='')
     avatar_link = models.URLField(blank=True)
 
-    @property
-    def last_online_class(self):
-        if not self.user.last_login:
-            return 'red'
-
-        tdm14 = datetime.datetime.today() - datetime.timedelta(days=14)
-        tdm3 = datetime.datetime.today() - datetime.timedelta(days=3)
-
-        if self.user.last_login.date() < tdm14.date():
-            return 'red'
-        elif tdm14.date() <= self.user.last_login.date() < tdm3.date():
-            return 'yellow'
-        else:
-            return 'green'
-
 
 class LanguageSpoken(models.Model):
     user = models.ForeignKey(User)
