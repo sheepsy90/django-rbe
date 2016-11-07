@@ -65,9 +65,9 @@
                     <tbody>
                     {% for profile in profiles %}
 
-                        <tr class='profile-link' data-href="{% url 'profile' user_skill.user.id %}">
+                        <tr class='profile-link' data-href="{% url 'profile' profile.user.id %}">
                             <td>
-                                <img style="height:20px" src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}"/>
+                                <img style="height:20px" src="{{ profile.user.user.avatar_link|default:'/static/img/unknown.png' }}"/>
                             </td>
                             <td>
                                 <div>{{ profile.user.username }}</div>

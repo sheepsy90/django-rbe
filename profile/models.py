@@ -25,8 +25,6 @@ class LanguageSpoken(models.Model):
     def count_grouping():
         qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True)) #annotate(num_people=Count('user')).order_by('-num_people')[:10]
         total = LanguageSpoken.objects.count()
-
-        print qs
         [e.update({
             'language_display': dict(LANGUAGES)[e['language']],
             'percentage_count': int(100*e['num_users'] / float(total)),

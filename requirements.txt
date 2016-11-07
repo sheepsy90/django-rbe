@@ -1,0 +1,11 @@
+Django==1.9.6
+argparse==1.2.1
+django-oidc-provider==0.4.0
+future==0.15.2
+gunicorn==19.4.5
+pycryptodome==3.4
+pyjwkest==1.1.0
+python-openid==2.2.5
+requests==2.11.1
+six==1.10.0
+wsgiref==0.1.2
