@@ -2,6 +2,28 @@
  * Created by rkessler on 2016-10-29.
  */
 
+function load_chart_data(element_id){
+    function drawChart() {
+        $.ajax({
+            method: 'POST',
+            url: get_url('language_chart'),
+            data: {
+                csrfmiddlewaretoken: get_csrf_token()
+            }
+        }).done(function (msg) {
+            if (msg['success']) {
+                var data = google.visualization.arrayToDataTable(msg['language_count']);
+                var options = {
+                  title: 'Languages available in the network'
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById(element_id));
+                chart.draw(data, options);
+            }
+        });
+      }
+    return drawChart;
+}
 
 function remove_language(event){
     console.log("Remove language");

@@ -3,6 +3,7 @@ import datetime
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Count
 
 
 class UserProfile(models.Model):
@@ -19,3 +20,21 @@ class LanguageSpoken(models.Model):
     @property
     def language_display(self):
         return dict(LANGUAGES)[self.language]
+
+    @staticmethod
+    def count_grouping():
+        qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True)) #annotate(num_people=Count('user')).order_by('-num_people')[:10]
+        total = LanguageSpoken.objects.count()
+
+        print qs
+        [e.update({
+            'language_display': dict(LANGUAGES)[e['language']],
+            'percentage_count': int(100*e['num_users'] / float(total)),
+        }) for e in qs]
+
+        qs = sorted(qs, key=lambda x: -x['percentage_count'])
+
+        return qs
+
+    def __repr__(self):
+        return u'{} / {}'.format(self.user, self.language)

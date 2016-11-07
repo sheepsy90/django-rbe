@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
@@ -47,7 +48,7 @@ def profile(request, user_id):
 def overview(request):
     rc = RequestContext(request)
 
-    user_list = UserProfile.objects.all().order_by('-user__lastseen__date_time')
+    user_list = UserProfile.objects.all().exclude(user=request.user).order_by('-user__lastseen__date_time')
     page = request.GET.get('page', 1)
 
     paginator = Paginator(user_list, 18)
@@ -137,6 +138,34 @@ def language_remove(request):
         return JsonResponse({'success': False, 'reason': "Could not remove language"})
 
 
+@login_required()
+def language_chart(request):
+    try:
+        language_count = [(value, LanguageSpoken.objects.filter(language=key).count()) for key, value in
+                          dict(LANGUAGES).items()]
+        language_count = [e for e in language_count if e[1] > 0]
+        language_count = [['A', 'B']] + language_count
+        if language_count > 0:
+            return JsonResponse({'success': True, 'language_count': language_count})
+    except Exception as e:
+        rbe_logger.exception(e)
+    return JsonResponse({'success': False, 'reason': "Could not estimate language chart data"})
+
+
+@login_required()
 def language_overview(request, language_code):
     rc = RequestContext(request)
-    return render_to_response('language.html', rc)
+
+    # Return the not with variables filled language page
+    if language_code == '' or language_code not in dict(LANGUAGES):
+        rc['empty_language_code'] = True
+        grouping_count = LanguageSpoken.count_grouping()
+        rc['grouping_count'] = grouping_count
+        return render_to_response('language.html', rc)
+    else:
+        rc['language_present'] = {
+            'language_display': dict(LANGUAGES)[language_code],
+            'language_code': language_code,
+        }
+        rc['profiles'] = LanguageSpoken.objects.filter(language=language_code)
+        return render_to_response('language.html', rc)

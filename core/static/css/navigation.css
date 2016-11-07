@@ -19,6 +19,10 @@
 hr {
   border-color: black; }
 
+.profile-link:hover {
+  background-color: #eee;
+  cursor: pointer; }
+
 #header .navbar, footer .navbar {
   border-radius: 0;
   border: none;

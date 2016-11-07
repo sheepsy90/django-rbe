@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'language_remove', profile.views.language_remove, name="language_remove"),
     url(r'language_add', profile.views.language_add, name="language_add"),
     url(r'language_overview/(?P<language_code>\w*)', profile.views.language_overview, name="language_overview"),
+    url(r'language_chart', profile.views.language_chart, name="language_chart"),
 
 ]
