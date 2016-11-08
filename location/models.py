@@ -30,3 +30,8 @@ class Location(models.Model):
         self.longitude = None
         self.position_updated = None
         self.save()
+
+class DistanceCacheEntry(models.Model):
+    user_source = models.ForeignKey(User, related_name='user_source')
+    distance_to = models.ForeignKey(User, related_name='distance_to')
+    value = models.IntegerField()

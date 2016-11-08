@@ -20,6 +20,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from library.log import rbe_logger
+from location.models import DistanceCacheEntry
 from profile.models import UserProfile, LanguageSpoken
 from skills.models import UserSkill
 
@@ -41,6 +42,7 @@ def profile(request, user_id):
     rc['profile'] = p
     rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
     rc['user_skills'] = UserSkill.objects.filter(user=uf).order_by('-level')
+    rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=uf).order_by('value')
     return render_to_response('profile.html', rc)
 
 
