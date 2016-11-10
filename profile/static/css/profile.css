@@ -91,4 +91,22 @@ span.tags {
   background-image: linear-gradient(to top, #d9edf7 0px, #c4e3f3 100%);
   background-repeat: repeat-x; }
 
+.cnav-button:hover {
+  background-color: #5aac56;
+  color: #eee; }
+
+.cnav-button {
+  background-color: #eee;
+  color: #333;
+  border-color: #eee;
+  margin-top: 2px; }
+
+.cnav-button.active {
+  background-color: #5aac56;
+  color: #eee; }
+
+.explain {
+  color: #7c7c7c;
+  font-style: italic; }
+
 /*# sourceMappingURL=profile.css.map */

@@ -6,12 +6,11 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db.models import Count
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http.response import Http404, HttpResponseRedirect
 
 from django.shortcuts import render_to_response
 
@@ -21,29 +20,75 @@ from django.template import RequestContext
 
 from library.log import rbe_logger
 from location.models import DistanceCacheEntry
+from profile.forms import ProfileDetailsForm
 from profile.models import UserProfile, LanguageSpoken
 from skills.models import UserSkill
 
 
-@login_required
-def profile(request, user_id):
+def _return_my_profile(request):
     rc = RequestContext(request)
-    # TODO differe between foreign and other profile in waht is given to the tempalte in the first palce
-    if user_id:
-        uf = User.objects.filter(id=user_id)
-        if uf.exists():
-            uf = uf.first()
-        else:
-            return render_to_response('profile.html', rc)
-    else:
-        uf = request.user
-
-    p = UserProfile.objects.get(user=uf)
+    user = request.user
+    p = UserProfile.objects.get(user=user)
+    rc['my_profile'] = True
     rc['profile'] = p
-    rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
-    rc['user_skills'] = UserSkill.objects.filter(user=uf).order_by('-level')
-    rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=uf).order_by('value')
-    return render_to_response('profile.html', rc)
+    rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
+    #rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
+    return render_to_response('my_profile/new_profile.html', rc)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def change_profile(request):
+    rc = RequestContext(request)
+
+    if request.method == 'POST':
+        form = ProfileDetailsForm(request.POST)
+        if form.is_valid():
+            about_me_text = form.cleaned_data['about_me_text']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.save()
+
+            request.user.user.about_me_text = about_me_text
+            request.user.user.save()
+
+            return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
+
+    else:
+        form = ProfileDetailsForm(initial={
+            'about_me_text': request.user.user.about_me_text,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'profile_email': request.user.email
+        })
+
+    rc['form'] = form
+    return render_to_response('my_profile/change_profile.html', rc)
+
+
+def _return_other_profile(request, user):
+    rc = RequestContext(request)
+    p = UserProfile.objects.get(user=user)
+    rc['my_profile'] = False
+    rc['profile'] = p
+    rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
+    rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
+    return render_to_response('my_profile/new_profile.html', rc)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def profile(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+
+        if user == request.user:
+            return _return_my_profile(request)
+        else:
+            return _return_other_profile(request, user)
+    except User.DoesNotExist:
+        raise Http404("User not found")
 
 
 @login_required
