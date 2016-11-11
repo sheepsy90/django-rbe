@@ -20,7 +20,7 @@
                     <li>
                         <div class="col col_4 iamgurdeep-pic">
                             <img id="user-picture" class="img-responsive iamgurdeeposahan"
-                                 src="{{ profile.avatar_link }}" style="width: 100%">
+                                 src="{{ profile.avatar_link|default:'/static/img/unknown.png' }}" style="width: 100%">
                             <div class="edit-pic">
                                 <!--<a href="https://twitter.com/gurdeeposahan1" target="_blank" class="fa fa-twitter"></a>
                                 <a href="https://plus.google.com/u/0/105032594920038016998" target="_blank"
