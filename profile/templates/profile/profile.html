@@ -181,18 +181,18 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        function general_stuff() {
             $('.profile-link').click(function () {
                 window.location.href = $(this).data('href');
             });
             $('.lang_tag').click(forward_language);
             $('.skill_tag').click(forward_skill);
-        });
+        }
     </script>
 
     {% if my_profile %}
         <script>
-            $(document).ready(function () {
+            function my_profile_bindings(){
                 $("#user-picture-btn").click(function (e) {
                     e.preventDefault();
                     $('#choose_file').click();
@@ -223,8 +223,19 @@
                         })
                     }
                 });
-            });
+            }
         </script>
     {% endif %}
+
+    <!-- We only can have on doc ready function for chrome for some reason -->
+    <script>
+        $(document).ready(function(){
+            general_stuff();
+            {% if my_profile %}
+                my_profile_bindings();
+            {% endif %}
+        })
+    </script>
+
 
 {% endblock %}
