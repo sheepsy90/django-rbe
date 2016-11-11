@@ -125,7 +125,7 @@ def delete_skill(request):
 def change_skills(request):
     rc = RequestContext(request)
     try:
-        user_skill_qs = UserSkill.objects.filter(user=request.user)
+        user_skill_qs = UserSkill.objects.filter(user=request.user).order_by('-level')
         rc['user_skill_qs'] = user_skill_qs
     except UserSkill.DoesNotExist:
         rbe_logger.info("Access request to change user skills with profile not found!")
