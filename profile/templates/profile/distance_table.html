@@ -1,0 +1,33 @@
+
+{% if closest_people %}
+    <table class="table table-condensed" style="background-color: #eee">
+        <thead>
+        <tr>
+            <th>Pic</th>
+            <th>Name</th>
+            <th>Distance</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for element in closest_people %}
+            <tr class='profile-link' data-href="{% url 'profile' element.distance_to.id %}">
+                <td>
+                    <img style="height:20px"
+                         src="{{ element.distance_to.user.avatar_link|default:'/static/img/unknown.png' }}"/>
+                </td>
+                <td>
+                    <div>{{ element.distance_to.username }}</div>
+                </td>
+                <td>
+                    <div>{{ element.value }} km</div>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div style="text-align: center; padding: 10px;">
+        <span style="color: white">No close people available!</span>
+    </div>
+{% endif %}

@@ -1,71 +1,70 @@
-<style>
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 
-</style>
-{% if user == profile.user %}
-<div class="row">
-    <div class="explain col-xs-12 col-sm-6 col-sm-offset-6">
-        Add a new skill by typing a single word describing your skill.
-        Also you can set the skill level between 1 and 5. After that press the save
-        button to register the skill.
-    </div>
-</div>
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='{% static 'css/profile20161111.css' %}'>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
-        <div class="input-group input-group-option level-range">
-            <span class="input-group-addon input-group-addon-remove">
-                <span id="create_skill_level">1</span>
-            </span>
-            <span id="create_skill_up" class="input-group-addon input-group-addon-remove clickable">
-                <span class="fa fa-angle-double-up"></span>
-            </span>
-            <span id="create_skill_down" class="input-group-addon input-group-addon-remove clickable">
-                <span class="fa fa-angle-double-down"></span>
-            </span>
+    <script src="{% static 'js/skills.js' %}"></script>
+{% endblock %}
 
-            <input id="create_skill_text" type="text" class="form-control" placeholder="Enter a skill" value="{{ usk.slug.value }}">
-            <span class="input-group-btn">
-                <button id="create_skill_save"  class="btn btn-default" type="button">Save</button>
-            </span>
+
+{% block content %}
+
+<div class="container">
+    <div class="row vertical-margin-10">
+        <div class="explain col-xs-12 col-sm-6 col-sm-offset-3">
+            Add a new skill by typing a single word describing your skill.
+            Also you can set the skill level between 1 and 5 (with 5 being the most skilled).
+            After that press the save button to register the skill.
         </div>
     </div>
-</div>
 
-{% endif %}
-
-<hr/>
-
-<div class="row user_skill_container" style="margin: 1em auto;">
-    {% for usk in user_skills %}
-        <div class="col-xs-12 col-sm-12 col-md-6">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <div class="input-group input-group-option level-range">
                 <span class="input-group-addon input-group-addon-remove">
-                    <span class="skill_level">{{ usk.level }}</span>
+                    <span id="create_skill_level">1</span>
                 </span>
-                {% if user == profile.user %}
+                <span id="create_skill_up" class="input-group-addon input-group-addon-remove clickable">
+                    <span class="fa fa-angle-double-up"></span>
+                </span>
+                <span id="create_skill_down" class="input-group-addon input-group-addon-remove clickable">
+                    <span class="fa fa-angle-double-down"></span>
+                </span>
+
+                <input id="create_skill_text" type="text" class="form-control" placeholder="Enter a skill" value="{{ usk.slug.value }}">
+                <span class="input-group-btn">
+                    <button id="create_skill_save"  class="btn btn-default" type="button">Save</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="row user_skill_container" style="margin: 1em auto;">
+        {% for usk in user_skill_qs %}
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="input-group input-group-option level-range">
+                    <span class="input-group-addon input-group-addon-remove">
+                        <span class="skill_level">{{ usk.level }}</span>
+                    </span>
                     <span data-slug-id="{{ usk.slug.id }}" class="input-group-addon input-group-addon-remove clickable upskill">
                         <span class="fa fa-angle-double-up"></span>
                     </span>
                     <span data-slug-id="{{ usk.slug.id }}" class="input-group-addon input-group-addon-remove clickable downskill">
                         <span class="fa fa-angle-double-down"></span>
                     </span>
-                {% endif %}
-                <a href="{% url 'phrase_details' usk.slug.id %}">
-                    <input type="text" name="option[]" class="btn btn-default form-control" placeholder="Focus me" value="{{ usk.slug.value }}" readonly>
-                </a>
-                {% if user == profile.user %}
+                    <a href="{% url 'phrase_details' usk.slug.id %}">
+                        <input type="text" name="option[]" class="btn btn-default form-control" placeholder="Focus me" value="{{ usk.slug.value }}" readonly>
+                    </a>
                     <span data-slug-id="{{ usk.slug.id }}" class="input-group-addon input-group-addon-remove clickable rmskill">
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="fa fa-trash"></span>
                     </span>
-                {% endif %}
+                </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
-
-
-
-{% if user == profile.user %}
+        {% endfor %}
+    </div>
 
     <div class="blueprint" style="display: none">
         <div class="col-xs-12 col-sm-12 col-md-6 blueprint-skill-entry">
@@ -83,14 +82,14 @@
                     <input type="text" name="option[]" class="btn btn-default form-control" value="" readonly>
                 </a>
                 <span data-slug-id="" class="input-group-addon input-group-addon-remove clickable rmskill">
-                    <span class="glyphicon glyphicon-remove"></span>
+                    <span class="fa fa-trash"></span>
                 </span>
             </div>
         </div>
+    </div>
 </div>
 
 <script>
-
     $(document).ready(function(){
         $('#create_skill_up').click(function(){
             change_skill_level_local($('#create_skill_level'), 1);
@@ -152,4 +151,4 @@
         })
     });
 </script>
-{% endif %}
+{% endblock %}

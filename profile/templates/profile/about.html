@@ -1,0 +1,35 @@
+<p style="color: white; padding: 4px;"><b>About</b></p>
+<p style="color: white; padding: 4px; text-align: justify">
+    {% if profile.about_me_text %}
+        {{ profile.about_me_text|escape }}
+    {% else %}
+        No about me text present!
+    {% endif %}
+</p>
+
+{% if my_profile %}
+
+    <p style="color: white; padding: 4px;"><b>Email:</b>
+        {% if profile.user.email %}
+            {{ profile.user.email }}
+        {% else %}
+            --
+        {% endif %}
+    </p>
+
+    <p style="color: white; padding: 4px;"><b>First Name:</b>
+        {% if profile.user.first_name %}
+            {{ profile.user.first_name }}
+        {% else %}
+            --
+        {% endif %}
+    </p>
+
+    <p style="color: white; padding: 4px;"><b>Last Name:</b>
+        {% if profile.user.last_name %}
+            {{ profile.user.last_name }}
+        {% else %}
+            --
+        {% endif %}
+    </p>
+{% endif %}

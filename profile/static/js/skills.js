@@ -79,3 +79,8 @@ function remove_skill(skill_id, $target){
         return swal('Error', 'Could not reach server!', 'error');
     });
 }
+
+function forward_skill(event){
+    var phrase_id = $(event.currentTarget).data('phrase-id');
+    window.location.href = get_url('phrase_details') + phrase_id
+}

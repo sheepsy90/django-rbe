@@ -1,5 +1,5 @@
 
-function updateLocation(position) {
+function updateLocation(position, success_callback) {
     $.ajax({
         method: 'POST',
         url: get_url('update_location'),
@@ -10,14 +10,14 @@ function updateLocation(position) {
         }
     }).done(function (msg) {
         if (msg['success']) {
-            window.location.reload();
+            success_callback()
         }
     }).fail(function () {
         return swal('Error', 'Could not reach server!', 'error');
     });
 }
 
-function clear_location() {
+function clear_location(success_handler) {
     $.ajax({
         method: 'POST',
         url: get_url('clear_location'),
@@ -26,7 +26,7 @@ function clear_location() {
         }
     }).done(function (msg) {
         if (msg['success']) {
-           window.location.reload();
+            success_handler()
         }
     }).fail(function () {
         return swal('Error', 'Could not reach server!', 'error');

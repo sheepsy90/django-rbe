@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='{% static 'css/profile20161111.css' %}'>
+
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/language.js' %}"></script>
+    <script src="{% static 'js/location.js' %}"></script>
+    <script src="{% static 'js/skills.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <ul id="accordion" class="accordion">
+                    <li>
+                        <div class="col col_4 iamgurdeep-pic">
+                            <img id="user-picture" class="img-responsive iamgurdeeposahan"
+                                 src="{{ profile.avatar_link }}" style="width: 100%">
+                            <div class="edit-pic">
+                                <!--<a href="https://twitter.com/gurdeeposahan1" target="_blank" class="fa fa-twitter"></a>
+                                <a href="https://plus.google.com/u/0/105032594920038016998" target="_blank"
+                                   class="fa fa-google"></a>-->
+                            </div>
+                            <div class="username">
+                                <div>
+                                    <span style="font-size: 30px">{{ profile.user.username }}</span>
+                                    <small>
+                                        <i class="fa fa-map-marker"></i>
+                                        <span id="location_span">
+                                            {% if profile.user.location and profile.user.location.position_updated %}
+                                                {{ profile.user.location.longitude_round }}
+                                                {{ profile.user.location.latitude_round }}
+                                                {{ profile.user.location.position_updated }}
+                                            {% else %}
+                                                Location not set!
+                                            {% endif %}
+                                        </span>
+                                    </small>
+                                </div>
+                                {% if profile.action_description %}
+                                    <p><i class="fa fa-briefcase"></i>{{ profile.action_description }}</p>
+                                {% endif %}
+                                {% if my_profile %}
+                                    <a id="user-picture-btn" class="btn-o">
+                                        <i class="fa fa-camera"></i> Change Picture
+                                    </a>
+                                    <input style="display: none" id="choose_file" type="file" multiple
+                                           name="file_source" size="0" value="Upload">
+                                    <a id="location" class="btn-o">
+                                        <i class="fa fa-map-marker"></i> Update Location
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'compose' profile.user.id %}" class="btn-o">
+                                        <i class="fa fa-envelope"></i> Start conversation</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-globe"></i>About<i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                            {% if my_profile %}
+                                <div class="pull-right edit">
+                                    <a style='padding-left: 12px' href="{% url 'change_about' %}"><span
+                                            class="fa fa-pencil"></span></a>
+                                </div>
+                            {% endif %}
+                            <li>
+                                <a>
+                                    {% include 'profile/about.html' %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-code"></i>Professional Skills
+                            <small>({{ user_skills|length }})</small>
+                            <i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                            {% if my_profile %}
+                                <div class="pull-right edit">
+                                    <a style='padding-left: 12px' href="{% url 'change_skills' %}"><span
+                                            class="fa fa-pencil"></span></a>
+                                </div>
+                            {% endif %}
+                            <li>
+                                <a>
+                                    {% for element in user_skills %}
+                                        <span data-phrase-id="{{ element.slug.id }}"
+                                              class="tags skill_tag">{{ element.slug.value }} <span
+                                                class="badge">{{ element.level }}</span></span>
+                                    {% endfor %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-picture-o"></i>Languages
+                            <small>({{ profile.user.languagespoken_set.all|length }})</small>
+                            <i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                            {% if my_profile %}
+                                <div class="pull-right edit">
+                                    <a style='padding-left: 12px' href="{% url 'change_languages' %}"><span
+                                            class="fa fa-pencil"></span></a>
+                                </div>
+                            {% endif %}
+
+                            <li>
+                                <a>
+                                    {% for e in profile.user.languagespoken_set.all %}
+                                        <span data-lang="{{ e.language }}" class="tags lang_tag">
+                                            {{ e.language_display }}
+                                            <img style="height: 1.5em; margin-top: -6px" src="/static/img/language_flags/{{ e.language }}.png" alt=""/>
+                                            <span class="badge">{{ element.level }}</span>
+                                        </span>
+                                    {% empty %}
+                                        <span style="color: white; padding: 4px;">No languages</span>
+                                    {% endfor %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-users"></i>Close People
+                            <small></small>
+                            <i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                            {% include 'profile/distance_table.html' %}
+                        </ul>
+                    </li>
+                    {% if my_profile %}
+                        <li>
+                            <div class="link"><i class="fa fa-gears"></i>Other
+                                <small></small>
+                                <i class="fa fa-chevron-down"></i></div>
+                            <ul class="submenu">
+                                <div style="padding: 5px;">
+                                    <a id="delete-profile-picture" class="btn-o">Delete Picture</a>
+                                    <a id="delete-location" class="btn-o">Delete Location</a>
+                                </div>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var Accordion = function (el, multiple) {
+                this.el = el || {};
+                this.multiple = multiple || false;
+
+                // Variables privadas
+                var links = this.el.find('.link');
+                // Evento
+                links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+            };
+
+            Accordion.prototype.dropdown = function (e) {
+                var $el = e.data.el;
+                $this = $(this),
+                        $next = $this.next();
+
+                $next.slideToggle();
+                $this.parent().toggleClass('open');
+
+                if (!e.data.multiple) {
+                    $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+                }
+            };
+
+            var accordion = new Accordion($('#accordion'), false);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.profile-link').click(function () {
+                window.location.href = $(this).data('href');
+            });
+            $('.lang_tag').click(forward_language);
+            $('.skill_tag').click(forward_skill);
+        });
+    </script>
+
+    {% if my_profile %}
+        <script>
+            $(document).ready(function () {
+                $("#user-picture-btn").click(function (e) {
+                    e.preventDefault();
+                    $('#choose_file').click();
+                });
+
+                $("#choose_file").bind('change', function (event) {
+                    upload_profile_image(event)
+                });
+
+                $("#delete-profile-picture").click(function () {
+                    var $image = $("#user-picture");
+                    delete_profile_image($image)
+                });
+                $("#delete-location").click(function(){
+                    clear_location(function(){
+                        $('#location_span').html('Location not set!')
+                    })
+                });
+                $("#location").click(function() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            updateLocation(position, function () {
+                                var lat = position.coords.latitude.toFixed(2);
+                                var long = position.coords.longitude.toFixed(2);
+                                $('#location_span').html(lat + ' ' + long)
+                            })
+                        })
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+
+{% endblock %}
