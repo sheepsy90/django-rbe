@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'up_skill_level', skills.views.up_skill_level, name="up_skill_level"),
     url(r'down_skill_level', skills.views.down_skill_level, name="down_skill_level"),
     url(r'delete_skill', skills.views.delete_skill, name="delete_skill"),
+
+    url(r'change_skills', skills.views.change_skills, name="change_skills"),
 ]

@@ -25,6 +25,18 @@ hr {
 }
 
 .profile-link:hover {
-    background-color: #eee;
+    background-color: #ccc;
     cursor: pointer;
+}
+
+.explain {
+    color: #7c7c7c;
+    font-style: italic;
+}
+
+.clickable {
+  &:hover{
+    background-color: #ccc;
+    cursor: pointer;
+  }
 }

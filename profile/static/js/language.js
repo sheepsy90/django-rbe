@@ -40,20 +40,26 @@ function remove_language(event){
         }
     }).done(function (msg) {
         if (msg['success']) {
-            $(event.currentTarget).hide(500).remove();
+            $(event.currentTarget).parent().hide(500).remove();
         }
     });
 }
 
 function create_language_button(lang, language_display){
-    var r1 = $('<div class="lang_button btn btn-default" data-lang="' + lang + '">');
-    var c1 = $('<img style="height: 2em; margin-top: -6px" src="/static/img/language_flags/' + lang + '.png" alt=""/>');
-    var c2 = $('<span style="font-size: 20px; height: 2em">' + language_display + '</span>');
-    var c3 = $('<span class="fa fa-remove" style="font-size: 15px;"></span>');
-    $(r1).append(c1)
-    $(r1).append(c2)
-    $(r1).append(c3)
-    return r1;
+    var element = $('.blueprint').find(".language_display").clone();
+    $(element).removeClass('language_display');
+
+    $(element).find('#language_display').val(language_display);
+    $(element).find('#language_display').data('lang', lang);
+    $(element).find('#language_display').click(forward_language);
+
+    var href = $(element).find('#flag_img').attr('src');
+    $(element).find('#flag_img').attr('src', href + lang + '.png');
+
+    $(element).find('.remove_language').data('lang', lang);
+    $(element).find('.remove_language').click(remove_language);
+
+    return element;
 }
 
 function add_language($select_box, $target_container){

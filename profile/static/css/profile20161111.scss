@@ -17,29 +17,17 @@
 .username {
     bottom: 0;
     color: #ffffff;
-    padding: 30px 15px 4px;
-    position: absolute;
+    padding: 10px 15px 4px;
     width: 100%;
     text-shadow: 1px 1px 2px #000000;
 
-    background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #2d2c41 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #2d2c41 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #2d2c41 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#a64d4d4d', GradientType=0); /* IE6-9 */
+    background: -moz-linear-gradient(top, rgba(0, 0, 0, 1.0) 0%, $color-primary-0 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 1.07) 0%, $color-primary-0 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, $color-primary-0 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 .iamgurdeeposahan {
     border-radius: 4px 4px 0 0;
-}
-
-.username > h2 {
-    font-family: oswald;
-    font-size: 27px;
-    font-weight: lighter;
-    margin: 31px 0 4px;
-    position: relative;
-    text-shadow: 1px 1px 2px #000000;
-    text-transform: uppercase;
 }
 
 .username > h2 small {
@@ -156,12 +144,13 @@ a:focus {
 .btn-o:hover {
     background-color: rgba(255, 255, 255, 0.4);
     color: #fff !important;
+    cursor: pointer;
 }
 
 .btn-o:focus {
-    background: #b63b4d;
+    background: $color-primary-2;
     color: #fff;
-    border: 1px solid #b63b4d;
+    border: 1px solid $color-primary-2;
 }
 
 .submenu .iamgurdeeposahan {
@@ -200,7 +189,7 @@ ul {
 }
 
 a {
-    color: #b63b4d;
+    color: $color-primary-2;
     text-decoration: none;
 }
 
@@ -216,13 +205,25 @@ h1 {
 }
 
 h1 a {
-    color: #c12c42;
+    color: $color-primary-2;
     font-size: 16px;
+}
+
+.vertical-margin-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.lang_remove {
+  &:hover{
+    cursor: pointer;
+    background-color: #ccc;
+  }
 }
 
 .accordion {
     width: 100%;
-    margin: 30px auto 20px;
+    margin: 25px auto 20px;
     background: #FFF;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -265,11 +266,11 @@ h1 a {
 }
 
 .accordion li.open .link {
-    color: #b63b4d;
+    color: $color-primary-3;
 }
 
 .accordion li.open i {
-    color: #b63b4d;
+    color: $color-primary-3;
 }
 
 .accordion li.open i.fa-chevron-down {
@@ -288,13 +289,14 @@ h1 a {
  -----------------------------*/
 .submenu {
     display: none;
-    background: #444359;
+    background: #4b4a5e;
     font-size: 14px;
 }
 
 .submenu li {
     border-bottom: 1px solid #4b4a5e;
 }
+
 
 .submenu a {
     display: block;
@@ -311,3 +313,19 @@ h1 a {
     //background: #b63b4d;
     color: #FFF;
 }
+
+.tags {
+  cursor: pointer;
+}
+
+.edit {
+  padding: 4px;
+  a {
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    &:hover {
+      background-color: $color-primary-2;
+    }
+  }
+}
+

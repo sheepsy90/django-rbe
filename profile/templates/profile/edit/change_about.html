@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2">
-                <form id="change_profile" action="{% url "change_profile" %}" method="post">
+                <form id="change_profile" action="{% url "change_about" %}" method="post">
                     {% csrf_token %}
 
                     {% for error in form.non_field_errors %}

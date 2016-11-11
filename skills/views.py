@@ -120,3 +120,14 @@ def delete_skill(request):
     except Exception as e:
         rbe_logger.exception(e)
         return JsonResponse({'success': False, 'reason': "Some error occurred!"})
+
+@login_required
+def change_skills(request):
+    rc = RequestContext(request)
+    try:
+        user_skill_qs = UserSkill.objects.filter(user=request.user)
+        rc['user_skill_qs'] = user_skill_qs
+    except UserSkill.DoesNotExist:
+        rbe_logger.info("Access request to change user skills with profile not found!")
+
+    return render_to_response('change_user_skills.html', rc)

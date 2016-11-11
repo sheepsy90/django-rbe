@@ -25,19 +25,8 @@ from profile.models import UserProfile, LanguageSpoken
 from skills.models import UserSkill
 
 
-def _return_my_profile(request):
-    rc = RequestContext(request)
-    user = request.user
-    p = UserProfile.objects.get(user=user)
-    rc['my_profile'] = True
-    rc['profile'] = p
-    rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
-    #rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
-    return render_to_response('my_profile/new_profile.html', rc)
-
-
 @login_required(login_url=settings.LOGIN_URL)
-def change_profile(request):
+def change_about(request):
     rc = RequestContext(request)
 
     if request.method == 'POST':
@@ -65,28 +54,20 @@ def change_profile(request):
         })
 
     rc['form'] = form
-    return render_to_response('my_profile/change_profile.html', rc)
-
-
-def _return_other_profile(request, user):
-    rc = RequestContext(request)
-    p = UserProfile.objects.get(user=user)
-    rc['my_profile'] = False
-    rc['profile'] = p
-    rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
-    rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
-    return render_to_response('my_profile/new_profile.html', rc)
+    return render_to_response('profile/edit/change_about.html', rc)
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def profile(request, user_id):
     try:
         user = User.objects.get(id=user_id)
-
-        if user == request.user:
-            return _return_my_profile(request)
-        else:
-            return _return_other_profile(request, user)
+        rc = RequestContext(request)
+        p = UserProfile.objects.get(user=user)
+        rc['my_profile'] = request.user == user
+        rc['profile'] = p
+        rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
+        rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
+        return render_to_response('profile/profile.html', rc)
     except User.DoesNotExist:
         raise Http404("User not found")
 
@@ -122,6 +103,16 @@ def aboutme(request):
     prof.save()
 
     return JsonResponse({'success': True})
+
+@login_required
+def avatar_delete(request):
+    try:
+        prof = UserProfile.objects.get(user=request.user)
+        prof.avatar_link = ''
+        prof.save()
+        return JsonResponse({'success': True})
+    except UserProfile.DoesNotExist:
+        return JsonResponse({'success': False, 'reason': 'UserProfile not found!'})
 
 
 @login_required
@@ -216,3 +207,14 @@ def language_overview(request, language_code):
         }
         rc['profiles'] = LanguageSpoken.objects.filter(language=language_code)
         return render_to_response('language.html', rc)
+
+@login_required()
+def change_languages(request):
+    rc = RequestContext(request)
+    try:
+        language_spoken_qs = LanguageSpoken.objects.filter(user=request.user)
+        rc['language_spoken_qs'] = language_spoken_qs
+    except UserProfile.DoesNotExist:
+        rbe_logger.info("Access request to change language with profile not found!")
+
+    return render_to_response('profile/edit/change_languages.html', rc)
