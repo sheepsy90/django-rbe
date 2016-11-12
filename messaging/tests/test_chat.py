@@ -69,4 +69,19 @@ class TestNewMessaging(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_retrieving_messages_page_works_with_read_message(self):
+        recipient = create_user('user', 'email', 'password')
+        sender = create_user('sender', 'email', 'password')
+
+        m = Message.create_message(sender, recipient, '', 'text', silent=True)
+        m.status = MessageStatus.READ
+        m.save()
+
+        c = Client()
+        c.login(username='user', password='password')
+
+        response = c.get(reverse('messages'))
+
+        self.assertEqual(response.status_code, 200)
+
 

@@ -126,7 +126,7 @@ def messages(request):
     if not qs.exists():
         sender = LastSeen.objects.all().order_by('date_time').first()
     else:
-        sender = qs.sender
+        sender = qs.first().sender
 
     return conversation(request, sender.id)
 
