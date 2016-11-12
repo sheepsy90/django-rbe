@@ -1,7 +1,6 @@
 language: python
 python:
   - "2.7"
-services: mysql
 env:
   - DJANGO_SETTINGS_MODULE="django_rbe.settings"
 install:
