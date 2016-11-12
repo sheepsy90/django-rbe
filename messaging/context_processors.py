@@ -14,7 +14,6 @@ def messaging_context(request):
         'message_context': messaging_context
     }
 
-
 def languages(request):
     return {
         'languages': sorted(LANGUAGES, key=lambda x: x[1])

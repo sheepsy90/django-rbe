@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import Group
 
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
 from core.models import PasswordResetKey
@@ -74,6 +75,19 @@ def logout(request):
     return HttpResponseRedirect(LOGIN_URL, rc)
 
 
+def create_user(username, email, password):
+    u = User.objects.create_user(username=username, email=email, password=password)
+    user = djauth.authenticate(username=username, password=password)
+
+    p = UserProfile(user=u)
+    p.save()
+
+    g, created = Group.objects.get_or_create(name='all_users')
+    g.user_set.add(u)
+
+    return user
+
+
 def register(request, registration_key):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -85,11 +99,7 @@ def register(request, registration_key):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
 
-            u = User.objects.create_user(username=username, email=email, password=password)
-            user = djauth.authenticate(username=username, password=password)
-
-            p = UserProfile(user=u, invited_by=None)
-            p.save()
+            user = create_user(username, email, password)
 
             try:
                 wcm = WelcomeMail()
