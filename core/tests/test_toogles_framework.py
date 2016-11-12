@@ -56,7 +56,7 @@ class TestTogglesFramework(TestCase):
         t.save()
 
         all_users, created = Group.objects.get_or_create(name='all_users')
-        t.activated_for.add(all_users)
+        Toggles.activate(t, all_users)
 
         create_user('username', 'email', 'password')
         c.login(username='username', password='password')

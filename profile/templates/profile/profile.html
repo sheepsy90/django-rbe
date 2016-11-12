@@ -13,7 +13,6 @@
 
 
 {% block content %}
-    {{ user.groups.all }}
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -56,7 +55,7 @@
                                         <i class="fa fa-map-marker"></i> Update Location
                                     </a>
                                 {% else %}
-                                    <a href="{% url 'compose' profile.user.id %}" class="btn-o">
+                                    <a href="{% if toggles.new_messaging %}{% url 'conversation' profile.user.id %}{% else %}{% url 'compose' profile.user.id %}{% endif %}" class="btn-o">
                                         <i class="fa fa-envelope"></i> Start conversation</a>
                                 {% endif %}
                             </div>

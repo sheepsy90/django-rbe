@@ -1,0 +1,60 @@
+<div class="chat_sidebar">
+    	 <div class="row">
+            <div id="custom-search-input">
+               <div class="input-group col-md-12">
+                  <!--<input type="text" class="  search-query form-control" placeholder="Conversation" />
+                  <button class="btn btn-danger" type="button">
+                  <span class=" glyphicon glyphicon-search"></span>
+                  </button>-->
+               </div>
+            </div>
+             <!--
+            <div class="dropdown all_conversation">
+               <button class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <i class="fa fa-weixin" aria-hidden="true"></i>
+               All Conversations
+               <span class="caret pull-right"></span>
+               </button>
+               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <li><a href="#"> All Conversation </a>  <ul class="sub_menu_ list-unstyled">
+                  <li><a href="#"> All Conversation </a> </li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li><a href="#">Separated link</a></li>
+               </ul>
+			   </li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li><a href="#">Separated link</a></li>
+               </ul>
+            </div>-->
+            <div class="member_list">
+               <ul class="list-unstyled">
+
+                   {% for element in latest_conversations %}
+                       <a href="{% url 'conversation' element.user.id %}">
+                     <li class="left clearfix">
+                     <span class="chat-img pull-left">
+                     <img src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}" alt="User Avatar" class="img-circle">
+                     </span>
+                     <div class="chat-body clearfix">
+                        <div class="header_sec">
+                           <strong class="primary-font">{{ element.user }}</strong> <span class="pull-right">
+                           </span>
+                        </div>
+                        <div class="contact_sec">
+                           <span class="primary-font">
+                               <span class="glyphicon glyphicon-time"></span> {{ element.last_contact }}
+                           </span>
+                            {% if element.unread_messages  %}
+                                <span class="badge pull-right">{{ element.unread_messages }}</span>
+                            {% endif %}
+                        </div>
+                     </div>
+                  </li>
+                       </a>
+                   {% endfor %}
+               </ul>
+            </div>
+        </div>
+     </div>

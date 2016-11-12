@@ -52,6 +52,8 @@ class Command(BaseCommand):
         # Make my user superuser to access admin and so on
         u = User.objects.get(username='sheepy')
         u.is_superuser = True
+        u.is_staff = True
+        u.status = True
         u.save()
 
         # Add some messages
