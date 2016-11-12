@@ -25,7 +25,7 @@ class Message(models.Model):
         """ This method sends an email to the recipient in order to inform them about a new message """
         try:
             nme = NewMessageEmail()
-            nme.send(recipient_list=[self.recipient.email], username=self.recipient.username, message_id=self.id)
+            nme.send(recipient_list=[self.recipient.email], message=self)
         except :
             rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 

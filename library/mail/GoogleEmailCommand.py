@@ -8,10 +8,12 @@ from django.conf import settings
 
 class GoogleEmail(object):
 
+    _smtplib = smtplib
+
     required_fields = ['recipient_list']
 
     def __init__(self):
-        self.smtpserver = smtplib.SMTP("smtp.gmail.com", 587)
+        self.smtpserver = GoogleEmail._smtplib.SMTP("smtp.gmail.com", 587)
         self.smtpserver.ehlo()
         self.smtpserver.starttls()
         self.smtpserver.ehlo()
