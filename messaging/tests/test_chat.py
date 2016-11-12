@@ -58,3 +58,15 @@ class TestNewMessaging(TestCase):
 
         m.refresh_from_db()
         self.assertEqual(m.status, MessageStatus.READ)
+
+    def test_retrieving_messages_page_works_without_messages(self):
+        create_user('user', 'email', 'password')
+
+        c = Client()
+        c.login(username='user', password='password')
+
+        response = c.get(reverse('messages'))
+
+        self.assertEqual(response.status_code, 200)
+
+

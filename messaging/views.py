@@ -7,6 +7,7 @@ from django.http.response import JsonResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
+from core.models import LastSeen
 from library.log import rbe_logger
 from messaging.forms import ComposeForm
 from messaging.models import Message, MessageStatus
@@ -117,8 +118,17 @@ def delete_message(request):
 
 @login_required()
 def messages(request):
-    x = Message.objects.filter(recipient=request.user, status=MessageStatus.UNREAD).annotate(count=Count('status')).order_by('count').first()
-    return conversation(request, x.sender.id)
+    qs = Message.objects.filter(recipient=request.user, status=MessageStatus.UNREAD).annotate(count=Count('status')).order_by('count')
+
+    if not qs.exists():
+        qs = Message.objects.filter(recipient=request.user).order_by('-sent_time')
+
+    if not qs.exists():
+        sender = LastSeen.objects.all().order_by('date_time').first()
+    else:
+        sender = qs.sender
+
+    return conversation(request, sender.id)
 
 
 def get_ordered_latest_contact_list(user):
