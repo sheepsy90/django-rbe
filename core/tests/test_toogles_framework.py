@@ -66,3 +66,5 @@ class TestTogglesFramework(TestCase):
         self.assertTrue(response.context['user'].is_authenticated())
         self.assertDictEqual(response.context['toggles'], {u'sample_toggle_one': True})
 
+    def test_testing_building_works(self):
+        self.assertTrue(False)
