@@ -131,3 +131,16 @@ def change_skills(request):
         rbe_logger.info("Access request to change user skills with profile not found!")
 
     return render_to_response('change_user_skills.html', rc)
+
+@login_required
+def search_skill(request):
+    search_term = request.POST.get('search_term')
+
+    if not search_term or len(search_term) < 2:
+        skill_qs = SlugPhrase.objects.all()[:10]
+    else:
+        skill_qs = SlugPhrase.objects.filter(value__icontains=search_term)
+
+    value_list = list(skill_qs.values_list('value', flat=True))
+
+    return JsonResponse({'success': True, 'skills': value_list})

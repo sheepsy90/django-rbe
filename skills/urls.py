@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'delete_skill', skills.views.delete_skill, name="delete_skill"),
 
     url(r'change_skills', skills.views.change_skills, name="change_skills"),
+    url(r'search_skill', skills.views.search_skill, name="search_skill"),
 ]

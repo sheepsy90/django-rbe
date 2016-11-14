@@ -84,3 +84,20 @@ function forward_skill(event){
     var phrase_id = $(event.currentTarget).data('phrase-id');
     window.location.href = get_url('phrase_details') + phrase_id
 }
+
+function skill_find_matching(search_term, response_display_callback){
+    $.ajax({
+        method: 'POST',
+        url: get_url('search_skill'),
+        data: {
+            search_term: search_term,
+            csrfmiddlewaretoken: get_csrf_token()
+        }
+    }).done(function (msg) {
+        if (msg['success']) {
+            response_display_callback(msg['skills']);
+        }
+    }).fail(function () {
+        return swal('Error', 'Could not reach server!', 'error');
+    });
+}
