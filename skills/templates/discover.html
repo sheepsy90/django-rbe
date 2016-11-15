@@ -76,10 +76,13 @@
                     $('#skill_results_area').hide();
                 } else {
                     $('#skill_results_area').empty();
-                    for (var e in skills){
+                    for (e in skills){
                         var $element = $('.skill_entry').clone();
-                        $element.find('.value').html(e[0]);
-                        $element.find('.badge').html(e[1]);
+                        $element.removeClass('skill_entry');
+                        $element.show();
+                        $element.css('display', 'inline-block');
+                        $element.find('.value').html(skills[e][0]);
+                        $element.find('.badge').html(skills[e][1]);
                         $('#skill_results_area').append($element);
                     }
 
