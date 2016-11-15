@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 
+from core.models import Toggles
 from library.log import rbe_logger
 from skills.models import SlugPhrase, UserSkill
 from skills.view_obj import CapabilityBreakdown
@@ -16,8 +17,11 @@ from skills.view_obj import CapabilityBreakdown
 def discover(request):
     try:
         rc = RequestContext(request)
-        rc['all_objects'] = sorted(SlugPhrase.objects.all().annotate(object_count=Count('userskill')),
-                                   key=lambda x: -x.object_count)
+        if Toggles.is_active('skill_search', request.user):
+            rc['all_objects'] = SlugPhrase.objects.all().annotate(object_count=Count('userskill')).order_by('-object_count')[:25]
+        else:
+            rc['all_objects'] = sorted(SlugPhrase.objects.all().annotate(object_count=Count('userskill')),
+                                       key=lambda x: -x.object_count)
         return render_to_response('discover.html', rc)
     except Exception as e:
         rbe_logger.exception(e)
@@ -79,7 +83,7 @@ def up_skill_level(request):
 
     try:
         sp = UserSkill.objects.get(slug__id=skill_id, user=request.user)
-        sp.level = min(5, sp.level+1)
+        sp.level = min(5, sp.level + 1)
         sp.latest_change = datetime.datetime.now()
         sp.save()
         return JsonResponse({'success': True, 'new_level': sp.level})
@@ -96,7 +100,7 @@ def down_skill_level(request):
 
     try:
         sp = UserSkill.objects.get(slug__id=skill_id, user=request.user)
-        sp.level = max(1, sp.level-1)
+        sp.level = max(1, sp.level - 1)
         sp.latest_change = datetime.datetime.now()
         sp.save()
         return JsonResponse({'success': True, 'new_level': sp.level})
@@ -121,6 +125,7 @@ def delete_skill(request):
         rbe_logger.exception(e)
         return JsonResponse({'success': False, 'reason': "Some error occurred!"})
 
+
 @login_required
 def change_skills(request):
     rc = RequestContext(request)
@@ -131,3 +136,16 @@ def change_skills(request):
         rbe_logger.info("Access request to change user skills with profile not found!")
 
     return render_to_response('change_user_skills.html', rc)
+
+
+@login_required
+def search_skill(request):
+    search_term = request.POST.get('search_term')
+
+    if not search_term or len(search_term) < 2:
+        return JsonResponse({'success': True, 'searched': False, 'skills': []})
+
+    skill_qs = SlugPhrase.objects.filter(value__icontains=search_term)
+
+    search_result = list(skill_qs.annotate(count=Count('userskill')).values_list('value', 'count'))
+    return JsonResponse({'success': True, 'searched': True, 'skills': search_result})
