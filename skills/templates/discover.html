@@ -70,7 +70,6 @@
         $('#search_string').bind('keyup', function(e){
             var search_term = $('#search_string').val();
             skill_find_matching(search_term, function(skills, searched){
-                console.log(skills)
                 if (skills.length == 0 && !searched){
                     $('#most_often_skills').show();
                     $('#skill_results_area').hide();
