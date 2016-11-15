@@ -23,7 +23,7 @@ class Command(BaseCommand):
         usernames = ["{}.{}".format(e[0], e[1]) for e in usernames]
         usernames.append('sheepy')
 
-        skill_sample_list = ['running', 'flying', 'diving', 'programming', 'dancing', 'cutting video', 'jumping']
+        skill_sample_list = ['running', 'flying', 'diving', 'programming', 'dancing', 'cutting video', 'jumping', 'sking', 'eating', 'washing', 'brooming', 'walking']
         sample_languages = dict(LANGUAGES).keys()
 
         for name in usernames:

@@ -95,7 +95,7 @@ function skill_find_matching(search_term, response_display_callback){
         }
     }).done(function (msg) {
         if (msg['success']) {
-            response_display_callback(msg['skills']);
+            response_display_callback(msg['skills'], msg['searched']);
         }
     }).fail(function () {
         return swal('Error', 'Could not reach server!', 'error');
