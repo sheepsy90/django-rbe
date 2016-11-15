@@ -77,7 +77,7 @@
                 } else {
                     $('#skill_results_area').empty();
                     for (var e in skills){
-                        var $element = $('.skill_area').clone();
+                        var $element = $('.skill_entry').clone();
                         $element.find('.value').html(e[0]);
                         $element.find('.badge').html(e[1]);
                         $('#skill_results_area').append($element);
