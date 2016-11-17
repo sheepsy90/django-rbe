@@ -89,8 +89,6 @@ def overview(request):
     rc = RequestContext(request)
     search_query = request.GET.get('search_query', '')
 
-    print search_query
-
     user_qs = transform_search_query_to_query_set(search_query, request.user)
 
     page = request.GET.get('page', 1)
