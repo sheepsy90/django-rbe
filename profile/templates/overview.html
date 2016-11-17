@@ -5,6 +5,7 @@
 {% block header %}
     <link rel="stylesheet" type="text/css" href='/static/css/profile_cards.css'>
     <link rel="stylesheet" type="text/css" href='/static/css/profile_common.css'>
+    <link rel="stylesheet" type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/0.3.7/awesome-bootstrap-checkbox.min.css'>
 
 {% endblock %}
 
@@ -18,12 +19,34 @@
     </style>
 
     <div class="container">
+        <div class="row" style="margin-top: 1em">
+            {% if toggles.skill_search %}
+                <form method="GET" action="{% url 'profile-overview' %}">
+
+                <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+                    <div class="input-group">
+                         <div class="input-group-btn">
+                            <button class="btn btn-default form-control" type="button"><span
+                                    class="fa fa-info"> </span></button>
+                        </div>
+                        <input id="search_string" type="text" class="form-control" name="search_query" placeholder="Search term..." value="{{ search_query }}">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default form-control" type="submit">
+                                Search <span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </div>
+                </div>
+                </form>
+
+            {% endif %}
+
+        </div>
         <div class="row">
             <div class="col-xs-12" style="text-align: center">
                 {% if profiles.has_other_pages %}
                     <ul class="pagination">
                         {% if profiles.has_previous %}
-                            <li><a href="?page={{ profiles.previous_page_number }}">&laquo;</a></li>
+                            <li><a href="?page={{ profiles.previous_page_number }}&search_query={{ search_query }}">&laquo;</a></li>
                         {% else %}
                             <li class="disabled"><span>&laquo;</span></li>
                         {% endif %}
@@ -33,12 +56,12 @@
                                     <li class="active"><span>{{ profiles.number }} <span
                                             class="sr-only">(current)</span></span></li>
                                 {% else %}
-                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    <li><a href="?page={{ i }}&search_query={{ search_query }}">{{ i }}</a></li>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% if profiles.has_next %}
-                            <li><a href="?page={{ profiles.next_page_number }}">&raquo;</a></li>
+                            <li><a href="?page={{ profiles.next_page_number }}&search_query={{ search_query }}">&raquo;</a></li>
                         {% else %}
                             <li class="disabled"><span>&raquo;</span></li>
                         {% endif %}
@@ -76,7 +99,7 @@
                 {% if profiles.has_other_pages %}
                     <ul class="pagination">
                         {% if profiles.has_previous %}
-                            <li><a href="?page={{ profiles.previous_page_number }}">&laquo;</a></li>
+                            <li><a href="?page={{ profiles.previous_page_number }}&search_query={{ search_query }}">&laquo;</a></li>
                         {% else %}
                             <li class="disabled"><span>&laquo;</span></li>
                         {% endif %}
@@ -86,12 +109,12 @@
                                     <li class="active"><span>{{ profiles.number }} <span
                                             class="sr-only">(current)</span></span></li>
                                 {% else %}
-                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    <li><a href="?page={{ i }}&search_query={{ search_query }}">{{ i }}</a></li>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% if profiles.has_next %}
-                            <li><a href="?page={{ profiles.next_page_number }}">&raquo;</a></li>
+                            <li><a href="?page={{ profiles.next_page_number }}&search_query={{ search_query }}">&raquo;</a></li>
                         {% else %}
                             <li class="disabled"><span>&raquo;</span></li>
                         {% endif %}

@@ -72,14 +72,30 @@ def profile(request, user_id):
         raise Http404("User not found")
 
 
+def transform_search_query_to_query_set(search_query, request_user):
+    if search_query == '':
+        return UserProfile.objects.all()\
+            .exclude(user=request_user)\
+            .order_by('-user__lastseen__date_time')
+    else:
+        return UserProfile.objects.all() \
+            .exclude(user=request_user) \
+            .filter(user__username__icontains=search_query) \
+            .order_by('-user__lastseen__date_time')
+
+
 @login_required
 def overview(request):
     rc = RequestContext(request)
+    search_query = request.GET.get('search_query', '')
 
-    user_list = UserProfile.objects.all().exclude(user=request.user).order_by('-user__lastseen__date_time')
+    print search_query
+
+    user_qs = transform_search_query_to_query_set(search_query, request.user)
+
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(user_list, 18)
+    paginator = Paginator(user_qs, 18)
     try:
         users = paginator.page(page)
     except PageNotAnInteger:
@@ -88,6 +104,7 @@ def overview(request):
         users = paginator.page(paginator.num_pages)
 
     rc['profiles'] = users
+    rc['search_query'] = search_query
     return render_to_response('overview.html', rc)
 
 
