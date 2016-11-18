@@ -54,15 +54,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
                 {% else %}
-                    <a href="{% url 'information' %}">
-                        <button type="button" class="navbar-toggle">
-                            Info
-                        </button>
-                    </a>
+                    <a class="navbar-brand" href="{% url 'index' %}">RBE Network</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 {% endif %}
 
-                <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
             </div>
 
 
@@ -91,6 +94,9 @@
                         <li class="hidden-xs"><a href="{% url 'language_overview' '' %}" class="fa-nav-adjust"
                                                  title="Languages"><i class="fa fa-2x fa-language green-text"></i></a>
                         </li>
+                        <li class="hidden-xs"><a href="{% url 'metrics' %}" class="fa-nav-adjust"
+                                                 title="Metrics"><i class="fa fa-2x fa-bar-chart green-text"></i></a>
+                        </li>
 
                         <!-- visible on mobile in the navigation -->
                         <li class="visible-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
@@ -106,6 +112,7 @@
                         <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
                         </li>
                         <li class="visible-xs" id='general_info'><a href="{% url 'information' %}">General Info</a></li>
+                        <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">Metrics</a></li>
                         <li class="visible-xs divider"></li>
                         <li class="visible-xs"><a href="{% url 'logout' %}">Logout</a></li>
 
@@ -125,6 +132,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                         <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
+                        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                     </ul>
                 </div>
             {% endif %}

@@ -16,7 +16,7 @@ class Message(models.Model):
     recipient = models.ForeignKey(User, help_text="The user who shall receive the message", related_name='recipient')
     status = models.IntegerField(default=MessageStatus.UNREAD, help_text="The message status - determines how the message is displayed")
     message_text = models.CharField(max_length=1200, help_text='The actual message text')
-    sent_time = models.DateTimeField(auto_now=True, help_text='The datetime when the message was sent')
+    sent_time = models.DateTimeField(blank=True, null=True, help_text='The datetime when the message was sent')
 
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """

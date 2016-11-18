@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid" style="margin-top: 3em">
+    <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Messages
+                </a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="badge">{{ metrics.messages_today }}</span> Today</li>
+                    <li class="list-group-item"><span class="badge">{{ metrics.messages_last_week }}</span> Week</li>
+                    <li class="list-group-item"><span class="badge">{{ metrics.total_messages }}</span> All</li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="panel-group" id="accordion">
+
+            <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Users
+                </a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="badge">{{ metrics.total_user_count}}</span>Users</li>
+                                        <li class="list-group-item">
+                        Users with about me
+                         <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ metrics.users_with_about }} " aria-valuemin="0" aria-valuemax="100" style="width: {{ metrics.users_with_about }}%">{{ metrics.users_with_about }} %</div>
+                        </div>
+                    </li>
+
+                                        <li class="list-group-item">
+                        Users with picture
+                         <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ metrics.users_with_picture }} " aria-valuemin="0" aria-valuemax="100" style="width: {{ metrics.users_with_picture }}%">{{ metrics.users_with_picture }} %</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Locations
+                </a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="badge">{{ metrics.valid_locations }}</span>Available locations</li>
+                    <li class="list-group-item">
+                        Users who haven set a location
+                         <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ metrics.valid_locations_percent }} " aria-valuemin="0" aria-valuemax="100" style="width: {{ metrics.valid_locations_percent }}%">{{ metrics.valid_locations_percent }} %</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Locations
+                </a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="badge">{{ metrics.available_skill_count }}</span>Skills</li>
+                    <li class="list-group-item"><span class="badge">{{ metrics.average_num_skills_per_user }}</span>Skills per user</li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

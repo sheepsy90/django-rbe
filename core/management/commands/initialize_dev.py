@@ -19,6 +19,8 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
+        User.objects.all().delete()
+
         usernames = list(itertools.product(['Anne', 'Robert', 'Marie', 'Tove', 'Jens', 'Ines'], ['Larson', 'Nilson', 'Weier', 'Wa', 'Halakkai', 'Czetec']))
         usernames = ["{}.{}".format(e[0], e[1]) for e in usernames]
         usernames.append('sheepy')
@@ -60,13 +62,15 @@ class Command(BaseCommand):
         all_profiles = User.objects.all()
 
         num_messages = 500
-        subjects = ["Hey", "whats up?", "Something", "Another"]
         bodies = ["Soem body", "Another body", "1 2 3 4", "Giraffen sind cool"]
 
         for idx in range(num_messages):
             u1, u2 = random.sample(all_profiles, 2)
 
-            m = Message.create_message(u1, u2, random.choice(subjects), random.choice(bodies), silent=True)
+            m = Message.create_message(u1, u2, random.choice(bodies), silent=True)
+            m.sent_time = datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 30),
+                                                                       minutes=random.randint(0, 60))
+            m.save()
 
             if random.random() > 0.9:
                 m.status = MessageStatus.READ
