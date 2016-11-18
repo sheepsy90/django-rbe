@@ -143,5 +143,5 @@ def search_skill(request):
 
     skill_qs = SlugPhrase.objects.filter(value__icontains=search_term)
 
-    search_result = list(skill_qs.annotate(count=Count('userskill')).values_list('value', 'count'))
+    search_result = list(skill_qs.annotate(count=Count('userskill')).values_list('value', 'count', 'id'))
     return JsonResponse({'success': True, 'searched': True, 'skills': search_result})

@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div style="display: none; text-align: center; font-size:16px; cursor: pointer; margin: 0.2em" class="skill_entry label label-warning"><span class="value">{{ element.value }}</span> <span class="badge">{{ element.object_count }}</span></div>
+    <a style="display: none; text-align: center; font-size:16px; cursor: pointer; margin: 0.2em" class="skill_entry label label-warning"><span class="value">{{ element.value }}</span> <span class="badge">{{ element.object_count }}</span></a>
 
 
 
@@ -78,6 +78,7 @@
                         $element.css('display', 'inline-block');
                         $element.find('.value').html(skills[e][0]);
                         $element.find('.badge').html(skills[e][1]);
+                        $element.attr('href', get_url('phrase_details') + skills[e][2]);
                         $('#skill_results_area').append($element);
                     }
 
