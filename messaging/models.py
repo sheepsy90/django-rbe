@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -27,7 +28,7 @@ class Message(models.Model):
             rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 
     @staticmethod
-    def create_message(sender, recipient, message_text, silent=False):
+    def create_message(sender, recipient, message_text, sent_time=None, silent=False):
         """ Method that actually creates the message and then triggers the informing of the user
             This later makes also some assumption when we add thread based messages.
             :param sender: the user sending the message
@@ -36,8 +37,10 @@ class Message(models.Model):
             :param message_text: The text of the message
             :return: the model of the message that was created
         """
+        if not sent_time:
+            sent_time = datetime.datetime.now()
 
-        m = Message(sender=sender, recipient=recipient, message_text=message_text)
+        m = Message(sender=sender, recipient=recipient, message_text=message_text, sent_time=sent_time)
         m.save()
         if not silent:
             m.inform_recipient()

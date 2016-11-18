@@ -83,4 +83,17 @@ class TestNewMessaging(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_view_function_for_sending_message(self):
+        recipient = create_user('user', 'email', 'password')
+        sender = create_user('sender', 'email', 'password')
+
+        c = Client()
+        c.login(username='sender', password='password')
+
+        response = c.post(reverse('send'), {'recipient_id': recipient.id, 'message_text': 'Test message'})
+
+        self.assertEqual(response.status_code, 200)
+
+        mqs = Message.objects.filter(sender=sender, recipient=recipient)
+        self.assertEqual(1, mqs.count())
 
