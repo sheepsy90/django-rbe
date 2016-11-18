@@ -15,11 +15,8 @@ class Message(models.Model):
     sender = models.ForeignKey(User, help_text="The user who send the message", related_name='sender')
     recipient = models.ForeignKey(User, help_text="The user who shall receive the message", related_name='recipient')
     status = models.IntegerField(default=MessageStatus.UNREAD, help_text="The message status - determines how the message is displayed")
-    reply_to = models.ForeignKey('self', null=True, default=None, help_text="The reply_to field that indicates that the message was an reply to a previous one")
-    subject = models.CharField(max_length=120, help_text='Subject of message')
     message_text = models.CharField(max_length=1200, help_text='The actual message text')
     sent_time = models.DateTimeField(auto_now=True, help_text='The datetime when the message was sent')
-    open_time = models.DateTimeField(null=True, default=None, help_text='The datetime when the message was read')
 
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """
@@ -30,7 +27,7 @@ class Message(models.Model):
             rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 
     @staticmethod
-    def create_message(sender, recipient, subject, message_text, silent=False):
+    def create_message(sender, recipient, message_text, silent=False):
         """ Method that actually creates the message and then triggers the informing of the user
             This later makes also some assumption when we add thread based messages.
             :param sender: the user sending the message
@@ -40,7 +37,7 @@ class Message(models.Model):
             :return: the model of the message that was created
         """
 
-        m = Message(sender=sender, recipient=recipient, subject=subject, message_text=message_text)
+        m = Message(sender=sender, recipient=recipient, message_text=message_text)
         m.save()
         if not silent:
             m.inform_recipient()

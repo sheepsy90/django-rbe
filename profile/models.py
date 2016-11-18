@@ -22,7 +22,7 @@ class LanguageSpoken(models.Model):
 
     @staticmethod
     def count_grouping():
-        qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True)) #annotate(num_people=Count('user')).order_by('-num_people')[:10]
+        qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True))
         total = LanguageSpoken.objects.count()
         [e.update({
             'language_display': dict(LANGUAGES)[e['language']],

@@ -8,7 +8,7 @@
     <script src="{% static 'js/profile20161111.js' %}"></script>
     <script src="{% static 'js/language20161111.js' %}"></script>
     <script src="{% static 'js/location20161111.js' %}"></script>
-    <script src="{% static 'js/skills20161111.js' %}"></script>
+    <script src="{% static 'js/skills20161115.js' %}"></script>
 {% endblock %}
 
 
@@ -55,7 +55,7 @@
                                         <i class="fa fa-map-marker"></i> Update Location
                                     </a>
                                 {% else %}
-                                    <a href="{% if toggles.new_messaging %}{% url 'conversation' profile.user.id %}{% else %}{% url 'compose' profile.user.id %}{% endif %}" class="btn-o">
+                                    <a href="{% url 'conversation' profile.user.id %}" class="btn-o">
                                         <i class="fa fa-envelope"></i> Start conversation</a>
                                 {% endif %}
                             </div>

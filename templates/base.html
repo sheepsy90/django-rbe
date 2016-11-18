@@ -40,7 +40,7 @@
                                 class="fa fa-2x fa-user-circle-o green-text"></i></a>
                         <a href="{% url 'world_map' %}" class="btn" title="World Map"><i
                                 class="fa fa-2x fa-globe green-text"></i></a>
-                        <a href="{% if toggles.new_messaging %}{% url 'messages' %}{% else %}{% url 'inbox' %}{% endif %}" class="btn" title="Messages"><i
+                        <a href="{% url 'messages' %}" class="btn" title="Messages"><i
                                 class="fa fa-2x fa-envelope green-text"></i>  {% if message_context %}
                             {% if message_context.unread_count %}
                                 <span class="badge">{{ message_context.unread_count }}</span>
@@ -72,7 +72,7 @@
                         <li class="hidden-xs"><a href="{% url 'profile' user.id %}" class="fa-nav-adjust"
                                                  title="My profile"><i class="fa fa-2x fa-user-circle-o green-text"></i></a>
                         </li>
-                        <li class="hidden-xs"><a href="{% if toggles.new_messaging %}{% url 'messages' %}{% else %}{% url 'inbox' %}{% endif %}" class="fa-nav-adjust" title="Messages"><i
+                        <li class="hidden-xs"><a href="{% url 'messages' %}" class="fa-nav-adjust" title="Messages"><i
                                 class="fa fa-2x fa-envelope green-text"></i>
                             {% if message_context %}
                                 {% if message_context.unread_count %}

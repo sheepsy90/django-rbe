@@ -31,7 +31,6 @@ class TestNewMessaging(TestCase):
         self.assertEqual(message.sender, sender)
         self.assertEqual(message.recipient, recipient)
         self.assertEqual(message.message_text, 'test_message')
-        self.assertEqual(message.subject, '')
         self.assertEqual(message.status, MessageStatus.UNREAD)
 
         self.assertEquals(response.context['conversation_partner'], recipient)
@@ -45,7 +44,7 @@ class TestNewMessaging(TestCase):
         recipient = create_user('recipient', 'email', 'password')
         sender = create_user('sender', 'email', 'password')
 
-        m = Message.create_message(sender, recipient, '', 'text', silent=True)
+        m = Message.create_message(sender, recipient, 'text', silent=True)
         self.assertEqual(m.status, MessageStatus.UNREAD)
 
         c = Client()
@@ -73,7 +72,7 @@ class TestNewMessaging(TestCase):
         recipient = create_user('user', 'email', 'password')
         sender = create_user('sender', 'email', 'password')
 
-        m = Message.create_message(sender, recipient, '', 'text', silent=True)
+        m = Message.create_message(sender, recipient, 'text', silent=True)
         m.status = MessageStatus.READ
         m.save()
 

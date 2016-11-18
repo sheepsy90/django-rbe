@@ -13,16 +13,7 @@ class NewMessageEmail(GoogleEmail):
         return "[RBE Network] New message"
 
     def body(self, variables):
-        message = variables['message']
-        user = variables['message'].recipient
+        return render_to_response('emails/new_message_email2.html', variables).content
 
-        if Toggles.is_active('new_messaging', user):
-            return render_to_response('emails/new_message_email2.html', variables).content
-        else:
-            variables.update({
-                'username': user.username,
-                'message_id': message.id
-            })
-            return render_to_response('emails/new_message_email.html', variables).content
 
 
