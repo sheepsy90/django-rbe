@@ -1,6 +1,7 @@
 import datetime
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 from library.log import rbe_logger
 from library.mail.NewMessageEmail import NewMessageEmail
@@ -38,12 +39,23 @@ class Message(models.Model):
             :return: the model of the message that was created
         """
         if not sent_time:
-            sent_time = datetime.datetime.now()
+            sent_time = timezone.now()
+
+        last_message = Message.objects.filter(sender=sender, recipient=recipient).order_by('-sent_time')
+
+        if last_message.count() > 0:
+            last_sent_time = last_message.first().sent_time
+            half_hour_ago = timezone.now() - datetime.timedelta(minutes=30)
+            should_inform_recipient = last_sent_time < half_hour_ago
+        else:
+            should_inform_recipient = True
 
         m = Message(sender=sender, recipient=recipient, message_text=message_text, sent_time=sent_time)
         m.save()
-        if not silent:
+
+        if not silent and should_inform_recipient:
             m.inform_recipient()
+
         return m
 
 

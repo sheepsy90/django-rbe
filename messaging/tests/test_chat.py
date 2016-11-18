@@ -1,8 +1,11 @@
 import unittest
 
+import datetime
+import mock
 from django.core.urlresolvers import reverse
 from django.test import Client
 from django.test import TestCase
+from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
 from core.views import create_user
@@ -97,3 +100,38 @@ class TestNewMessaging(TestCase):
         mqs = Message.objects.filter(sender=sender, recipient=recipient)
         self.assertEqual(1, mqs.count())
 
+
+    def test_send_is_silenced(self):
+        recipient = create_user('user', 'email', 'password')
+        sender = create_user('sender', 'email', 'password')
+
+        f = Message.inform_recipient
+        inform_mock = mock.MagicMock()
+        Message.inform_recipient = inform_mock
+        Message.create_message(sender, recipient, 'text1')
+
+        inform_mock.assert_called_once()
+        inform_mock.reset_mock()
+
+        Message.create_message(sender, recipient, 'text2')
+        inform_mock.assert_not_called()
+
+        Message.inform_recipient = f
+
+    def test_send_is_not_silenced_after_half_an_hour(self):
+        recipient = create_user('user', 'email', 'password')
+        sender = create_user('sender', 'email', 'password')
+
+        f = Message.inform_recipient
+        inform_mock = mock.MagicMock()
+        Message.inform_recipient = inform_mock
+        sent_time = timezone.now() - datetime.timedelta(minutes=31)
+        Message.create_message(sender, recipient, 'text1', sent_time)
+
+        inform_mock.assert_called_once()
+        inform_mock.reset_mock()
+
+        Message.create_message(sender, recipient, 'text2')
+        inform_mock.assert_called_once()
+
+        Message.inform_recipient = f
