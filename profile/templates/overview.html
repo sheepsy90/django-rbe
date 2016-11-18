@@ -77,8 +77,7 @@
                             </div>
                             <div class="info">
                                 <div class="title">
-                                    <a target="_blank"
-                                       href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
+                                    <a href="{% url 'profile' profile.user.id %}">{{ profile.user.username }}</a>
                                 </div>
                                 <div class="desc">
                                     <span class="last-online {{ profile.user.lastseen.last_online_class }}"></span>
