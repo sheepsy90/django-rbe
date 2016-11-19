@@ -298,7 +298,7 @@ h1 a {
 }
 
 
-.submenu a {
+.submenu .a {
     display: block;
     text-decoration: none;
     color: #d9d9d9;
@@ -307,9 +307,14 @@ h1 a {
     -webkit-transition: all 0.25s ease;
     -o-transition: all 0.25s ease;
     transition: all 0.25s ease;
+    a {
+        text-decoration: none;
+            color: #d9d9d9;
+
+    }
 }
 
-.submenu a:hover {
+.submenu .a:hover {
     //background: #b63b4d;
     color: #FFF;
 }
@@ -328,4 +333,3 @@ h1 a {
     }
   }
 }
-

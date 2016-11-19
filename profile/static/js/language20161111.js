@@ -75,7 +75,7 @@ function add_language($select_box, $target_container){
         if (msg['success']) {
             var btn = create_language_button(lang, msg['language_display']);
             $(btn).click(remove_language)
-            $target_container.append(btn);
+            $target_container.prepend(btn);
         }
     });
 }

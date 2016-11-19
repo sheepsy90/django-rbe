@@ -3,7 +3,8 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block header %}
-    <link rel="stylesheet" type="text/css" href='{{ STATIC_PREFIX }}css/conversation.css'>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_PREFIX }}css/conversation.css'
+          xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" type="text/css" href='{{ STATIC_PREFIX }}css/chat-sidebar.css'>
     <script src="{% static 'js/messaging.js' %}"></script>
 {% endblock %}
@@ -73,14 +74,11 @@
                                     <form method="post" action="{% url 'send' %}">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ conversation_partner.id }}" name="recipient_id"/>
-
-                                        <div class="input-group">
-                                            <input name="message_text" id="btn-input" type="text" class="form-control input-sm"
-                                                   placeholder="Type your message here..."/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-warning btn-sm" id="btn-chat">Send</button>
-                                            </span>
-                                        </div>
+                                        <textarea name="message_text" id="btn-input" class="form-control input-sm"
+                                               placeholder="Type your message here..." style="width:100%; resize: none" rows="6"></textarea>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success pull-right" style="margin-top: 4px"  id="btn-chat">Send</button>
+                                        </span>
                                     </form>
                                 </div>
                             </div>

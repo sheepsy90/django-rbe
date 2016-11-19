@@ -287,7 +287,7 @@ h1 a {
 .submenu li {
   border-bottom: 1px solid #4b4a5e; }
 
-.submenu a {
+.submenu .a {
   display: block;
   text-decoration: none;
   color: #d9d9d9;
@@ -296,8 +296,11 @@ h1 a {
   -webkit-transition: all 0.25s ease;
   -o-transition: all 0.25s ease;
   transition: all 0.25s ease; }
+  .submenu .a a {
+    text-decoration: none;
+    color: #d9d9d9; }
 
-.submenu a:hover {
+.submenu .a:hover {
   color: #FFF; }
 
 .tags {
@@ -311,4 +314,4 @@ h1 a {
     .edit a:hover {
       background-color: #5AAC56; }
 
-/*# sourceMappingURL=profile20161111.css.map */
+/*# sourceMappingURL=profile20161119.css.map */

@@ -3,7 +3,7 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block header %}
-    <link rel="stylesheet" type="text/css" href='{% static 'css/profile20161111.css' %}'>
+    <link rel="stylesheet" type="text/css" href='{% static 'css/profile20161119.css' %}'>
 
     <script src="{% static 'js/profile20161111.js' %}"></script>
     <script src="{% static 'js/language20161111.js' %}"></script>
@@ -66,7 +66,7 @@
                         <ul class="submenu">
                             {% if my_profile %}
                                 <div class="pull-right edit">
-                                    <a style='padding-left: 12px' href="{% url 'change_about' %}"><span
+                                    <a class="a" style='padding-left: 12px' href="{% url 'change_about' %}"><span
                                             class="fa fa-pencil"></span></a>
                                 </div>
                             {% endif %}
@@ -84,18 +84,19 @@
                         <ul class="submenu">
                             {% if my_profile %}
                                 <div class="pull-right edit">
-                                    <a style='padding-left: 12px' href="{% url 'change_skills' %}"><span
+                                    <a class="a" style='padding-left: 12px' href="{% url 'change_skills' %}"><span
                                             class="fa fa-pencil"></span></a>
                                 </div>
                             {% endif %}
                             <li>
-                                <a>
+                                <div class="a">
                                     {% for element in user_skills %}
-                                        <span data-phrase-id="{{ element.slug.id }}"
-                                              class="tags skill_tag">{{ element.slug.value }} <span
+                                        <a href="{% url 'phrase_details' element.slug.id %}">
+                                            <span class="tags skill_tag">{{ element.slug.value }} <span
                                                 class="badge">{{ element.level }}</span></span>
+                                        </a>
                                     {% endfor %}
-                                </a>
+                                </div>
                             </li>
                         </ul>
                     </li>
@@ -106,28 +107,28 @@
                         <ul class="submenu">
                             {% if my_profile %}
                                 <div class="pull-right edit">
-                                    <a style='padding-left: 12px' href="{% url 'change_languages' %}"><span
+                                    <a class="a" style='padding-left: 12px' href="{% url 'change_languages' %}"><span
                                             class="fa fa-pencil"></span></a>
                                 </div>
                             {% endif %}
 
                             <li>
-                                <a>
+                                <div class="a">
                                     {% for e in profile.user.languagespoken_set.all %}
-                                        <span data-lang="{{ e.language }}" class="tags lang_tag">
+                                        <a href="{% url 'language_overview' e.language %}"><span data-lang="{{ e.language }}" class="tags lang_tag">
                                             {{ e.language_display }}
                                             <img style="height: 1.5em; margin-top: -6px" src="/static/img/language_flags/{{ e.language }}.png" alt=""/>
                                             <span class="badge">{{ element.level }}</span>
-                                        </span>
+                                        </span></a>
                                     {% empty %}
                                         <span style="color: white; padding: 4px;">No languages</span>
                                     {% endfor %}
-                                </a>
+                                </div>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <div class="link"><i class="fa fa-users"></i>Close People
+                        <div class="link"><i class="fa fa-users"></i>Nearby People
                             <small></small>
                             <i class="fa fa-chevron-down"></i></div>
                         <ul class="submenu">
@@ -185,8 +186,6 @@
             $('.profile-link').click(function () {
                 window.location.href = $(this).data('href');
             });
-            $('.lang_tag').click(forward_language);
-            $('.skill_tag').click(forward_skill);
         }
     </script>
 
