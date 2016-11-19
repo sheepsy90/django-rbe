@@ -20,6 +20,9 @@ class Message(models.Model):
     message_text = models.CharField(max_length=1200, help_text='The actual message text')
     sent_time = models.DateTimeField(blank=True, null=True, help_text='The datetime when the message was sent')
 
+    def __str__(self):
+        return "From: {} // To: {}".format(self.sender, self.recipient)
+
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """
         try:
