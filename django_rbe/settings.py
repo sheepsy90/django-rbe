@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'skills',
     'public',
     'messaging',
+    'associated',
     'oidc_provider'
 ]
 
