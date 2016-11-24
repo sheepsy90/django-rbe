@@ -1,18 +1,10 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="/static/js/language.js"></script>
+    <script type="text/javascript" src="/static/js/language20161111.js"></script>
 {% endblock %}
 
 {% block content %}
-    <style>
-        .chart {
-            width: 100%;
-            min-height: 450px;
-        }
-    </style>
-
     <div class="container" style="margin: 1em auto">
 
         {% if empty_language_code %}
@@ -86,7 +78,5 @@
                 });
             </script>
         {% endif %}
-
-
     </div>
 {% endblock %}

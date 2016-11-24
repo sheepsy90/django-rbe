@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.core.urlresolvers import reverse
 
+IS_UNITTESTS = len(sys.argv) >= 2 and sys.argv[1] == 'test'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -76,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.additional_template_vars',
+                'core.context_processors.toggles',
                 'messaging.context_processors.messaging_context',
                 'messaging.context_processors.languages'
             ],
@@ -89,13 +91,34 @@ WSGI_APPLICATION = 'django_rbe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if IS_UNITTESTS:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
+CACHE_BACKEND = 'django.core.cache.backends.memcached.MemcachedCache'
+CACHE_LOCATION = 'localhost:9000'
+
+if IS_UNITTESTS:
+    CACHE_LOCATION = 'unique-snowflake'
+    CACHE_BACKEND = 'django.core.cache.backends.locmem.LocMemCache'
+
+CACHES = {
+    'default': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

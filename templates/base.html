@@ -5,9 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" name="viewport">
+
+
+    <meta name="description" content="The main purpose of this page is to connect people who consider themselves advocates for a Resource Based Economy or certain aspects of it.">
+    <meta name="revisit-after" content="7 days">
+    <meta name="keywords" content="RBE,TVP,TYM,Resource Based Economy,Social Media,">
+    <meta name="author" content="Robert Kessler">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>RBE Connect</title>
+    <title>RBE Network</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -17,7 +23,6 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link href="/static/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='/static/css/navigation.css'>
     <script src="/static/js/global.js"></script>
 
@@ -41,7 +46,7 @@
                                 class="fa fa-2x fa-user-circle-o green-text"></i></a>
                         <a href="{% url 'world_map' %}" class="btn" title="World Map"><i
                                 class="fa fa-2x fa-globe green-text"></i></a>
-                        <a href="{% url 'inbox' %}" class="btn" title="Messages"><i
+                        <a href="{% url 'messages' %}" class="btn" title="Messages"><i
                                 class="fa fa-2x fa-envelope green-text"></i>  {% if message_context %}
                             {% if message_context.unread_count %}
                                 <span class="badge">{{ message_context.unread_count }}</span>
@@ -55,15 +60,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
                 {% else %}
-                    <a href="{% url 'information' %}">
-                        <button type="button" class="navbar-toggle">
-                            Info
-                        </button>
-                    </a>
+                    <a class="navbar-brand" href="{% url 'index' %}">RBE Network</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 {% endif %}
 
-                <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
             </div>
 
 
@@ -73,7 +81,7 @@
                         <li class="hidden-xs"><a href="{% url 'profile' user.id %}" class="fa-nav-adjust"
                                                  title="My profile"><i class="fa fa-2x fa-user-circle-o green-text"></i></a>
                         </li>
-                        <li class="hidden-xs"><a href="{% url 'inbox' %}" class="fa-nav-adjust" title="Messages"><i
+                        <li class="hidden-xs"><a href="{% url 'messages' %}" class="fa-nav-adjust" title="Messages"><i
                                 class="fa fa-2x fa-envelope green-text"></i>
                             {% if message_context %}
                                 {% if message_context.unread_count %}
@@ -94,6 +102,8 @@
                         </li>
                         <li class="hidden-xs"><a href="{% url 'associated_overview' %}" class="fa-nav-adjust"
                                                  title="Associated"><i class="fa fa-2x fa-puzzle-piece green-text"></i></a>
+                        <li class="hidden-xs"><a href="{% url 'metrics' %}" class="fa-nav-adjust"
+                                                 title="Metrics"><i class="fa fa-2x fa-bar-chart green-text"></i></a>
                         </li>
 
                         <!-- visible on mobile in the navigation -->
@@ -101,11 +111,11 @@
                                                   title="Other Users"><i class="fa fa-users green-text"></i> Other Users</a>
                         </li>
                         <li class="visible-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
-                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i>
-                            Skills & Interests</a></li>
+                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i> Skills & Interests</a></li>
                         <li class="visible-xs"><a href="{% url 'language_overview'  '' %}" class="fa-nav-adjust"
-                                                  title="Languages"><i class="fa fa-language green-text"></i>
-                            Languages</a></li>
+                                                  title="Languages"><i class="fa fa-language green-text"></i> Languages</a></li>
+                        <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">
+                            <i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                         <li class="visible-xs divider"></li>
                         <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
                         </li>
@@ -129,6 +139,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                         <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
+                        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                     </ul>
                 </div>
             {% endif %}

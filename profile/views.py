@@ -6,12 +6,11 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db.models import Count
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http.response import Http404, HttpResponseRedirect
 
 from django.shortcuts import render_to_response
 
@@ -21,39 +20,80 @@ from django.template import RequestContext
 
 from library.log import rbe_logger
 from location.models import DistanceCacheEntry
+from profile.forms import ProfileDetailsForm
 from profile.models import UserProfile, LanguageSpoken
 from skills.models import UserSkill
 
 
-@login_required
-def profile(request, user_id):
+@login_required(login_url=settings.LOGIN_URL)
+def change_about(request):
     rc = RequestContext(request)
-    # TODO differe between foreign and other profile in waht is given to the tempalte in the first palce
-    if user_id:
-        uf = User.objects.filter(id=user_id)
-        if uf.exists():
-            uf = uf.first()
-        else:
-            return render_to_response('profile.html', rc)
-    else:
-        uf = request.user
 
-    p = UserProfile.objects.get(user=uf)
-    rc['profile'] = p
-    rc['invited_users'] = UserProfile.objects.filter(invited_by=uf)
-    rc['user_skills'] = UserSkill.objects.filter(user=uf).order_by('-level')
-    rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=uf).order_by('value')
-    return render_to_response('profile.html', rc)
+    if request.method == 'POST':
+        form = ProfileDetailsForm(request.POST)
+        if form.is_valid():
+            about_me_text = form.cleaned_data['about_me_text']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.save()
+
+            request.user.user.about_me_text = about_me_text
+            request.user.user.save()
+
+            return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
+
+    else:
+        form = ProfileDetailsForm(initial={
+            'about_me_text': request.user.user.about_me_text,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'profile_email': request.user.email
+        })
+
+    rc['form'] = form
+    return render_to_response('profile/edit/change_about.html', rc)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+def profile(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        rc = RequestContext(request)
+        p = UserProfile.objects.get(user=user)
+        rc['my_profile'] = request.user == user
+        rc['profile'] = p
+        rc['user_skills'] = UserSkill.objects.filter(user=user).order_by('-level')
+        rc['closest_people'] = DistanceCacheEntry.objects.filter(user_source=user).order_by('value')
+        return render_to_response('profile/profile.html', rc)
+    except User.DoesNotExist:
+        raise Http404("User not found")
+
+
+def transform_search_query_to_query_set(search_query, request_user):
+    if search_query == '':
+        return UserProfile.objects.all()\
+            .exclude(user=request_user)\
+            .order_by('-user__lastseen__date_time')
+    else:
+        return UserProfile.objects.all() \
+            .exclude(user=request_user) \
+            .filter(user__username__icontains=search_query) \
+            .order_by('-user__lastseen__date_time')
 
 
 @login_required
 def overview(request):
     rc = RequestContext(request)
+    search_query = request.GET.get('search_query', '')
 
-    user_list = UserProfile.objects.all().exclude(user=request.user).order_by('-user__lastseen__date_time')
+    user_qs = transform_search_query_to_query_set(search_query, request.user)
+
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(user_list, 18)
+    paginator = Paginator(user_qs, 18)
     try:
         users = paginator.page(page)
     except PageNotAnInteger:
@@ -62,6 +102,7 @@ def overview(request):
         users = paginator.page(paginator.num_pages)
 
     rc['profiles'] = users
+    rc['search_query'] = search_query
     return render_to_response('overview.html', rc)
 
 
@@ -77,6 +118,16 @@ def aboutme(request):
     prof.save()
 
     return JsonResponse({'success': True})
+
+@login_required
+def avatar_delete(request):
+    try:
+        prof = UserProfile.objects.get(user=request.user)
+        prof.avatar_link = ''
+        prof.save()
+        return JsonResponse({'success': True})
+    except UserProfile.DoesNotExist:
+        return JsonResponse({'success': False, 'reason': 'UserProfile not found!'})
 
 
 @login_required
@@ -171,3 +222,14 @@ def language_overview(request, language_code):
         }
         rc['profiles'] = LanguageSpoken.objects.filter(language=language_code)
         return render_to_response('language.html', rc)
+
+@login_required()
+def change_languages(request):
+    rc = RequestContext(request)
+    try:
+        language_spoken_qs = LanguageSpoken.objects.filter(user=request.user)
+        rc['language_spoken_qs'] = language_spoken_qs
+    except UserProfile.DoesNotExist:
+        rbe_logger.info("Access request to change language with profile not found!")
+
+    return render_to_response('profile/edit/change_languages.html', rc)

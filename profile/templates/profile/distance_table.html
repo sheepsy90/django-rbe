@@ -1,0 +1,15 @@
+ <li>
+    <div class="a">
+        {% for element in closest_people %}
+           <a href="{% url 'profile' element.distance_to.id %}">
+               <span class="tags">
+                <img class="responsive" style="height:20px" src="{{ element.distance_to.user.avatar_link|default:'/static/img/unknown.png' }}"/>
+                {{ element.distance_to.username  }}
+                <span class="badge">{{ element.value }} km</span>
+            </span></a>
+        {% empty %}
+            <span style="color: white; padding: 4px;">No languages</span>
+        {% endfor %}
+    </div>
+</li>
+

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_PREFIX }}css/conversation.css'
+          xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_PREFIX }}css/chat-sidebar.css'>
+    <script src="{% static 'js/messaging.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 1em">
+        <div class="row">
+            <div class="hidden-xs col-sm-4 col-md-3">
+                {% include 'messaging/chat_sidebar.html' with latest_conversations=latest_conversations %}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9">
+                        <div class="panel {% if error_message %}panel-danger{% else %}panel-success{% endif %}">
+                            <div class="panel-heading" id="accordion">
+                                <span class="glyphicon glyphicon-comment"></span> Chat
+
+                                <span class="pull-right">
+                                    {% if error_message %}
+                                        {{ error_message }}
+                                    {% else %}
+                                        {{ conversation_partner.username }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="panel-collapse" id="collapseOne">
+                                <div id="chat" class="panel-body">
+                                    <ul class="chat">
+                                        <li class="left clearfix">
+
+                                        </li>
+                                        {% if messages %}
+                                        {% for message in messages %}
+                                            <a style="text-decoration: none; color: #222" href="{% url 'profile' message.sender.id %}">
+                                                <li id="mid_{{ message.id }}" {% if message.recipient == user and message.status == 0%}data-mid="{{ message.id }}"{% endif %}  class="left clearfix message-entry{% if message.recipient == user and message.status == 0%} unread{% endif %}">
+                                                    <span class="chat-img pull-left">
+                                             <img style="height: 30px; width: 30px;"
+                                                  src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}"
+                                                  alt="User Avatar" class="img-circle"/>
+                                    </span>
+                                                    <div class="chat-body clearfix">
+                                                        <div class="header">
+                                                            <small class="text-muted">
+                                                                {% if message.status == 1 %}
+                                                                    <span id="status" class="fa fa-envelope-open"></span>
+                                                                {% elif message.status == 0%}
+                                                                    <span id="status" class="fa fa-envelope"></span>
+                                                                {% endif %}
+                                                                <span class="glyphicon glyphicon-time"></span>{{ message.sent_time }}
+                                                            </small>
+                                                            <strong class="pull-right primary-font">
+                                                                {% if message.sender == request.user %}You{% else %}
+                                                                    {{ message.sender.username }}{% endif %}</strong>
+                                                        </div>
+                                                        <p>
+                                                            {{ message.message_text }}
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </a>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>No messages yet - write a friendly message :)</li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <form method="post" action="{% url 'send' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ conversation_partner.id }}" name="recipient_id"/>
+                                        <textarea name="message_text" id="btn-input" class="form-control input-sm"
+                                               placeholder="Type your message here..." style="width:100%; resize: none" rows="6"></textarea>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success pull-right" style="margin-top: 4px"  id="btn-chat">Send</button>
+                                        </span>
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function () {
+        var objDiv = document.getElementById("chat");
+        objDiv.scrollTop = objDiv.scrollHeight;
+
+        var message_ids_to_confirm = $.map($('.unread'), function(i, e){
+            return $(i).data('mid');
+        });
+
+        messaging_confirm_read(message_ids_to_confirm, function(){
+            for (var idx in message_ids_to_confirm){
+                var mid = message_ids_to_confirm[idx];
+                $('#mid_' + mid).removeClass('unread');
+                $('#mid_' + mid).find('#status').removeClass('fa-envelope').addClass('fa-envelope-open')
+            }
+        });
+    });
+
+    </script>
+{% endblock %}

@@ -31,6 +31,20 @@ class Location(models.Model):
         self.position_updated = None
         self.save()
 
+    @property
+    def longitude_round(self):
+        if self.longitude:
+            return "{0:.2f}".format(self.longitude)
+        else:
+            return ''
+
+    @property
+    def latitude_round(self):
+        if self.latitude:
+            return "{0:.2f}".format(self.latitude)
+        else:
+            return ''
+
 class DistanceCacheEntry(models.Model):
     user_source = models.ForeignKey(User, related_name='user_source')
     distance_to = models.ForeignKey(User, related_name='distance_to')

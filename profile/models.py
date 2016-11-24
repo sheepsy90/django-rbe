@@ -8,7 +8,6 @@ from django.db.models import Count
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, null=True, default=None, related_name='user')
-    invited_by = models.ForeignKey(User, related_name='invited_by', null=True)
     about_me_text = models.TextField(max_length=3000, default='')
     avatar_link = models.URLField(blank=True)
 
@@ -23,7 +22,7 @@ class LanguageSpoken(models.Model):
 
     @staticmethod
     def count_grouping():
-        qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True)) #annotate(num_people=Count('user')).order_by('-num_people')[:10]
+        qs = LanguageSpoken.objects.values('language').annotate(num_users=Count('user', distinct=True))
         total = LanguageSpoken.objects.count()
         [e.update({
             'language_display': dict(LANGUAGES)[e['language']],
