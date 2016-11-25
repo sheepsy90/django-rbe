@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 
 import re
-
 import requests
-import time
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
