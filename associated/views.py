@@ -36,7 +36,7 @@ def associated_service_info(request):
         return JsonResponse({'success': False, 'reason': 'AssociatedService does not exists'})
 
     try:
-        response = requests.get("{}/meta", assoc_service.client.website_url)
+        response = requests.get("{}/meta".format(assoc_service.client.website_url))
         if response.status_code != 200:
             return JsonResponse({'success': False, 'reason': 'Could not retrieve service information'})
         else:
