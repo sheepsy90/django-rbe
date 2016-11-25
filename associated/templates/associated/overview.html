@@ -32,7 +32,7 @@ body{ margin-top:20px;}
     <div class="row">
         {% for assoc_service in assoc_services %}
         <div class="col-xs-12 col-md-6">
-            <div class="well well-sm">
+            <div data-asid="{{ assoc_service.id }}" class="well well-sm assoc-service-marker">
                 <div class="row">
                     <div class="col-xs-3 col-md-3 text-center">
                         <img src="{{ assoc_service.logo_url }}" alt="{{ assoc_service.client.name }}"
@@ -47,17 +47,47 @@ body{ margin-top:20px;}
                            {{ assoc_service.description }}</p>
                         <hr />
                         <div class="row rating-desc">
-                            <div class="col-md-12">
-                                <i class="fa fa-warning"></i>
-                                Could not load metrics for this service
+                            <div id="service_metrics" class="col-md-12">
+                                <div id="loading"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading metrics for this service</div>
+                                <div id="loaded" style="display: none"><i class="fa fa-users"></i> <span id="users"></span></div>
+                                <div id="not_loaded" style="display: none"><i class="fa fa-warning"></i> Could not load metrics for this service</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         {% endfor %}
     </div>
+        <script>
+            $(document).ready(function(){
+                $(".assoc-service-marker").each(function(){
+                    var $service_metrics = $(this).find('#service_metrics');
+                    var assoc_sid = $(this).data('asid');
+                    $.ajax({
+                        url: get_url('associated_service_info'),
+                        type: 'POST',
+                        data: {
+                            assoc_sid: assoc_sid,
+                            csrfmiddlewaretoken: get_csrf_token()
+                        }
+                    }).done(function (msg) {
+                        if (msg['success'] == true) {
+                            $service_metrics.children().hide();
+                            $service_metrics.find('#users').html(msg['users']);
+                            $service_metrics.find('#loaded').show();
+                        } else {
+                            $service_metrics.children().hide();
+                            $service_metrics.find('#not_loaded').show();
+                        }
+                    }).fail(function () {
+                        $service_metrics.children().hide();
+                        $service_metrics.find('#not_loaded').show();
+                    });
+                });
+          });
+        </script>
 </div>
 
 {% endblock %}
