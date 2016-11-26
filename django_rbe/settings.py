@@ -163,8 +163,7 @@ STATIC_ROOT = 'static'
 # Django OIDC Provider Settings
 SITE_URL = 'http://localhost:9001'
 #OIDC_USERINFO = 'core.openid.user_info'
-#OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
-
+OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
 
 LOGIN_URL = '/core/login'
 

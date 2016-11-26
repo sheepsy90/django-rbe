@@ -10,15 +10,12 @@
                 <p>Client <strong>{{ client.name }}</strong> would like to access this information of you ...</p>
             </div>
         </div>
-
         <div class="row">
-
             <form method="post" action="{% url 'oidc_provider:authorize' %}">
 
                 {% csrf_token %}
 
                 {{ hidden_inputs }}
-
 
                 {% for scope in scopes %}
                     <div class="col-xs-4">
