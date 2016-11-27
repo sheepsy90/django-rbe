@@ -1,93 +1,129 @@
 {% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+        <link rel="stylesheet" type="text/css" href='{% static 'css/associated_services.css' %}'>
+{% endblock %}
 
 {% block content %}
-    <style>
-    body{padding-top:20px}
-
-.well {
-  margin-left:0px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: #f3f3f3;
-  -moz-box-shadow: 0 0 6px 2px #b0b2ab;
-  -webkit-box-shadow: 0 0 6px 2px #b0b2ab;
-  box-shadow: 0 0 6px 2px #b0b2ab;
-}
-
-.well:hover {
-      background-color: #d2d2d2;
-}
-
-body{ margin-top:20px;}
-.glyphicon { margin-right:5px;}
-.section-box h2 { margin-top:0px;}
-.section-box h2 a { font-size:15px; }
-.glyphicon-heart { color:#e74c3c;}
-.glyphicon-comment { color:#27ae60;}
-.separator { padding-right:5px;padding-left:5px; }
-.section-box hr {margin-top: 0;margin-bottom: 5px;border: 0;border-top: 1px solid rgb(199, 199, 199);}
-    </style>
-
 <div class="container">
-    <div class="row">
-        {% for assoc_service in assoc_services %}
-        <div class="col-xs-12 col-md-6">
-            <div data-asid="{{ assoc_service.id }}" class="well well-sm assoc-service-marker">
-                <div class="row">
-                    <div class="col-xs-3 col-md-3 text-center">
-                        <img src="{{ assoc_service.logo_url }}" alt="{{ assoc_service.client.name }}"
-                            class="img-rounded img-responsive" />
-                    </div>
-                    <div class="col-xs-9 col-md-9 section-box">
-                        <h4>
-                            <span>{{ assoc_service.client.name }}</span> <a href="{{ assoc_service.client.website_url }}" class="pull-right" target="_blank"><span class="glyphicon glyphicon-new-window">
-                            </span></a>
-                        </h4>
-                        <p>
-                           {{ assoc_service.description }}</p>
-                        <hr />
-                        <div class="row rating-desc">
-                            <div id="service_metrics" class="col-md-12">
-                                <div id="loading"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading metrics for this service</div>
-                                <div id="loaded" style="display: none"><i class="fa fa-users"></i> <span id="users"></span></div>
-                                <div id="not_loaded" style="display: none"><i class="fa fa-warning"></i> Could not load metrics for this service</div>
+
+    {% if your_assoc_service %}
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h3>Active in </h3>
+            </div>
+        </div>
+        <div class="row">
+            {% for assoc_service in your_assoc_service %}
+            <div class="col-xs-12 col-md-6">
+                <div data-asid="{{ assoc_service.id }}" class="well well-sm assoc-service-marker">
+                    <div class="row">
+                        <div class="col-xs-3 col-md-3 text-center">
+                            <img src="{{ assoc_service.logo_url }}" alt="{{ assoc_service.client.name }}"
+                                class="img-rounded img-responsive" />
+                        </div>
+                        <div class="col-xs-9 col-md-9 section-box">
+                            <h4>
+                                <span>{{ assoc_service.client.name }}</span>
+                                <a href="{{ assoc_service.client.website_url }}" class="pull-right" target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>
+                                <div style="clear: both"></div>
+                            </h4>
+                            <p>
+                               {{ assoc_service.description }}
+                            </p>
+                            <p style="font-size: 10px">
+                                <a href="{% url 'associated_service_revoke' assoc_service.id %}"><span class="fa fa-trash"></span> Revoke authorization</a>
+                            </p>
+                            <hr />
+                            <div class="row rating-desc">
+                                <div id="service_metrics" class="col-md-11">
+                                    <div id="loading"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading metrics for this service</div>
+                                    <div id="loaded" style="display: none"><i class="fa fa-users"></i> <span id="users"></span></div>
+                                    <div id="not_loaded" style="display: none"><i class="fa fa-warning"></i> Could not load metrics for this service</div>
+                                </div>
+                                <div class="col-md-1">
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% endfor %}
-    </div>
-        <script>
-            $(document).ready(function(){
-                $(".assoc-service-marker").each(function(){
-                    var $service_metrics = $(this).find('#service_metrics');
-                    var assoc_sid = $(this).data('asid');
-                    $.ajax({
-                        url: get_url('associated_service_info'),
-                        type: 'POST',
-                        data: {
-                            assoc_sid: assoc_sid,
-                            csrfmiddlewaretoken: get_csrf_token()
-                        }
-                    }).done(function (msg) {
-                        if (msg['success'] == true) {
-                            $service_metrics.children().hide();
-                            $service_metrics.find('#users').html(msg['users']);
-                            $service_metrics.find('#loaded').show();
-                        } else {
-                            $service_metrics.children().hide();
-                            $service_metrics.find('#not_loaded').show();
-                        }
-                    }).fail(function () {
+            {% endfor %}
+        </div>
+            <hr>
+
+    {% endif %}
+    {% if other_assoc_services %}
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h3>Available</h3>
+            </div>
+        </div>
+        <div class="row">
+            {% for assoc_service in other_assoc_services %}
+            <div class="col-xs-12 col-md-6">
+                <div data-asid="{{ assoc_service.id }}" class="well well-sm assoc-service-marker">
+                    <div class="row">
+                        <div class="col-xs-3 col-md-3 text-center">
+                            <img src="{{ assoc_service.logo_url }}" alt="{{ assoc_service.client.name }}"
+                                class="img-rounded img-responsive" />
+                        </div>
+                        <div class="col-xs-9 col-md-9 section-box">
+                            <h4>
+                                <span>{{ assoc_service.client.name }}</span> <a href="{{ assoc_service.client.website_url }}" class="pull-right" target="_blank"><span class="glyphicon glyphicon-new-window">
+                                </span></a>
+                            </h4>
+                            <p>
+                               {{ assoc_service.description }}</p>
+                            <hr />
+                            <div class="row rating-desc">
+                                <div id="service_metrics" class="col-md-12">
+                                    <div id="loading"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading metrics for this service</div>
+                                    <div id="loaded" style="display: none"><i class="fa fa-users"></i> <span id="users"></span></div>
+                                    <div id="not_loaded" style="display: none"><i class="fa fa-warning"></i> Could not load metrics for this service</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $(".assoc-service-marker").each(function(){
+                var $service_metrics = $(this).find('#service_metrics');
+                var assoc_sid = $(this).data('asid');
+                $.ajax({
+                    url: get_url('associated_service_info'),
+                    type: 'POST',
+                    data: {
+                        assoc_sid: assoc_sid,
+                        csrfmiddlewaretoken: get_csrf_token()
+                    }
+                }).done(function (msg) {
+                    if (msg['success'] == true) {
+                        $service_metrics.children().hide();
+                        $service_metrics.find('#users').html(msg['users']);
+                        $service_metrics.find('#loaded').show();
+                    } else {
                         $service_metrics.children().hide();
                         $service_metrics.find('#not_loaded').show();
-                    });
+                    }
+                }).fail(function () {
+                    $service_metrics.children().hide();
+                    $service_metrics.find('#not_loaded').show();
                 });
-          });
-        </script>
+            });
+      });
+    </script>
 </div>
 
 {% endblock %}

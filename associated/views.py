@@ -5,8 +5,9 @@ import requests
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from oidc_provider.models import UserConsent, Token, Code
 
 from associated.models import AssociatedService
 
@@ -14,7 +15,8 @@ from associated.models import AssociatedService
 @login_required
 def overview(request):
     rc = RequestContext(request)
-    rc['assoc_services'] = AssociatedService.objects.filter(enabled=True)
+    rc['your_assoc_service'] = AssociatedService.objects.filter(enabled=True, client__userconsent__user=request.user)
+    rc['other_assoc_services'] = AssociatedService.objects.filter(enabled=True).exclude(client__userconsent__user=request.user)
     return render_to_response('associated/overview.html', rc)
 
 
@@ -47,3 +49,16 @@ def associated_service_info(request):
             return JsonResponse({'success': True, 'users': users})
     except:
         return JsonResponse({'success': False, 'reason': 'Could not retrieve service information'})
+
+
+@login_required
+def associated_service_revoke(request, assoc_id):
+    try:
+        assoc_service = AssociatedService.objects.get(id=assoc_id)
+        Token.objects.filter(client=assoc_service.client, user=request.user).delete()
+        UserConsent.objects.filter(client=assoc_service.client, user=request.user).delete()
+        Code.objects.filter(client=assoc_service.client, user=request.user).delete()
+    except AssociatedService.DoesNotExist:
+        pass
+
+    return redirect('associated_overview')
