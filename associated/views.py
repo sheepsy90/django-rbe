@@ -49,7 +49,8 @@ def associated_service_info(request):
             assert re.match(r'[0-9]+', str(users))
 
             return JsonResponse({'success': True, 'users': users})
-    except:
+    except Exception as e:
+        rbe_logger.exception(e)
         return JsonResponse({'success': False, 'reason': 'Could not retrieve service information'})
 
 
