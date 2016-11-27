@@ -10,6 +10,7 @@ from django.template import RequestContext
 from oidc_provider.models import UserConsent, Token, Code
 
 from associated.models import AssociatedService
+from library.log import rbe_logger
 
 
 @login_required
@@ -40,6 +41,7 @@ def associated_service_info(request):
     try:
         response = requests.get("{}/meta".format(assoc_service.client.website_url))
         if response.status_code != 200:
+            rbe_logger.error("Could not retrieve status from service content={}".format(response.content))
             return JsonResponse({'success': False, 'reason': 'Could not retrieve service information'})
         else:
             parameters = response.json()
