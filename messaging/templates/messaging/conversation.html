@@ -37,13 +37,12 @@
                                         </li>
                                         {% if messages %}
                                         {% for message in messages %}
-                                            <a style="text-decoration: none; color: #222" href="{% url 'profile' message.sender.id %}">
                                                 <li id="mid_{{ message.id }}" {% if message.recipient == user and message.status == 0%}data-mid="{{ message.id }}"{% endif %}  class="left clearfix message-entry{% if message.recipient == user and message.status == 0%} unread{% endif %}">
                                                     <span class="chat-img pull-left">
-                                             <img style="height: 30px; width: 30px;"
-                                                  src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}"
-                                                  alt="User Avatar" class="img-circle"/>
-                                    </span>
+                                                        <a style="text-decoration: none; color: #222" href="{% url 'profile' message.sender.id %}">
+                                                            <img style="height: 30px; width: 30px;" src="{{ message.sender.user.avatar_link|default:'/static/img/unknown.png' }}" alt="User Avatar" class="img-circle"/>
+                                                        </a>
+                                                    </span>
                                                     <div class="chat-body clearfix">
                                                         <div class="header">
                                                             <small class="text-muted">
