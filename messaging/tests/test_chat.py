@@ -27,7 +27,7 @@ class TestNewMessaging(TestCase):
             'message_text': 'test_message'
         })
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Message.objects.all().count(), 1)
 
         message = Message.objects.all().first()
@@ -35,13 +35,6 @@ class TestNewMessaging(TestCase):
         self.assertEqual(message.recipient, recipient)
         self.assertEqual(message.message_text, 'test_message')
         self.assertEqual(message.status, MessageStatus.UNREAD)
-
-        self.assertEquals(response.context['conversation_partner'], recipient)
-        self.assertEquals(response.context['messages'][0], message)
-        self.assertEquals(response.context['error_message'], '')
-
-        self.assertEquals(response.context['latest_conversations'][0]['unread_messages'], 0)
-        self.assertEquals(response.context['latest_conversations'][0]['user'], recipient)
 
     def test_confirming_unread_works(self):
         recipient = create_user('recipient', 'email', 'password')
@@ -95,11 +88,10 @@ class TestNewMessaging(TestCase):
 
         response = c.post(reverse('send'), {'recipient_id': recipient.id, 'message_text': 'Test message'})
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         mqs = Message.objects.filter(sender=sender, recipient=recipient)
         self.assertEqual(1, mqs.count())
-
 
     def test_send_is_silenced(self):
         recipient = create_user('user', 'email', 'password')

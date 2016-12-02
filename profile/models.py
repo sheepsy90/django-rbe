@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from django.db import models
