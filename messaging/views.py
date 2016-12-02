@@ -62,7 +62,7 @@ def conversation(request, user_id, error_message=''):
         rc = RequestContext(request)
         conversation_partner = User.objects.get(id=user_id)
         messages = Message.objects.filter(Q(sender=request.user) | Q(recipient=request.user)).filter(
-            Q(sender=conversation_partner) | Q(recipient=conversation_partner)).order_by('-sent_time')[0:10]
+            Q(sender=conversation_partner) | Q(recipient=conversation_partner)).order_by('-sent_time')
 
         ordered_latest_conversations = get_ordered_latest_contact_list(request.user)
 
