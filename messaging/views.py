@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.http.response import JsonResponse, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from core.models import LastSeen
@@ -88,6 +88,7 @@ def send(request):
         else:
             recipient = User.objects.get(id=recipient_id)
             Message.create_message(request.user, recipient, message_text)
+            return redirect('conversation', kwargs={'user_id': recipient.id})
     except User.DoesNotExist as e:
         rbe_logger.warning("Had problems")
         error_message = "User to write to doesn't exists"
