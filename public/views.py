@@ -30,8 +30,8 @@ def calculate_metrics():
     messages_last_week = Message.objects.filter(sent_time__gte=(datetime.date.today()-datetime.timedelta(days=7))).count()
 
     total_user_count = User.objects.count()
-    users_with_about = 100 * UserProfile.objects.exclude(about_me_text='').count() / float(total_user_count)
-    users_with_picture = 100 * UserProfile.objects.exclude(avatar_link='').count() / float(total_user_count)
+    users_with_about = round(100 * UserProfile.objects.exclude(about_me_text='').count() / float(total_user_count), 2)
+    users_with_picture = round(100 * UserProfile.objects.exclude(avatar_link='').count() / float(total_user_count), 2)
 
     available_skill_count = SlugPhrase.objects.annotate(count=Count('userskill')).exclude(count=0).count()
     average_num_skills_per_user = UserSkill.objects.count() / total_user_count
