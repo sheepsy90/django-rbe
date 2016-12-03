@@ -15,13 +15,16 @@ def general(request):
     rc = RequestContext(request)
     return render_to_response('public/general.html', rc)
 
+
 def developer(request):
     rc = RequestContext(request)
     return render_to_response('public/developer.html', rc)
 
+
 def faq(request):
     rc = RequestContext(request)
     return render_to_response('public/faq.html', rc)
+
 
 def calculate_metrics():
 
@@ -35,8 +38,6 @@ def calculate_metrics():
 
     available_skill_count = SlugPhrase.objects.annotate(count=Count('userskill')).exclude(count=0).count()
     average_num_skills_per_user = UserSkill.objects.count() / total_user_count
-
-
 
     valid_locations = Location.objects.exclude(position_updated=None).count()
     valid_locations_percent = "{0:.2f}".format(100.0 * valid_locations / total_user_count)
