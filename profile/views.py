@@ -206,7 +206,7 @@ def language_overview(request, language_code):
             'language_display': dict(LANGUAGES)[language_code],
             'language_code': language_code,
         }
-        rc['language_spoken_qs'] = LanguageSpoken.objects.filter(language=language_code).order_by('-level')
+        rc['language_spoken_qs'] = LanguageSpoken.objects.filter(language=language_code).order_by('level')
         return render_to_response('language.html', rc)
 
 @login_required()
