@@ -46,30 +46,34 @@
                 <div>
                     <p>This is a list of people who listed {{ language_present.language_display }} as a language in their profile.</p>
                 </div>
+                    {% regroup language_spoken_qs by level as language_spoken_qs_levels %}
 
-                <table class="table table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Pic</th>
-                        <th>Name</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for profile in profiles %}
-
-                        <tr class='profile-link' data-href="{% url 'profile' profile.user.id %}">
-                            <td>
-                                <img style="height:20px" src="{{ profile.user.user.avatar_link|default:'/static/img/unknown.png' }}"/>
-                            </td>
-                            <td>
-                                <div>{{ profile.user.username }}</div>
-                            </td>
-                        </tr>
+                    {% for element in language_spoken_qs_levels reversed %}
+                        {% with a=element.list|first %}
+                            <div class="pull-right" style="margin-top: 2em; color: #3c3c3e; font-size: 16px; font-weight: 700">{{ a.level_display }}</div>
+                        {% endwith %}
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="color: grey">Pic</th>
+                                    <th style="color: grey">Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for entry in element.list %}
+                                <tr class='profile-link' data-href="{% url 'profile' profile.user.id %}">
+                                    <td>
+                                        <img style="height:20px" src="{{ profile.user.user.avatar_link|default:'/static/img/unknown.png' }}"/>
+                                    </td>
+                                    <td>
+                                        <div>{{ profile.user.username }}</div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% endfor %}
-                    </tbody>
-                </table>
-
-            </div>
+                </div>
             <script>
                 $(document).ready(function(){
                     $('.profile-link').click(function(){
