@@ -26,11 +26,11 @@
         $('body').data('markers', markers);
 
         {% for location in locations %}
-            mark_on_map({{ location.user.id }}, {{ location.longitude }}, {{ location.latitude }}, false);
+            mark_on_map({{ location.user.id }}, {{ location.display_longitude }}, {{ location.display_latitude }}, false);
         {% endfor %}
 
         {% if user.location.position_updated %}
-            mark_on_map({{ user.id }}, {{ user.location.longitude }}, {{ user.location.latitude }}, true);
+            mark_on_map({{ user.id }}, {{ user.location.display_longitude }}, {{ user.location.display_latitude }}, true);
         {% else %}
             mark_on_map({{ user.id }}, 0 , 0, true);
         {% endif %}
@@ -57,7 +57,7 @@
         $('body').data('markers').addMarker(marker);
 
         if (centering){
-            $('body').data('map').setCenter(position, 3);
+            $('body').data('map').setCenter(position, 4);
         }
     }
 

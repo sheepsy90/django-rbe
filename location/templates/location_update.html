@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block header %}
+    <script src="{% static 'js/location20161111.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+            <div class="row" style="margin-top: 2em">
+
+                <div class="col-xs-12 col-sm-3 col-sm-offset-3">
+                <button id="autofetch_location" class="btn btn-success btn-block">Fetch location</button>
+            </div>
+                <div class="col-xs-12 col-sm-3">
+                <button id="delete_location" class="btn btn-danger btn-block">Clear</button>
+            </div>
+
+        </div>
+        <div class="row" style="margin-top: 3em">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <form id="change_profile" action="{% url "change_location" %}" method="post">
+                    {% csrf_token %}
+
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+
+                    {% with field=form.longitude %}
+                        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+
+                    {% with field=form.latitude %}
+                        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+
+                    {% with field=form.location_precision %}
+                        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+
+                    {% with field=form.country %}
+                        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+
+                    {% with field=form.location_trace %}
+                        <div class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                    <input class="btn btn-success btn-block" type="submit" value="Save location information" style="margin-top: 15px"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $("#delete_location").click(function() {
+        $('#id_longitude').val('');
+        $('#id_latitude').val('');
+        $('#id_location_trace').html('');
+        $('#id_country').val('-')
+    });
+
+    $("#autofetch_location").click(function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+            function (position) {
+                $("#id_longitude").val(position.coords.longitude);
+                $("#id_latitude").val(position.coords.latitude);
+                location_trace();
+            })
+        }
+    });
+    function location_trace(){
+        var longitude = $("#id_longitude").val();
+        var latitude = $("#id_latitude").val();
+
+        $.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+ latitude + ',' + longitude + '&sensor=false', function( data ){
+            var trace_back = "";
+            var trace_list = data.results;
+            for (var idx in trace_list){
+                trace_back += trace_list[idx].formatted_address + "\n"
+            }
+
+            var top_level = trace_list[trace_list.length-1].formatted_address;
+            var option = $('#id_country').find('option[value=' + top_level + ']');
+            if (option.length == 1){
+                $('#id_country').val(top_level)
+            }
+
+            $('#id_location_trace').html(trace_back);
+        });
+    }
+
+    </script>
+{% endblock %}

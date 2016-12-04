@@ -7,7 +7,6 @@
 
     <script src="{% static 'js/profile20161111.js' %}"></script>
     <script src="{% static 'js/language20161111.js' %}"></script>
-    <script src="{% static 'js/location20161111.js' %}"></script>
     <script src="{% static 'js/skills20161115.js' %}"></script>
 {% endblock %}
 
@@ -33,8 +32,8 @@
                                         <i class="fa fa-map-marker"></i>
                                         <span id="location_span">
                                             {% if profile.user.location and profile.user.location.position_updated %}
-                                                {{ profile.user.location.longitude_round }}
-                                                {{ profile.user.location.latitude_round }}
+                                                {{ profile.user.location.display_longitude }}
+                                                {{ profile.user.location.display_latitude }}
                                                 {{ profile.user.location.position_updated }}
                                             {% else %}
                                                 Location not set!
@@ -51,7 +50,7 @@
                                     </a>
                                     <input style="display: none" id="choose_file" type="file" multiple
                                            name="file_source" size="0" value="Upload">
-                                    <a id="location" class="btn-o">
+                                    <a href="{% url 'change_location' %}" id="location" class="btn-o">
                                         <i class="fa fa-map-marker"></i> Update Location
                                     </a>
                                 {% else %}
@@ -143,7 +142,6 @@
                             <ul class="submenu">
                                 <div style="padding: 5px;">
                                     <a id="delete-profile-picture" class="btn-o">Delete Picture</a>
-                                    <a id="delete-location" class="btn-o">Delete Location</a>
                                 </div>
                             </ul>
                         </li>
@@ -204,23 +202,6 @@
                 $("#delete-profile-picture").click(function () {
                     var $image = $("#user-picture");
                     delete_profile_image($image)
-                });
-                $("#delete-location").click(function(){
-                    clear_location(function(){
-                        $('#location_span').html('Location not set!')
-                    })
-                });
-                $("#location").click(function() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                        function (position) {
-                            updateLocation(position, function () {
-                                var lat = position.coords.latitude.toFixed(2);
-                                var long = position.coords.longitude.toFixed(2);
-                                $('#location_span').html(lat + ' ' + long)
-                            })
-                        })
-                    }
                 });
             }
         </script>

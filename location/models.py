@@ -1,12 +1,17 @@
+from __future__ import  unicode_literals
+
 import datetime
+import random
 
 from django.contrib.auth.models import User
 from django.db import models
 
+from location.constants import COUNTRIES
 
-class LocationPrecision:
-    PRECISE = 0
-    ROUGH = 1
+LOCATION_PRECISION = [
+    ('rough', 'Rough Location'),
+    ('precise', 'Precise Location')
+]
 
 class Location(models.Model):
 
@@ -17,33 +22,28 @@ class Location(models.Model):
     latitude = models.FloatField(blank=True, null=True, help_text="Latitude of the user")
     longitude = models.FloatField(blank=True, null=True, help_text="Longitude of the user")
     position_updated = models.DateTimeField(blank=True, null=True, help_text="The time the location was updated last")
-    location_precision = models.IntegerField(default=LocationPrecision.PRECISE, help_text="How accurate the location should be shown to the outside world.")
+    location_precision = models.CharField(max_length=32, default=LOCATION_PRECISION[1][0], choices=LOCATION_PRECISION,
+                                          help_text="How accurate the location should be shown to the outside world.")
 
-    def update_location(self, longitude, latitude):
-        self.latitude = latitude
-        self.longitude = longitude
-        self.position_updated = datetime.datetime.now()
-        self.save()
+    country = models.CharField(max_length=128, default=COUNTRIES[0][0], choices=COUNTRIES,
+                               help_text="The country corresponding to the location.")
 
-    def clear_location(self):
-        self.latitude = None
-        self.longitude = None
-        self.position_updated = None
-        self.save()
+    location_trace = models.TextField(default='', help_text="The country corresponding to the location.")
 
     @property
-    def longitude_round(self):
-        if self.longitude:
-            return "{0:.2f}".format(self.longitude)
+    def display_latitude(self):
+        if self.location_precision == LOCATION_PRECISION[0][0]:
+            return "{0:.1f}".format(self.latitude)
         else:
-            return ''
+            return self.latitude
 
     @property
-    def latitude_round(self):
-        if self.latitude:
-            return "{0:.2f}".format(self.latitude)
+    def display_longitude(self):
+        if self.location_precision == LOCATION_PRECISION[0][0]:
+            return "{0:.1f}".format(self.longitude)
         else:
-            return ''
+            return self.longitude
+
 
 class DistanceCacheEntry(models.Model):
     user_source = models.ForeignKey(User, related_name='user_source')
