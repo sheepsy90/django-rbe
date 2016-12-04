@@ -5,11 +5,20 @@
 {% block header %}
     <link rel="stylesheet" type="text/css" href='/static/css/profile20161119.css'>
 
-    <script src="{% static 'js/language20161111.js' %}"></script>
+    <script src="{% static 'js/language20161204.js' %}"></script>
 {% endblock %}
 
 
 {% block content %}
+
+    <style>
+        .lang-level {
+            display: none;
+        }
+        .lang-level.active {
+            display: block;
+        }
+    </style>
 <div class="container">
     <div class="toppad visible-xs"></div>
 
@@ -32,17 +41,18 @@
         <div id="language_container" class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3" style="margin-top: 20px">
             {% for e in language_spoken_qs %}
                 <div class="input-group input-group-option level-range">
-                    {% if False %}
-                        <span class="input-group-addon input-group-addon-remove">
-                            <span>1</span>
-                        </span>
-                        <span class="input-group-addon input-group-addon-remove clickable">
-                            <span class="fa fa-angle-double-up"></span>
-                        </span>
-                        <span class="input-group-addon input-group-addon-remove clickable">
-                            <span class="fa fa-angle-double-down"></span>
-                        </span>
-                    {% endif %}
+
+                    <span class="increase-language-skill input-group-addon input-group-addon-remove clickable">
+                        <span class="fa fa-angle-double-up"></span>
+                    </span>
+                    <span class="decrease-language-skill input-group-addon input-group-addon-remove clickable">
+                        <span class="fa fa-angle-double-down"></span>
+                    </span>
+                    <span class="input-group-addon input-group-addon-remove">
+                        {% for value, display in language_levels %}
+                            <span class="lang-level{% if e.level == value %} active{% endif %}" data-value="{{ value }}">{{ display }}</span>
+                        {% endfor %}
+                    </span>
 
                     <input data-lang="{{ e.language }}" type="text" class="btn btn-default form-control lang_forward" value="{{ e.language_display }}" readonly>
 
@@ -63,18 +73,17 @@
 
 <div class="blueprint" style="display: none">
     <div class="language_display input-group input-group-option level-range">
-        {% if False %}
-            <span class="input-group-addon input-group-addon-remove">
-                <span>1</span>
-            </span>
-            <span class="input-group-addon input-group-addon-remove clickable">
-                <span class="fa fa-angle-double-up"></span>
-            </span>
-            <span class="input-group-addon input-group-addon-remove clickable">
-                <span class="fa fa-angle-double-down"></span>
-            </span>
-        {% endif %}
-
+         <span class="increase-language-skill input-group-addon input-group-addon-remove clickable">
+            <span class="fa fa-angle-double-up"></span>
+        </span>
+        <span class="decrease-language-skill input-group-addon input-group-addon-remove clickable">
+            <span class="fa fa-angle-double-down"></span>
+        </span>
+        <span class="input-group-addon input-group-addon-remove">
+            {% for value, display in language_levels %}
+                <span class="lang-level{% if forloop.counter0 == 0 %} active{% endif %}" data-value="{{ value }}">{{ display }}</span>
+            {% endfor %}
+        </span>
         <input id="language_display" type="text" class="btn btn-default form-control lang_forward" value="" readonly>
         <span class="input-group-addon">
             <img id="flag_img" style="width: 25px; height: 20px;" src="/static/img/language_flags/" alt=""/>
@@ -93,6 +102,9 @@
         $('#add_language').click(function(){
             add_language($('#language_select'), $('#language_container'));
         });
+
+        $('.increase-language-skill').click(increase_lang_skill);
+        $('.decrease-language-skill').click(decrease_lang_skill);
     });
 </script>
 

@@ -20,6 +20,7 @@ from django.template import RequestContext
 
 from library.log import rbe_logger
 from location.models import DistanceCacheEntry
+from profile.constants import LANGUAGE_LEVELS
 from profile.forms import ProfileDetailsForm
 from profile.models import UserProfile, LanguageSpoken
 from skills.models import UserSkill
@@ -190,21 +191,6 @@ def language_remove(request):
         rbe_logger.exception(e)
         return JsonResponse({'success': False, 'reason': "Could not remove language"})
 
-
-@login_required()
-def language_chart(request):
-    try:
-        language_count = [(value, LanguageSpoken.objects.filter(language=key).count()) for key, value in
-                          dict(LANGUAGES).items()]
-        language_count = [e for e in language_count if e[1] > 0]
-        language_count = [['A', 'B']] + language_count
-        if language_count > 0:
-            return JsonResponse({'success': True, 'language_count': language_count})
-    except Exception as e:
-        rbe_logger.exception(e)
-    return JsonResponse({'success': False, 'reason': "Could not estimate language chart data"})
-
-
 @login_required()
 def language_overview(request, language_code):
     rc = RequestContext(request)
@@ -228,8 +214,30 @@ def change_languages(request):
     rc = RequestContext(request)
     try:
         language_spoken_qs = LanguageSpoken.objects.filter(user=request.user)
+        rc['language_levels'] = LANGUAGE_LEVELS
         rc['language_spoken_qs'] = language_spoken_qs
     except UserProfile.DoesNotExist:
         rbe_logger.info("Access request to change language with profile not found!")
 
     return render_to_response('profile/edit/change_languages.html', rc)
+
+@login_required()
+def language_level_change(request):
+    lang_code = request.POST.get('lang_code')
+    new_value = request.POST.get('new_value')
+
+    if lang_code not in dict(LANGUAGES).keys():
+        return JsonResponse({'success': False, 'reason': 'Language code not known!'})
+
+    if new_value not in dict(LANGUAGE_LEVELS).keys():
+        return JsonResponse({'success': False, 'reason': 'Language level not known!'})
+
+    try:
+        ls = LanguageSpoken.objects.get(user=request.user, language=lang_code)
+        ls.level = new_value
+        ls.save()
+        return JsonResponse({'success': True})
+    except LanguageSpoken.DoesNotExist:
+        return JsonResponse({'success': False, 'reason': 'Language entry not there!'})
+    except Exception:
+        return JsonResponse({'success': False, 'reason': 'Something went wrong!'})

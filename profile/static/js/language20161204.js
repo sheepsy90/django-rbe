@@ -1,30 +1,6 @@
 /**
  * Created by rkessler on 2016-10-29.
  */
-
-function load_chart_data(element_id){
-    function drawChart() {
-        $.ajax({
-            method: 'POST',
-            url: get_url('language_chart'),
-            data: {
-                csrfmiddlewaretoken: get_csrf_token()
-            }
-        }).done(function (msg) {
-            if (msg['success']) {
-                var data = google.visualization.arrayToDataTable(msg['language_count']);
-                var options = {
-                  title: 'Languages available in the network'
-                };
-
-                var chart = new google.visualization.PieChart(document.getElementById(element_id));
-                chart.draw(data, options);
-            }
-        });
-      }
-    return drawChart;
-}
-
 function remove_language(event){
     console.log("Remove language");
 
@@ -45,6 +21,48 @@ function remove_language(event){
     });
 }
 
+function change_lang_skill(lang_code, new_value, success_callback) {
+    $.ajax({
+        method: 'POST',
+        url: get_url('language_level_change'),
+        data: {
+            lang_code: lang_code,
+            new_value: new_value,
+            csrfmiddlewaretoken: get_csrf_token()
+        }
+    }).done(function (msg) {
+        if (msg['success']) {
+            success_callback();
+        }
+    });
+}
+
+function increase_lang_skill(){
+    var $active = $(this).parent().find('.lang-level.active');
+    var $next = $active.next();
+    var lang_code = $(this).parent().find('input').data('lang');
+
+    if ($next.length != 0){
+        change_lang_skill(lang_code, $next.data('value'), function(){
+            $active.removeClass('active');
+            $next.addClass('active');
+        });
+    }
+}
+
+function decrease_lang_skill(){
+    var $active = $(this).parent().find('.lang-level.active');
+    var $prev = $active.prev();
+    var lang_code = $(this).parent().find('input').data('lang');
+
+    if ($prev.length != 0){
+        change_lang_skill(lang_code, $prev.data('value'), function(){
+            $active.removeClass('active');
+            $prev.addClass('active');
+        });
+    }
+}
+
 function create_language_button(lang, language_display){
     var element = $('.blueprint').find(".language_display").clone();
     $(element).removeClass('language_display');
@@ -56,11 +74,16 @@ function create_language_button(lang, language_display){
     var href = $(element).find('#flag_img').attr('src');
     $(element).find('#flag_img').attr('src', href + lang + '.png');
 
-    $(element).find('.remove_language').data('lang', lang);
-    $(element).find('.remove_language').click(remove_language);
+    $(element).find('.lang_remove').data('lang', lang);
+    $(element).find('.lang_remove').click(remove_language);
+
+    $(element).find('.increase-language-skill').click(increase_lang_skill);
+    $(element).find('.decrease-language-skill').click(decrease_lang_skill);
 
     return element;
 }
+
+
 
 function add_language($select_box, $target_container){
     var lang = $select_box.find(":selected").val();
@@ -74,7 +97,6 @@ function add_language($select_box, $target_container){
     }).done(function (msg) {
         if (msg['success']) {
             var btn = create_language_button(lang, msg['language_display']);
-            $(btn).click(remove_language)
             $target_container.prepend(btn);
         }
     });
