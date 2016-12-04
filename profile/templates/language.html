@@ -61,12 +61,12 @@
                             </thead>
                             <tbody>
                             {% for entry in element.list %}
-                                <tr class='profile-link' data-href="{% url 'profile' profile.user.id %}">
+                                <tr class='profile-link' data-href="{% url 'profile' entry.user.id %}">
                                     <td>
-                                        <img style="height:20px" src="{{ profile.user.user.avatar_link|default:'/static/img/unknown.png' }}"/>
+                                        <img style="height:20px" src="{{ entry.user.user.avatar_link|default:'/static/img/unknown.png' }}"/>
                                     </td>
                                     <td>
-                                        <div>{{ profile.user.username }}</div>
+                                        <div>{{ entry.user.username }}</div>
                                     </td>
                                 </tr>
                             {% endfor %}
