@@ -1,7 +1,10 @@
+import json
+
+import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.utils import timezone
@@ -15,6 +18,31 @@ def world_map(request):
     rc = RequestContext(request)
     rc['locations'] = Location.objects.exclude(position_updated=None).exclude(user=request.user)
     return render_to_response('world_map.html', rc)
+
+@login_required(login_url=settings.LOGIN_URL)
+def location_trace_back(request):
+    longitude = request.POST.get('longitude')
+    latitude = request.POST.get('latitude')
+
+    try:
+        LocationDetailsForm.validate_longlat(longitude, latitude)
+
+        response = requests.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&sensor=false')
+        payload = response.json()
+
+        formatted_address_list = [e['formatted_address'] for e in payload['results']]
+        formatted_address_str = '\n'.join(formatted_address_list)
+        country = formatted_address_list[-1]
+
+        return JsonResponse({'success': True, 'country': country, 'trace_back': formatted_address_str})
+
+    except ValueError as ve:
+        return JsonResponse({'success': False})
+    except Exception as e:
+        return JsonResponse({'success': False})
+
+
+
 
 
 @login_required(login_url=settings.LOGIN_URL)

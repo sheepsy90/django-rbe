@@ -38,15 +38,23 @@ class LocationDetailsForm(forms.Form):
         longitude = cleaned_data['longitude']
         latitude = cleaned_data['latitude']
 
-        # If both are not set that is fine - meaning no location
         if latitude or longitude:
-            # First parse the latitude and longitude
-
+        # First parse the latitude and longitude
             try:
-                latitude = float(latitude)
-                longitude = float(longitude)
-            except:
-                forms.ValidationError("Longitude/Latitude not correct")
+                self.validate_longlat(latitude, longitude)
+            except ValueError as ve:
+                raise forms.ValidationError(ve.message)
+            except Exception:
+                raise forms.ValidationError("Could not validate form")
 
-            if not (-90 <= latitude <= 90) or not(-180 <= longitude < 180):
-                raise forms.ValidationError("Longitude/Latitude not correct")
+    @staticmethod
+    def validate_longlat(latitude, longitude):
+        # If both are not set that is fine - meaning no location
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except:
+            ValueError("Longitude/Latitude not correct")
+
+        if not (-90 <= latitude <= 90) or not (-180 <= longitude < 180):
+            raise ValueError("Longitude/Latitude not correct")

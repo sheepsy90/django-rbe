@@ -139,20 +139,23 @@
         var longitude = $("#id_longitude").val();
         var latitude = $("#id_latitude").val();
 
-        $.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+ latitude + ',' + longitude + '&sensor=false', function( data ){
-            var trace_back = "";
-            var trace_list = data.results;
-            for (var idx in trace_list){
-                trace_back += trace_list[idx].formatted_address + "\n"
+        $.ajax({
+            url: get_url('location_trace_back'),
+            type: 'POST',
+            data: {
+                longitude: longitude,
+                latitude: latitude,
+                csrfmiddlewaretoken: get_csrf_token()
             }
-
-            var top_level = trace_list[trace_list.length-1].formatted_address;
-            var option = $('#id_country').find('option[value=' + top_level + ']');
-            if (option.length == 1){
-                $('#id_country').val(top_level)
+        }).done(function (msg) {
+            if (msg['success'] == true) {
+                var trace_back = msg['trace_back'];
+                var country = msg['country'];
+                $('#id_country').val(country);
+                $('#id_location_trace').html(trace_back);
             }
-
-            $('#id_location_trace').html(trace_back);
+        }).fail(function () {
+            return swal('Error', 'Could not reach server!', 'error');
         });
     }
 
