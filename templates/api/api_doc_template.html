@@ -1,0 +1,10 @@
+<table class="table">
+    <tbody>
+        {%  for regex, doc in endpoints %}
+            <tr>
+                <td>{{ base_url }}{{ regex }}</td>
+                <td>{{ doc }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

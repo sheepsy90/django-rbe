@@ -3,8 +3,7 @@ import uuid
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
-from django.views.decorators.http import require_http_methods
-from oidc_provider.lib.utils.oauth2 import protected_resource_view
+
 
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
 from core.models import PasswordResetKey
@@ -223,14 +222,3 @@ def error_page(request):
     rc = RequestContext(request)
     return render_to_response('general/error_page.html', rc)
 
-
-@require_http_methods(['GET'])
-@protected_resource_view(['identity'])
-def identity(request, *args, **kwargs):
-    dic = {
-        'uid': kwargs['token'].user.id,
-        'username': kwargs['token'].user.username,
-        'email': kwargs['token'].user.email
-    }
-
-    return JsonResponse(dic, status=200)

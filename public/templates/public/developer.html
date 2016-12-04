@@ -2,31 +2,130 @@
 
 {% block content %}
     <div class="container">
-        <div class="row" style="margin-top: 1em">
-            <p class="col-xs-12 col-md-6 col-md-offset-3" style="font-size: 24px; font-weight: bold">Developer Info</p>
+        <div class="row" style="margin-top: 3em">
+            <p class="col-xs-12 col-md-8 col-md-offset-1" style="font-size: 24px; font-weight: bold">Developer Info</p>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <div class="row" style="margin-top: 1em">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
                 <p>If you are a software developer you might want to contribute to either
-                     <b>RBE Network</b> or have other ideas on software that can improve the community
+                 <b>RBE Network</b> or have other ideas on software that can improve the community
                     of people advocating an RBE.
                 </p>
-                <p>To support <b>RBE Network</b> project you can find it on <a href="https://github.com/sheepsy90/django-rbe-inventory"><span class="fa fa-github"></span> Github</a> and contact me there.
-                    The programming language is python with the django web framework.</p>
+                <p>To support <b>RBE Network</b> project you can find it on github (see below) or
+                    contact me there. The programming language is python with the django web framework.</p>
                 <p>
                     If you plan to build other tools it could be beneficiary to integrate those
-                    via Oauth2. This allows users to authenticate via this page and you will
+                    via the RBE Network. This allows users to authenticate via this page and you will
                     easily get the users profile information, location data and entered skills.
                     This page basically works then as a database of people which provide certain
-                    datapoints which can be build upon in other applications.
+                    datapoints which can be build upon in other applications. For information on how
+                    to integrate - see the information below.
                 </p>
-                <p>
-                    An example project on how to integrate with <b>RBE Network</b> will be soon
-                    available on github as well.
+                <p>//Robert</p>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 1em">
+            <p class="col-xs-12 col-md-8 col-md-offset-1" style="font-size: 24px; font-weight: bold">Repositories</p>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Description</th>
+                            <th>Repository</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>RBE Network</td>
+                            <td>Description</td>
+                            <td><a href="https://github.com/sheepsy90/django-rbe-inventory"><span class="fa fa-github"></span> Github</a> </td>
+                        </tr>
+                        <tr>
+                            <td>RBE Mood</td>
+                            <td>Description</td>
+                            <td><a href="https://github.com/sheepsy90/rbe-mood"><span class="fa fa-github"></span> Github</a> </td>
+                        </tr>
+                        <tr>
+                            <td>RBE Events</td>
+                            <td>Description</td>
+                            <td><a href="https://github.com/sheepsy90/rbe-events"><span class="fa fa-github"></span> Github</a> </td>
+                        </tr>
+                        <tr>
+                            <td>RBE Authorize</td>
+                            <td>Description</td>
+                            <td><a href="https://github.com/sheepsy90/django-rbe-authorize"><span class="fa fa-github"></span> Github</a> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 1em">
+            <p class="col-xs-12 col-md-8 col-md-offset-1" style="font-size: 24px; font-weight: bold">Authentication procedure</p>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2 steps">
+                <style>
+                    .steps ul li {
+                        margin-top: 2em;
+                    }
+                </style>
+                <ul>
+                   <li>(0) Retrieve a CLIENT_ID and a CLIENT_SECRET from the RBE Network by contacting the core team. You also need to provide
+                        a REDIRECT_URI where users are redirected after the authorization process. This is necessary for security reasons.
+                   </li>
+                   <li>(1) Generate a URL in the form<br>
+                       <div style="margin-left: 2em;">
+                        <span style="color: dimgray">
+                            https://rbe-network.org/authorize?<br>
+                           <span style="padding-left: 1em;"></span>client_id=CLIENT_ID&<br>
+                           <span style="padding-left: 1em;"></span>response_type=code&<br>
+                           <span style="padding-left: 1em;"></span>state=RANDOM_UUID&<br>
+                           <span style="padding-left: 1em;"></span>duration=temporary&<br>
+                           <span style="padding-left: 1em;"></span>redirect_uri=REDIRECT_URI&<br>
+                           <span style="padding-left: 1em;"></span>scope=identity<br>
+                        </span>
+                       </div>
+                   </li>
+                   <li>
+                       (2) Redirect the user who tries to authorize to the in (1) generated URL. The user will see the
+                       required scopes you requested (possible is: identity, location, skills, languages, profile, messages).
+                       Note that you <b>need</b> the identity scope to authorize the user.
+                   </li>
+                   <li>(3) The RBE Network will generate a link like <span>https://REDIRECT_URI/auth_callback?state=STATE&code=CODE</span>
+                       and redirect the user after granting permission there. If the user declined there will be a parameter called error=some_code.
+                       The STATE variable in the response is the RANDOM_UUID from (1) which you provided. With this you can make sure that you
+                       initiated the request.
+                   </li>
+                   <li>
+                       (4) With the CODE from (3) you can now request an Oauth2 token from the RBE Network to make further calls.
+                       To do so you should call https://rbe-network.org/token?grant_type=authorization_code&code=CODE&redirect_uri=REDIRECT_URI
+                       and if the code is correct the response will contain an Oauth2 token. See below API for calls that you can perform now.
+                       The initial call should be the identity call to retrieve the identity of the token you have now at hand. Then you can log
+                       in the user and do further things.
+                   </li>
+                </ul>
+                <p style="font-size: 12px">Note: I know that this is not the best way technically as it requires a call each time the suer logs in.
+                This is likely to change at some point though.
                 </p>
-                <p>
-                    Robert
-                </p>
+           </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 1em">
+            <p class="col-xs-12 col-md-8 col-md-offset-1">
+                <span style="font-size: 24px; font-weight: bold">API Endpoints</span><br>
+                <i>Make sure to include the bearer token in the header in order to perform a successful api call.</i>
+            </p>
+        </div>
+        <div class="row" style="margin-top: 1em">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                {% include 'api/api_doc_include.html' %}
             </div>
         </div>
     </div>
