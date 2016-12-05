@@ -8,7 +8,7 @@ from messaging.models import Message
 
 class TestEmails(TestCase):
 
-    @mock.patch('library.mail.GoogleEmailCommand.GoogleEmail._smtplib')
+    @mock.patch('library.mail.GoogleSession.GoogleSession._smtplib')
     def test_new_message_email_new_messaging_system(self, smptlib_mock):
         smtpserver = mock.MagicMock()
         smptlib_mock.SMTP = mock.MagicMock(return_value=smtpserver)
