@@ -121,6 +121,8 @@
                         <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">
                             <i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                         <li class="visible-xs divider"></li>
+                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px" src="https://s3.amazonaws.com/patreon_public_assets/patreon_negative.svg"></a></li>
+                        <li class="visible-xs divider"></li>
                         <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
                         </li>
                         <li class="visible-xs" id='general_info'><a href="{% url 'information' %}">General Info</a></li>
@@ -135,6 +137,8 @@
                             <ul class="dropdown-menu">
                                 <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
                                 <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
+                                <li class="divider"></li>
+                                <li><a href="https://patreon.com/sheepsy90"><img height="20px" src="https://s3.amazonaws.com/patreon_public_assets/patreon_negative.svg"></a></li>
                                 <li class="divider"></li>
                                 {% if user.is_superuser  %}
                                 <li><a href="{% url 'admin:index' %}">Admin</a></li>

@@ -59,7 +59,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.LastSeenMiddleware'
+    'core.middleware.LastSeenMiddleware',
+    'core.middleware.AutoLogout'
 ]
 
 ROOT_URLCONF = 'django_rbe.urls'
@@ -162,10 +163,10 @@ STATIC_ROOT = 'static'
 
 # Django OIDC Provider Settings
 SITE_URL = 'http://localhost:9001'
-#OIDC_USERINFO = 'core.openid.user_info'
 OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
 
 LOGIN_URL = '/core/login'
+AUTO_LOGOUT_DELAY = 24 * 60 * 60
 
 
 GOOGLE_ANALYTICS_ID = None
