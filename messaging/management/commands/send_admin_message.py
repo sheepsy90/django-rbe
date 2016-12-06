@@ -43,7 +43,7 @@ class Command(BaseCommand):
         if result == 'y':
             self.stdout.write(self.style.SUCCESS('Sending all emails...'))
             admin_mail = AdminMail(google_session)
-            admin_mail.send(subject, body_content, User.objects.all().values_list('username', 'email'))
+            admin_mail.send(subject, body_content, query_set.values_list('username', 'email'))
             self.stdout.write(self.style.SUCCESS('Done.'))
         else:
             self.stdout.write(self.style.SUCCESS('User abort! Not sending emails!'))
