@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 from django.shortcuts import render_to_response
 
@@ -17,14 +19,17 @@ class AdminMail(GoogleEmail):
         content = render_to_response('emails/admin_mail.html', {'username': 'XXXUSERNAMEYYY', 'body': body}).content
 
         for username, email in recipient_list:
-            msg = MIMEMultipart()
-            msg['From'] = settings.DEFAULT_FROM_EMAIL
-            msg['Subject'] = subject
-            msg['To'] = email
+            try:
+                msg = MIMEMultipart()
+                msg['From'] = settings.DEFAULT_FROM_EMAIL
+                msg['Subject'] = subject
+                msg['To'] = email
 
-            specific_content = content.replace('XXXUSERNAMEYYY', username)
-            mime_text = MIMEText(specific_content, 'html')
-            msg.attach(mime_text)
+                specific_content = content.replace('XXXUSERNAMEYYY', username)
+                mime_text = MIMEText(specific_content, 'html')
+                msg.attach(mime_text)
 
-            self._google_session.smtpserver.sendmail(settings.DEFAULT_FROM_EMAIL, [email], msg.as_string())
-            rbe_logger.info("Send out admin email to user={} at email={}".format(username, email))
+                self._google_session.smtpserver.sendmail(settings.DEFAULT_FROM_EMAIL, [email], msg.as_string())
+                rbe_logger.info("Send out admin email to user={} at email={}".format(username, email))
+            except Exception as e:
+                rbe_logger.error("Could not send admin message to email={} message={}".format(email, e.message))
