@@ -3,6 +3,8 @@ import random
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
+from library.mail.AdminMail import AdminMail
+from library.mail.GoogleSession import GoogleSession
 from messaging.models import Message, MessageStatus
 
 
@@ -10,6 +12,8 @@ class Command(BaseCommand):
     help = 'Create some test messages across users for testing'
 
     def handle(self, *args, **options):
+        AdminMail(GoogleSession()).send('[RBE Network] Newsletter', 'Some message <br> <b>Blaaa</b>', None)
+
         # Add some messages
         all_profiles = User.objects.all()
 

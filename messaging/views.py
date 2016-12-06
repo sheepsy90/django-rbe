@@ -3,12 +3,15 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db.models.aggregates import Count
-from django.http.response import JsonResponse, Http404
+from django.http.response import JsonResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from core.models import LastSeen
 from library.log import rbe_logger
+from library.mail.AdminMail import AdminMail
+from library.mail.GoogleSession import GoogleSession
+from messaging.forms import AdminMessageForm
 from messaging.models import Message, MessageStatus
 
 
@@ -115,3 +118,4 @@ def messaging_confirm_read(request):
     Message.objects.filter(id__in=message_ids, recipient=request.user).update(status=MessageStatus.READ)
 
     return JsonResponse({'success': True})
+

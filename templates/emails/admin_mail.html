@@ -1,0 +1,8 @@
+{% extends 'emails/base_email.html' %}
+{% block content %}
+Hey {{ username }},<br>
+<br>
+{{ body|safe }}
+<br>
+Kind regards
+{% endblock %}

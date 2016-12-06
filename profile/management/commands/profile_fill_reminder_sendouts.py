@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from library.log import rbe_logger
+from library.mail.GoogleSession import GoogleSession
 from library.mail.ProfileCompletionEmail import ProfileCompletionEmail
 from location.models import Location
 from profile.models import UserProfile, LanguageSpoken
@@ -21,13 +22,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         all_users = User.objects.all()
 
+        google_session = GoogleSession()
+
         for user in all_users:
             location_missing = not self.has_location(user)
             about_missing = not self.has_about(user)
             languages_missing = not self.has_languages(user)
 
             if location_missing or about_missing or languages_missing:
-                gec = ProfileCompletionEmail()
+                gec = ProfileCompletionEmail(google_session)
                 gec.send(username=user.username, recipient_list=[user.email], location_missing=location_missing, about_missing=about_missing, languages_missing=languages_missing)
                 rbe_logger.info("Sending email to {} for profile fill reminder on Loc:{} / About:{} / Languages:{}".format(user.email, location_missing, about_missing, languages_missing))
             else:

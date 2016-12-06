@@ -1,10 +1,12 @@
 from django.shortcuts import render_to_response
 
-from core.models import Toggles
 from library.mail.GoogleEmailCommand import GoogleEmail
 
 
 class NewMessageEmail(GoogleEmail):
+
+    def __init__(self, google_session=None):
+        GoogleEmail.__init__(self, google_session)
 
     required_fields = ['recipient_list', 'message']
 

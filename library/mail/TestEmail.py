@@ -5,6 +5,9 @@ from library.mail.GoogleEmailCommand import GoogleEmail
 
 class TestEmail(GoogleEmail):
 
+    def __init__(self, google_session=None):
+        GoogleEmail.__init__(self, google_session)
+
     @property
     def subject(self):
         return "This is a test email"

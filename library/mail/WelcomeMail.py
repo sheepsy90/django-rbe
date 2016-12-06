@@ -7,6 +7,9 @@ class WelcomeMail(GoogleEmail):
 
     required_fields = ['recipient_list', 'username']
 
+    def __init__(self, google_session=None):
+        GoogleEmail.__init__(self, google_session)
+
     @property
     def subject(self):
         return '[RBE Network] Welcome'

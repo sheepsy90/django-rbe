@@ -7,6 +7,9 @@ class PasswordResetMail(GoogleEmail):
 
     required_fields = ['recipient_list', 'username', 'reset_key', 'valid_until']
 
+    def __init__(self, google_session=None):
+        GoogleEmail.__init__(self, google_session)
+
     @property
     def subject(self):
         return '[RBE Network] Password reset'
