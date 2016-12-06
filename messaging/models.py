@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from library.log import rbe_logger
 from library.mail.NewMessageEmail import NewMessageEmail
+from library.mail.SendgridEmailClient import SendgridEmailClient
 
 
 class MessageStatus:
@@ -26,8 +27,9 @@ class Message(models.Model):
     def inform_recipient(self):
         """ This method sends an email to the recipient in order to inform them about a new message """
         try:
-            nme = NewMessageEmail()
-            nme.send(recipient_list=[self.recipient.email], message=self)
+            sg = SendgridEmailClient()
+            nme = NewMessageEmail(self)
+            sg.send_mail(nme)
         except :
             rbe_logger.error("Could not send new message email to {}".format(self.recipient.email))
 

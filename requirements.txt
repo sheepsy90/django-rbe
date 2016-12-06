@@ -12,3 +12,5 @@ wsgiref==0.1.2
 geopy
 python-memcached
 mock
+sendgrid
+pyaml

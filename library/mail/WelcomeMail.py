@@ -1,18 +1,23 @@
+from __future__ import unicode_literals
+
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 
-from library.mail.GoogleEmailCommand import GoogleEmail
+from library.mail.Mail import Mail
 
 
-class WelcomeMail(GoogleEmail):
+class WelcomeMail(Mail):
 
-    required_fields = ['recipient_list', 'username']
+    def __init__(self, user):
+        assert isinstance(user, User), "Not an auth.User model"
+        self.user = user
 
-    def __init__(self, google_session=None):
-        GoogleEmail.__init__(self, google_session)
-
-    @property
     def subject(self):
         return '[RBE Network] Welcome'
 
-    def body(self, variables):
-        return render_to_response('emails/welcome_mail.html', variables).content
+    def to_email(self):
+        return self.user.email
+
+    def body_html(self):
+        return render_to_response('emails/welcome_mail.html', {
+            'username': self.user.username}).content

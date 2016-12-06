@@ -1,18 +1,31 @@
+from __future__ import unicode_literals
+
+import datetime
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 
-from library.mail.GoogleEmailCommand import GoogleEmail
+from library.mail.Mail import Mail
 
 
-class PasswordResetMail(GoogleEmail):
+class PasswordResetMail(Mail):
 
-    required_fields = ['recipient_list', 'username', 'reset_key', 'valid_until']
+    def __init__(self, user, reset_key, valid_until):
+        assert isinstance(user, User), "Not an auth.User model"
+        assert isinstance(valid_until, datetime), "Not an auth.User model"
 
-    def __init__(self, google_session=None):
-        GoogleEmail.__init__(self, google_session)
+        self.user = user
+        self.reset_key = reset_key
+        self.valid_until = valid_until
 
-    @property
     def subject(self):
         return '[RBE Network] Password reset'
 
-    def body(self, variables):
-        return render_to_response('emails/password_reset_mail.html', variables).content
+    def body_html(self):
+        return render_to_response('emails/password_reset_mail.html', {
+            'username': self.user.username,
+            'reset_key': self.reset_key,
+            'valid_until': self.valid_until
+        }).content
+
+    def to_email(self):
+        return self.user.email

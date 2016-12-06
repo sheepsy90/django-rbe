@@ -4,7 +4,6 @@ import uuid
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 
-
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
 from core.models import PasswordResetKey
 import django.contrib.auth as djauth
@@ -13,15 +12,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
-from django.http.response import JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django_rbe.settings import LOGIN_URL
 
-from django.conf import settings
-
 from library.log import rbe_logger
 from library.mail.PasswordResetMail import PasswordResetMail
+from library.mail.SendgridEmailClient import SendgridEmailClient
 from library.mail.WelcomeMail import WelcomeMail
 from profile.models import UserProfile
 
@@ -103,8 +100,9 @@ def register(request, registration_key):
             user = create_user(username, email, password)
 
             try:
-                wcm = WelcomeMail()
-                wcm.send(username=user.username, recipient_list=[email])
+                sg = SendgridEmailClient()
+                wcm = WelcomeMail(user)
+                sg.send_mail(wcm)
                 rbe_logger.info("Send welcome message to {}".format(email))
             except Exception as e:
                 rbe_logger.exception(e)
@@ -143,8 +141,9 @@ def reset(request):
             pwrk.save()
 
             try:
-                prm = PasswordResetMail()
-                prm.send(recipient_list=[email], username=u.first().username, reset_key=reset_key, valid_until=valid_until.isoformat())
+                sg = SendgridEmailClient()
+                prm = PasswordResetMail(u, reset_key, valid_until)
+                sg.send_mail(prm)
             except Exception as e:
                 rbe_logger.error("Could not send the password forgot email to {}".format(email))
                 rbe_logger.exception(e)
@@ -153,19 +152,6 @@ def reset(request):
     else:
         return render(request, 'auth/reset_password.html', {'form': PasswordResetRequest()})
 
-
-def suggest_close_by(request):
-    latitude = request.POST.get('latitude')
-    longitude = request.POST.get('longitude')
-
-    # TODO - Change to real data not to my personal fake one
-
-    person = {
-        'name': 'Robert Kessler',
-        'fb': 'https://www.facebook.com/profile.php?id=100010614489059'
-    }
-
-    return JsonResponse({'success': True, 'person': person})
 
 @login_required
 def change_password(request):

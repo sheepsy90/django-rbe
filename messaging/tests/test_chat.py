@@ -14,7 +14,8 @@ from messaging.models import Message, MessageStatus
 
 class TestNewMessaging(TestCase):
 
-    def test_simple_message_sending_works_and_redirects_correctly(self):
+    @mock.patch('library.mail.SendgridEmailClient.SendgridEmailClient')
+    def test_simple_message_sending_works_and_redirects_correctly(self, smc):
         c = Client()
 
         recipient = create_user('recipient', 'email', 'password')
@@ -36,7 +37,8 @@ class TestNewMessaging(TestCase):
         self.assertEqual(message.message_text, 'test_message')
         self.assertEqual(message.status, MessageStatus.UNREAD)
 
-    def test_confirming_unread_works(self):
+    @mock.patch('library.mail.SendgridEmailClient.SendgridEmailClient')
+    def test_confirming_unread_works(self, smc):
         recipient = create_user('recipient', 'email', 'password')
         sender = create_user('sender', 'email', 'password')
 
@@ -54,7 +56,8 @@ class TestNewMessaging(TestCase):
         m.refresh_from_db()
         self.assertEqual(m.status, MessageStatus.READ)
 
-    def test_retrieving_messages_page_works_without_messages(self):
+    @mock.patch('library.mail.SendgridEmailClient.SendgridEmailClient')
+    def test_retrieving_messages_page_works_without_messages(self, smc):
         create_user('user', 'email', 'password')
 
         c = Client()
@@ -64,7 +67,8 @@ class TestNewMessaging(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_retrieving_messages_page_works_with_read_message(self):
+    @mock.patch('library.mail.SendgridEmailClient.SendgridEmailClient')
+    def test_retrieving_messages_page_works_with_read_message(self, smc):
         recipient = create_user('user', 'email', 'password')
         sender = create_user('sender', 'email', 'password')
 
@@ -79,7 +83,8 @@ class TestNewMessaging(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_view_function_for_sending_message(self):
+    @mock.patch('library.mail.SendgridEmailClient.SendgridEmailClient')
+    def test_view_function_for_sending_message(self, smc):
         recipient = create_user('user', 'email', 'password')
         sender = create_user('sender', 'email', 'password')
 

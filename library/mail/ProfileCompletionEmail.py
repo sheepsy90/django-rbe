@@ -1,18 +1,32 @@
+from __future__ import unicode_literals
+
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 
-from library.mail.GoogleEmailCommand import GoogleEmail
+from library.mail.Mail import Mail
 
 
-class ProfileCompletionEmail(GoogleEmail):
+class ProfileCompletionEmail(Mail):
 
-    required_fields = ['recipient_list', 'username', 'location_missing', 'about_missing']
+    def __init__(self, user, location_missing, about_missing, language_missing):
+        assert isinstance(user, User), "Not an auth.User model"
 
-    def __init__(self, google_session=None):
-        GoogleEmail.__init__(self, google_session)
+        self.user = user
+        self.location_missing = location_missing
+        self.about_missing = about_missing
+        self.language_missing = language_missing
 
-    @property
+    def body_html(self):
+        return render_to_response('emails/profile_completion.html', {
+            'username': self.user.username,
+            'about_missing': self.about_missing,
+            'location_missing': self.location_missing,
+            'language_missing': self.language_missing
+        }).content
+
+    def to_email(self):
+        return self.user.email
+
     def subject(self):
         return '[RBE Network] Complete your profile'
 
-    def body(self, variables):
-        return render_to_response('emails/profile_completion.html', variables).content

@@ -10,7 +10,6 @@ urlpatterns = [
      url(r'reset/$', core.views.reset, name='password_reset'),
      url(r'chpw/(?P<reset_key>[\w]*)$', core.views.chpw, name='chpw'),
      url(r'change_password/$', core.views.change_password, name='change_password'),
-     url(r'suggest_close_by/$', core.views.suggest_close_by, name='suggest_close_by'),
      url(r'error_page/$', core.views.error_page, name='error_page'),
      url(r'api/identity/$', core.api.identity, name='api_identity'),
 ]

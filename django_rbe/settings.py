@@ -168,10 +168,8 @@ OIDC_EXTRA_SCOPE_CLAIMS = 'core.openid.CustomScopeClaims'
 LOGIN_URL = '/core/login'
 AUTO_LOGOUT_DELAY = 24 * 60 * 60
 
-
+SENDGRID_API_KEY = None
 GOOGLE_ANALYTICS_ID = None
-GMAIL_USER = None
-GMAIL_PASSWORD = None
 DEFAULT_FROM_EMAIL = None
 
 # Overwrite some of the properties to production parameters

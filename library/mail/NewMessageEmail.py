@@ -1,21 +1,25 @@
+from __future__ import unicode_literals
+
 from django.shortcuts import render_to_response
 
-from library.mail.GoogleEmailCommand import GoogleEmail
+from library.mail.Mail import Mail
 
 
-class NewMessageEmail(GoogleEmail):
+class NewMessageEmail(Mail):
 
-    def __init__(self, google_session=None):
-        GoogleEmail.__init__(self, google_session)
+    def __init__(self, message):
+        assert message.__class__.__name__ == 'Message', "Message is not a models.Message model"
+        self.message = message
 
-    required_fields = ['recipient_list', 'message']
-
-    @property
     def subject(self):
         return "[RBE Network] New message"
 
-    def body(self, variables):
-        return render_to_response('emails/new_message_email2.html', variables).content
+    def body_html(self):
+        return render_to_response('emails/new_message_email2.html', {
+            'message': self.message
+        }).content
 
+    def to_email(self):
+        return self.message.recipient.email
 
 
