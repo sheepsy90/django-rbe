@@ -30,9 +30,9 @@ class SendgridEmailClient(object):
 
         if response.status_code == 202:
             rbe_logger.info(
-                "Send {} email successful to {}".format(mail_object.__class__.__name__, mail_object.from_email()))
+                "Send {} email successful to {}".format(mail_object.__class__.__name__, mail_object.to_email()))
         else:
             rbe_logger.error(
                 "Send {} email failed with status_code={} successful to {}".format(mail_object.__class__.__name__,
                                                                                    response.status_code,
-                                                                                   mail_object.from_email()))
+                                                                                   mail_object.to_email()))
