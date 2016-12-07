@@ -142,7 +142,7 @@ def reset(request):
 
             try:
                 sg = SendgridEmailClient()
-                prm = PasswordResetMail(u, reset_key, valid_until)
+                prm = PasswordResetMail(u.first(), reset_key, valid_until)
                 sg.send_mail(prm)
             except Exception as e:
                 rbe_logger.error("Could not send the password forgot email to {}".format(email))
