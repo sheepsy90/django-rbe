@@ -214,7 +214,6 @@ def error_page(request):
 def verify_email(request, key):
     if key:
         try:
-            print EmailVerification.objects.filter(user=request.user).first()
             ev = EmailVerification.objects.get(user=request.user, key=key)
             if not ev.confirmed:
                 ev.confirmed = True
