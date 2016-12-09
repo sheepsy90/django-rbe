@@ -2,10 +2,11 @@ from django.contrib import admin
 
 # Register your models here.
 from oidc_provider.models import UserConsent
-from core.models import PasswordResetKey, Toggles
+from core.models import PasswordResetKey, Toggles, EmailVerification
 
 admin.site.register(PasswordResetKey)
 admin.site.register(UserConsent)
+admin.site.register(EmailVerification)
 
 
 class ClassAdmin(admin.ModelAdmin):
