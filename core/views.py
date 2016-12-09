@@ -212,7 +212,7 @@ def error_page(request):
 
 @login_required()
 def verify_email(request, key):
-    if request.method == 'POST':
+    if key:
         try:
             print EmailVerification.objects.filter(user=request.user).first()
             ev = EmailVerification.objects.get(user=request.user, key=key)
@@ -232,10 +232,10 @@ def verify_email(request, key):
             ev.key = uuid.uuid4().hex
             ev.save()
 
-            # Send email
-            sec = SendgridEmailClient()
-            email = VerifyMail(ev)
-            sec.send_mail(email)
+        # Send email
+        sec = SendgridEmailClient()
+        email = VerifyMail(ev)
+        sec.send_mail(email)
 
         return render(request, 'auth/email_verification.html', {'state': 'send_email'})
 
