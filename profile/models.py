@@ -11,6 +11,10 @@ class UserProfile(models.Model):
     about_me_text = models.TextField(max_length=3000, default='')
     avatar_link = models.URLField(blank=True)
 
+    @property
+    def email_verified(self):
+        return self.user.emailverification.confirmed
+
 
 class LanguageSpoken(models.Model):
     user = models.ForeignKey(User)

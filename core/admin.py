@@ -8,8 +8,6 @@ admin.site.register(PasswordResetKey)
 admin.site.register(UserConsent)
 
 
-
-
 class ClassAdmin(admin.ModelAdmin):
     filter_horizontal = ('activated_for',)
 

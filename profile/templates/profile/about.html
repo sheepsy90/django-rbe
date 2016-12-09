@@ -12,6 +12,9 @@
     <p style="color: white; padding: 4px;"><b>Email:</b>
         {% if profile.user.email %}
             {{ profile.user.email }}
+            {% if profile.email_verified %}
+                <span class="fa fa-check" aria-hidden="true"></span>
+            {% endif %}
         {% else %}
             --
         {% endif %}

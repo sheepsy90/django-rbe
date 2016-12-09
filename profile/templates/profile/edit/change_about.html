@@ -29,6 +29,13 @@
                             </div>
                         </div>
                     {% endfor %}
+                    {% if user.user.email_verified %}
+                        <div class="alert alert-success" role="alert" style="margin-top: 4px"><span class="fa fa-check" aria-hidden="true"></span> Your email is verified!</div>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert" style="margin-top: 4px"><span class="fa fa-check" aria-hidden="true"></span> Your email is not verified yet.
+                            <a href="{% url 'verify_email' '' %}" class="btn btn-default btn-sm pull-right">Verify email!</a>
+                        </div>
+                    {% endif %}
                     <input class="btn btn-success btn-block" type="submit" value="Apply changes"
                            style="margin-top: 15px"/>
                 </form>

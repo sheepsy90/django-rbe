@@ -1,12 +1,17 @@
 {% extends 'emails/base_email.html' %}
 {% block content %}
-Hey {{ username }},<br>
+Hello {{ user.username }},<br>
 <br>
-Thank you for signing up for the RBE Network.<br>
+Thank you for signing up for the RBE Network.<br><br>
+Just a few things to take care of:<br>
 <br>
-Please make sure that you fill out your profile - describe yourself and record your location.
-You can also add some skills and interests to your profile such that others can see what you are
-interested in or with what they can approach you about.<br>
+1. Let's confirm your email address <a href="{{ site_url }}{% url 'verify_email' email_verification.key %}">here</a>.<br>
+<br>
+2. Make sure that you add a short description about yourself on your <a href="{{ site_url }}{% url 'change_about' %}">profile</a>.<br>
+3. Adding a location is vital to coordinate ourselves and connect better.<br>
+<br>
+Finally, you can also add some <a href="{{ site_url }}{% url 'change_skills' %}">skills</a> and <a href="{{ site_url }}{% url 'change_languages' %}">languages</a> to your profile,
+    such that others know on what topics to approach you in particular.<br>
 <br>
 Kind regards
 {% endblock %}

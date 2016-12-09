@@ -1,4 +1,7 @@
+from __future__ import unicode_literals
+
 import datetime
+
 from django.contrib.auth.models import User, Group
 from django.core.cache import caches
 from django.db import models
@@ -10,6 +13,15 @@ class PasswordResetKey(models.Model):
     user = models.ForeignKey(User)
     key = models.CharField(max_length=64, unique=True, help_text="The unique key for resetting password!")
     valid_until = models.DateTimeField(help_text="The time until this key is valid!")
+
+
+class EmailVerification(models.Model):
+    user = models.OneToOneField(User)
+    key = models.CharField(max_length=64, unique=True, help_text="The unique key for resetting password!")
+    confirmed = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "<EmailVerification user={} // key={} // confirmed={}>".format(self.user, self.key, self.confirmed)
 
 
 class LastSeen(models.Model):

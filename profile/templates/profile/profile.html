@@ -57,6 +57,14 @@
                                     <a href="{% url 'conversation' profile.user.id %}" class="btn-o">
                                         <i class="fa fa-envelope"></i> Start conversation</a>
                                 {% endif %}
+                                 {% if profile.email_verified %}
+                                     <div class="pull-right" style="text-align: right">
+                                        <span class="fa fa-envelope" aria-hidden="true"></span>
+                                        <span class="fa fa-check" aria-hidden="true"></span><br>
+                                        <div><span>E-mail verified</span></div>
+                                     </div>
+                                     <div style="clear: both"></div>
+                                {% endif %}
                             </div>
                         </div>
                     </li>

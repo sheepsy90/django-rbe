@@ -5,18 +5,19 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 
 from core.forms import RegistrationForm, LoginForm, PasswordChangeForm, PasswordResetRequest, PasswordReset
-from core.models import PasswordResetKey
+from core.models import PasswordResetKey, EmailVerification
 import django.contrib.auth as djauth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django_rbe.settings import LOGIN_URL
 
 from library.log import rbe_logger
+from library.mail.VerifyMail import VerifyMail
 from library.mail.PasswordResetMail import PasswordResetMail
 from library.mail.SendgridEmailClient import SendgridEmailClient
 from library.mail.WelcomeMail import WelcomeMail
@@ -101,7 +102,8 @@ def register(request, registration_key):
 
             try:
                 sg = SendgridEmailClient()
-                wcm = WelcomeMail(user)
+                ve, created = EmailVerification.objects.get_or_create(user=user, key=uuid.uuid4().hex)
+                wcm = WelcomeMail(user, ve)
                 sg.send_mail(wcm)
                 rbe_logger.info("Send welcome message to {}".format(email))
             except Exception as e:
@@ -109,7 +111,7 @@ def register(request, registration_key):
 
             djauth.login(request, user)
 
-            return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
+            return HttpResponseRedirect(reverse('welcome'))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -148,7 +150,7 @@ def reset(request):
                 rbe_logger.error("Could not send the password forgot email to {}".format(email))
                 rbe_logger.exception(e)
 
-        return render_to_response('auth/reset_password_email_send.html', {'email': email})
+        return render(request, 'auth/reset_password_email_send.html', {'email': email})
     else:
         return render(request, 'auth/reset_password.html', {'form': PasswordResetRequest()})
 
@@ -205,6 +207,39 @@ def chpw(request, reset_key):
 
 
 def error_page(request):
-    rc = RequestContext(request)
-    return render_to_response('general/error_page.html', rc)
+    return render(request, 'general/error_page.html')
 
+
+@login_required()
+def verify_email(request, key):
+    if request.method == 'POST':
+        try:
+            print EmailVerification.objects.filter(user=request.user).first()
+            ev = EmailVerification.objects.get(user=request.user, key=key)
+            if not ev.confirmed:
+                ev.confirmed = True
+                ev.save()
+                return render(request, 'auth/email_verification.html', {'state': 'verified'})
+            else:
+                return render(request, 'auth/email_verification.html', {'state': 'verified'})
+
+        except EmailVerification.DoesNotExist:
+            rbe_logger.info("User {} tried to verify email with key={} but not found".format(request.user, key))
+            return render(request, 'auth/email_verification.html', {'state': 'key_not_found'})
+    else:
+        ev, created = EmailVerification.objects.get_or_create(user=request.user)
+        if created:
+            ev.key = uuid.uuid4().hex
+            ev.save()
+
+            # Send email
+            sec = SendgridEmailClient()
+            email = VerifyMail(ev)
+            sec.send_mail(email)
+
+        return render(request, 'auth/email_verification.html', {'state': 'send_email'})
+
+
+@login_required()
+def welcome(request):
+    return render(request, 'general/welcome.html')

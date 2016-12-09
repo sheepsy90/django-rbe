@@ -1,0 +1,9 @@
+{% extends 'emails/base_email.html' %}
+{% block content %}
+Hello {{ email_verification.user.username }},<br>
+<br>
+You asked for a confirmation code for your email address.<br>
+To confirm your email please click <a href="{{ site_url }}{% url 'verify_email' email_verification.key %}">here</a>.<br>
+<br>
+Kind regards
+{% endblock %}
