@@ -20,3 +20,22 @@ def identity(request, *args, **kwargs):
     }
 
     return JsonResponse(dic, status=200)
+
+
+'''Alternative variant with DRF'''
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+
+class IdentityAPI(generics.APIView):
+    
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request, format=None):
+        content = {
+            'user': unicode(request.user), # info about related Django user
+            'auth': unicode(request.auth),  # Info from related DRF Token instance
+        }
+        return Response(content)
