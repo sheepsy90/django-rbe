@@ -7,7 +7,8 @@
     <meta content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" name="viewport">
 
 
-    <meta name="description" content="The main purpose of this page is to connect people who consider themselves advocates for a Resource Based Economy or certain aspects of it.">
+    <meta name="description"
+          content="The main purpose of this page is to connect people who consider themselves advocates for a Resource Based Economy or certain aspects of it.">
     <meta name="revisit-after" content="7 days">
     <meta name="keywords" content="RBE,TVP,TYM,Resource Based Economy,Social Media,">
     <meta name="author" content="Robert Kessler">
@@ -94,40 +95,37 @@
                         <li class="hidden-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
                                                  title="Other Users"><i class="fa fa-2x fa-users green-text"></i></a>
                         </li>
-                        <li class="hidden-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
-                                                 title="Skills & Interests"><i class="fa fa-2x fa-tags green-text"></i></a>
-                        </li>
-                        <li class="hidden-xs"><a href="{% url 'language_overview' '' %}" class="fa-nav-adjust"
-                                                 title="Languages"><i class="fa fa-2x fa-language green-text"></i></a>
-                        </li>
-                        <li class="hidden-xs"><a href="{% url 'associated_overview' %}" class="fa-nav-adjust"
-                                                 title="Associated Services"><i class="fa fa-2x fa-puzzle-piece green-text"></i></a>
-                        </li>
-                        <li class="hidden-xs"><a href="{% url 'metrics' %}" class="fa-nav-adjust"
-                                                 title="Metrics"><i class="fa fa-2x fa-bar-chart green-text"></i></a>
-                        </li>
+
 
                         <!-- visible on mobile in the navigation -->
                         <li class="visible-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
                                                   title="Other Users"><i class="fa fa-users green-text"></i> Other Users</a>
                         </li>
                         <li class="visible-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
-                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i> Skills & Interests</a></li>
+                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i>
+                            Skills</a></li>
                         <li class="visible-xs"><a href="{% url 'language_overview'  '' %}" class="fa-nav-adjust"
-                                                  title="Languages"><i class="fa fa-language green-text"></i> Languages</a></li>
+                                                  title="Languages"><i class="fa fa-language green-text"></i> Languages</a>
+                        </li>
                         <li class="visible-xs"><a href="{% url 'associated_overview' %}" class="fa-nav-adjust"
-                                                 title="Associated Services"><i class="fa fa-puzzle-piece"></i> Associated Services</a>
+                                                  title="Associated Services"><i class="fa fa-puzzle-piece"></i>
+                            Associated Services</a>
+                        <li class="visible-xs"><a href="{% url 'organization-overview' %}" class="fa-nav-adjust"
+                                                  title="Organizations"><i class="fa fa-university"
+                                                                           aria-hidden="true"></i> Organizations</a>
                         </li>
                         <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">
                             <i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                         <li class="visible-xs divider"></li>
-                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px" src="{% static 'img/patreon_nav.svg' %}"></a></li>
+                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px"
+                                                                                            src="{% static 'img/patreon_nav.svg' %}"></a>
+                        </li>
                         <li class="visible-xs divider"></li>
                         <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
                         </li>
                         <li class="visible-xs" id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                         <li class="visible-xs divider"></li>
-                        {% if user.is_superuser  %}
+                        {% if user.is_superuser %}
                             <li class="visible-xs"><a href="{% url 'admin:index' %}">Admin</a></li>
                         {% endif %}
                         <li class="visible-xs"><a href="{% url 'logout' %}">Logout</a></li>
@@ -135,13 +133,40 @@
                         <li id='other' class="hidden-xs dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
                             <ul class="dropdown-menu">
+
+                                <li>
+                                    <a href="{% url 'language_overview' '' %}" class="fa-nav-adjust nav-pad"
+                                       title="Languages">
+                                        <i class="fa fa-language green-text"></i> Languages
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profile_discover' %}" class="fa-nav-adjust nav-pad" title="Skills">
+                                        <i class="fa fa-tags green-text"></i> Skills</a>
+                                </li>
+                                <li><a href="{% url 'associated_overview' %}" class="fa-nav-adjust nav-pad"
+                                       title="Associated Services"><i class="fa fa-puzzle-piece green-text"></i>
+                                    Services</a>
+                                </li>
+                                <li><a href="{% url 'organization-overview' %}" class="fa-nav-adjust nav-pad"
+                                       title="Organizations"><i class="fa fa-university" aria-hidden="true"></i>
+                                    Organizations</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'metrics' %}" class="fa-nav-adjust nav-pad" title="Metrics">
+                                        <i class="fa fa-bar-chart green-text"></i> Metrics
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
                                 <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
                                 <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                                 <li class="divider"></li>
-                                <li><a href="https://patreon.com/sheepsy90"><img height="20px" src="{% static 'img/patreon_nav.svg' %}"></a></li>
+                                <li><a href="https://patreon.com/sheepsy90"><img height="20px"
+                                                                                 src="{% static 'img/patreon_nav.svg' %}"></a>
+                                </li>
                                 <li class="divider"></li>
-                                {% if user.is_superuser  %}
-                                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                                {% if user.is_superuser %}
+                                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
                                 {% endif %}
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
@@ -153,7 +178,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                         <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
-                        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
+                        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i>
+                            Metrics</a></li>
                     </ul>
                 </div>
             {% endif %}

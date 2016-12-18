@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row" style="margin-top: 3em">
+        <p class="col-xs-12 col-md-8 col-md-offset-2" style="font-size: 24px; font-weight: bold">Various
+            Organizations</p>
+    </div>
+    <div class="row" style="margin-top: 1em">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+            <p>This page shows various organizations that are active in the RBE Context.
+                They are added by the RBE Network and undergo certain objective measures.
+                Furthermore the organizations can request to have a member of the RBE Network
+                as editor giving this person the right to change the custom description of the
+                organization and present themselves. If your organization is not listed here
+                please contact us.
+            </p>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 2em">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+            <table class="table" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>Organization</th>
+                    <th>Tags</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for organization in organizations %}
+                    <tr>
+                        <td class="col-xs-6">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
+                            {% else %}
+                                {{ organization.name }}
+                            {% endif %}
+                        </td>
+                        <td class="col-xs-5">{{ organization.display_tags }}</td>
+                        <td class="col-xs-1">
+                            {% if organization.website_url %}
+                                <a href="{{ organization.website_url }}">
+                                    <i class="fa fa-external-link"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

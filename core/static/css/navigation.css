@@ -13,6 +13,12 @@
 .bg-primary-4 {
   background-color: #034500; }
 
+.green {
+  color: #5aac56; }
+
+.red {
+  color: #ff2c27; }
+
 .fg-black {
   color: black; }
 
@@ -30,6 +36,13 @@ hr {
 .clickable:hover {
   background-color: #ccc;
   cursor: pointer; }
+
+.btn-success {
+  background: #5AAC56; }
+
+.nav-pad {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important; }
 
 #header .navbar, footer .navbar {
   border-radius: 0;

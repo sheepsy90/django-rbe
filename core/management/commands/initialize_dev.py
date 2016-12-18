@@ -10,6 +10,8 @@ from django.core.management.base import BaseCommand
 from core.views import create_user
 from location.models import Location
 from messaging.models import Message, MessageStatus
+from organizations.models import Organization, OrganizationTag
+from organizations.views import create_organization
 from profile.models import UserProfile, LanguageSpoken
 from skills.models import SlugPhrase, UserSkill
 
@@ -61,7 +63,7 @@ class Command(BaseCommand):
         # Add some messages
         all_profiles = User.objects.all()
 
-        num_messages = 500
+        num_messages = 50
         bodies = ["Soem body", "Another body", "1 2 3 4", "Giraffen sind cool"]
 
         for idx in range(num_messages):
@@ -79,5 +81,21 @@ class Command(BaseCommand):
                 m.status = MessageStatus.DELETED
 
             m.save()
+
+        organization_names = [
+            ('The Auravana Project(TAP)', 'http://www.auravana.com', ['community', 'systems', 'scientific',
+                                                                        'critical', 'no_money', 'open_source']),
+            ('Buckminster Fuller Institute', 'http://www.bfi.org', ['systems', 'scientific'])
+        ]
+
+        for element in organization_names:
+            ozt = [OrganizationTag.objects.get_or_create(value=e)[0] for e in element[2]]
+
+            org = create_organization(name=element[0], website_url=element[1])
+            org.enabled = True
+            for e in ozt:
+                org.tags.add(e)
+
+            org.save()
 
         self.stdout.write(self.style.SUCCESS('Successfully create a bunch of users!'))

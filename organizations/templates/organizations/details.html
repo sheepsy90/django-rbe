@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load prettify %}
+
+{% block content %}
+    <style>
+        hr {
+            margin-top: 0.3em;
+        }
+
+        .social-circle:hover {
+            background-color: #3B5A9B;
+            cursor: pointer;
+        }
+
+        .social-circle {
+            width: 25px;
+            height: 25px;
+            color: white;
+            background-color: grey;
+            border-radius: 25px;
+            display: inline-block;
+            line-height: 25px;
+            margin: auto 3px;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .organization_answer {
+            padding: 5px 15px 15px;
+            font-style: italic;
+        }
+
+        .organization_question {
+            font-weight: bold;
+        }
+    </style>
+    <div class="container">
+    <div class="row" style="margin-top: 3em">
+        <div class="col-xs-12 col-sm-6 col-sm-offset-1 col-md-8 col-md-offset-1">
+            <p style="font-size: 24px; font-weight: bold">{{ organization.name }}
+                {% if organization.website_url %}
+                    <a style="font-size: 20px" href="{{ organization.website_url }}">
+                        <i class="fa fa-external-link"></i>
+                    </a>
+                {% endif %}
+            </p>
+        </div>
+        {% if False %}
+            <div class="col-xs-12 col-sm-4 col-md-2">
+                {% if view_role == 'Follower' %}
+                    <div class="btn btn-block btn-sm btn-success">Unfollow</div>
+                {% else %}
+                    <div class="btn btn-block btn-sm btn-success">Follow</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row" style="margin-top: 1em">
+        <div class="row" style="margin-top: 1em">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <div>
+                    <span class="social-circle fa fa-question"></span> <span style="font-size: 16px">Assessment</span>
+                    <span style="font-size: 10px">
+                        {% if organization.organizationcheck.last_checked %}
+                            ({{ organization.organizationcheck.last_checked.isoformat }})
+                        {% else %}
+                            (not checked yet)
+                        {% endif %}
+                    </span>
+                </div>
+                <hr>
+                <div style="margin-bottom: 0.25em; padding-left: 4px; font-weight: bold">General parameters</div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="row"><span class="col-xs-9">Useful Content:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.useful_content|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Open Source:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.open_source|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Uses Money:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.uses_money|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Automation:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.automation|pretty_assessment }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="row"><span class="col-xs-9">Project Plan:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.project_plan|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Implementation Oriented:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.implementation_oriented|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Geographic Location:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.geographic_location|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">RBE Network integration:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.rbe_network|pretty_assessment }}</span>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div style="margin-top: 0.5em; padding-left: 4px; font-weight: bold">Economic model</div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="row"><span class="col-xs-9">System based:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.system|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Access based:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.access|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Resource based:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.resource|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Participatory based:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.participatory|pretty_assessment }}</span>
+                    </div>
+                    <div class="row"><span class="col-xs-9">Monetary based:</span><span
+                            class="col-xs-3">{{ organization.organizationcheck.monetary|pretty_assessment }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 2em">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <b>Tags:</b> {{ organization.display_tags }}
+            </div>
+        </div>
+        {% if organization.organizationcheck.note %}
+            <div class="row" style="margin-top: 2em">
+                <div class="col-xs-12 col-md-10 col-md-offset-1">
+                    <b>Note:</b> {{ organization.note }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row" style="margin-top: 2em">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <div>
+                    <span class="social-circle fa fa-question"></span> <span
+                        style="font-size: 16px">Self description</span>
+                    {% if view_role == 'Editor' %}
+                        <a href="{% url 'organization-edit' organization.id %}"><span
+                                class="fa fa-pencil pull-right"></span></a>
+                    {% endif %}
+                </div>
+                <hr>
+                {% if organization.organizationdescription.summary %}
+                    <div class="organization_question">What is your organizations summary?</div>
+                    <p class="organization_answer">{{ organization.organizationdescription.summary }}</p>
+                {% endif %}
+                {% if organization.organizationdescription.value_system %}
+                    <div class="organization_question">What is your organizations value system?</div>
+                    <p class="organization_answer">{{ organization.organizationdescription.value_system }}</p>
+                {% endif %}
+                {% if organization.organizationdescription.decision_making %}
+                    <div class="organization_question">How does your organizations make decisions?</div>
+                    <p class="organization_answer">{{ organization.organizationdescription.decision_making }}</p>
+                {% endif %}
+                {% if organization.organizationdescription.when_join %}
+                    <div class="organization_question">Who should contact your organization?</div>
+                    <p class="organization_answer">{{ organization.organizationdescription.when_join }}</p>
+                {% endif %}
+                {% if organization.organizationdescription.none_available %}
+                    No self description available.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -18,6 +18,14 @@ $rgba-primary-4: rgba(  3, 69,  0,1);
 .bg-primary-3 {background-color: $color-primary-3}
 .bg-primary-4 {background-color: $color-primary-4}
 
+.green {
+  color: $rgba-primary-2
+}
+
+.red {
+  color: #ff2c27;
+}
+
 .fg-black {color: black}
 
 hr {
@@ -39,4 +47,13 @@ hr {
     background-color: #ccc;
     cursor: pointer;
   }
+}
+
+.btn-success {
+  background: $color-primary-2;
+}
+
+.nav-pad {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 }

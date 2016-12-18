@@ -6,6 +6,7 @@ import core.urls
 
 import location.urls
 import messaging.urls
+import organizations.urls
 import public.urls
 import profile.urls
 import skills.urls
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^skills/', include(skills.urls)),
     url(r'^messaging/', include(messaging.urls)),
     url(r'^associated/', include(associated.urls)),
+    url(r'^organizations/', include(organizations.urls)),
 
     # The openid/oauth2 provider urls
     url(r'^', include('oidc_provider.urls', namespace='oidc_provider')),

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'public',
     'messaging',
     'associated',
+    'organizations',
     'oidc_provider'
 ]
 

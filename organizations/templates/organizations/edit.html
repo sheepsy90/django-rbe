@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+<div class="row" style="margin-top: 3em">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div style="font-size: 20px; font-weight: bold">{{ organization.name }}</div>
+        <form style="margin-top: 2em" id="edit-organization" action="{% url "organization-edit" organization.id %}" method="post">
+            {% csrf_token %}
+
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+
+            {% for field in form %}
+                <div style="margin-bottom: 2em" class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                    <div class='row'>
+                        <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="col-sm-12">{{ field }}
+                            {% if field.help_text %}
+                                <span id="help_{{ field.id_for_label }}"
+                                      class="help-block">{{ field.help_text|safe }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <input class="btn btn-success btn-block" type="submit" value="Submit description" style="margin-top: 15px"/>
+        </form>
+    </div>
+</div>
+</div>
+    <script>
+        $(document).ready(function(){
+            $('textarea').each(function(){
+                var $textarea = $(this);
+                var $charshower = $('<div style="width: 100%; text-align:right"></div>');
+
+                $textarea.after($charshower);
+                var update_char_length = function(){
+                    var length = $textarea.val().length;
+                    $charshower.html(length + "/" + $textarea.attr('maxlength'))
+                };
+                $textarea.keydown(update_char_length);
+                update_char_length();
+            });
+        })
+
+    </script>
+{% endblock %}
