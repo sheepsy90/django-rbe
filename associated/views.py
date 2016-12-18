@@ -65,3 +65,4 @@ def associated_service_revoke(request, assoc_id):
         pass
 
     return redirect('associated_overview')
+
