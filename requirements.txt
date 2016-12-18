@@ -14,3 +14,4 @@ python-memcached
 mock
 sendgrid
 pyaml
+werkzeug
