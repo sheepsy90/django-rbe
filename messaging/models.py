@@ -50,7 +50,7 @@ class Message(models.Model):
 
         if last_message.count() > 0:
             last_sent_time = last_message.first().sent_time
-            half_hour_ago = timezone.now() - datetime.timedelta(minutes=30)
+            half_hour_ago = timezone.now() - timezone.timedelta(minutes=30)
             should_inform_recipient = last_sent_time < half_hour_ago
         else:
             should_inform_recipient = True
