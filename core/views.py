@@ -84,6 +84,9 @@ def create_user(username, email, password):
     g, created = Group.objects.get_or_create(name='all_users')
     g.user_set.add(u)
 
+    ve = EmailVerification(user=user, key=uuid.uuid4().hex)
+    ve.save()
+
     return user
 
 
@@ -102,8 +105,7 @@ def register(request, registration_key):
 
             try:
                 sg = SendgridEmailClient()
-                ve, created = EmailVerification.objects.get_or_create(user=user, key=uuid.uuid4().hex)
-                wcm = WelcomeMail(user, ve)
+                wcm = WelcomeMail(user, user.emailverification)
                 sg.send_mail(wcm)
                 rbe_logger.info("Send welcome message to {}".format(email))
             except Exception as e:
