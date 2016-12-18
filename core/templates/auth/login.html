@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
     <style>
@@ -51,7 +53,7 @@
         <div class="col-xs-6 col-xs-offset-3 col-sm-2 col-sm-offset-5 col-md-2 col-md-offset-5">
             <div style="text-align: center">
             <a href="https://patreon.com/sheepsy90" style="margin: 0 auto">
-                <img style="width: 128px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUYObtpuHjr1tWFyuJukJS7eoVuDv3qZ5rI8LSE0JFbNlnVO3l">
+                <img style="width: 128px;" src="{% static 'img/patreon_front.png' %}">
             </a>
                 </div>
 
@@ -61,17 +63,17 @@
     <div class="container">
         <div class="row" style="width: 100%; margin-top: 6em">
             <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 explain-box">
-                <img class="col-xs-5" src="/static/img/location.png">
+                <img class="col-xs-5" src="{% static 'img/location.png' %}">
                 <b>Location</b>
                 <p>This page allows you to see the location of other people advocating for a Resource Based Economy. You are free to share your location if you want to and also can see the profiles of users close to you. This allows better activism and coordination and you might discover people which you didn't know before living closer to you than you think.</p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 explain-box" style="margin-top: 4px">
-                <img class="col-xs-5" src="/static/img/skills.png">
+                <img class="col-xs-5" src="{% static 'img/skills.png' %}">
                 <b>Skills & Abilities</b>
                 <p>Being part of the network allows you to enter skills, abilities and interests you have and in which fields you want to advance yourself. You can find people with similar skills to deepen your knowledge or get help for particular problems. I am sure that some people are also willing provide education on new topics and share their knowledge.</p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 explain-box" style="margin-top: 4px">
-                <img class="col-xs-5" src="/static/img/languages.png">
+                <img class="col-xs-5" src="{% static 'img/languages.png' %}">
                 <b>Languages</b>
                 <p>In order to reach more and more people with new ideas one central concept is to translate materials. If you enter the languages that you speak it gets easier for project coordinators to contact you when specific translations are necessary. The LTI project always needs people who help out.</p>
             </div>
@@ -80,12 +82,12 @@
         <div class="hidden-xs" style="margin-bottom: 2em"></div>
         <div class="row" style="width: 100%;">
              <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 explain-box" style="margin-top: 4px">
-                <img class="col-xs-5" src="/static/img/connect.png">
+                <img class="col-xs-5" src="{% static 'img/connect.png' %}">
                 <b>Connecting</b>
                 <p>Networking is one of the most important parts in activism and in spreading ideas in general. When part of the network you can send message to others and invite them to have a conversation. Learning and talking about ideas and concepts is an important to determine their validity.</p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-md-4 col-md-offset-0 explain-box" style="margin-top: 4px">
-                <img class="col-xs-5" src="/static/img/plugin.png">
+                <img class="col-xs-5" src="{% static 'img/plugin.png' %}">
                 <b>Plugin</b>
                 <p>If you are a software developer, then this page can be used as an OpenId provider which allows you to build additional functionality around it. Use the location data to inform about activism in the region, bring people together on projects with certain skills; the possibilities are endless.</p>
             </div>
@@ -94,7 +96,7 @@
     <div class="container">
         <div class="row" style="margin-top: 1em">
             <div class="col-xs-12">
-                <img width="100%" src="https://scontent-arn2-1.xx.fbcdn.net/t31.0-8/15235806_606285022911742_5836519418608657170_o.jpg"></img>
+                <img width="100%" src="{% static 'img/landing.jpg' %}" />
                 <div style="text-align: center; margin-top: 10px;"><i>"Let the future begin..."</i></div>
             </div>
         </div>

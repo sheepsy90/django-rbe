@@ -15,19 +15,19 @@
 
     <title>RBE Network</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href='/static/css/navigation.css'>
-    <script src="/static/js/global.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href='{% static 'css/navigation.css' %}'>
+    <script src="{% static 'js/global.js' %}"></script>
 
-    <script src="https://cdn.jsdelivr.net/sweetalert2/2.2.6/sweetalert2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href='https://cdn.jsdelivr.net/sweetalert2/2.2.6/sweetalert2.min.css'>
+    <script src="{% static 'js/sweetalert2.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href='{% static 'css/sweetalert2.min.css' %}'>
 
     {% block header %}{% endblock %}
 </head>
@@ -121,7 +121,7 @@
                         <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">
                             <i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
                         <li class="visible-xs divider"></li>
-                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px" src="https://s3.amazonaws.com/patreon_public_assets/patreon_negative.svg"></a></li>
+                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px" src="{% static 'img/patreon_nav.svg' %}"></a></li>
                         <li class="visible-xs divider"></li>
                         <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
                         </li>
@@ -138,7 +138,7 @@
                                 <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
                                 <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
                                 <li class="divider"></li>
-                                <li><a href="https://patreon.com/sheepsy90"><img height="20px" src="https://s3.amazonaws.com/patreon_public_assets/patreon_negative.svg"></a></li>
+                                <li><a href="https://patreon.com/sheepsy90"><img height="20px" src="{% static 'img/patreon_nav.svg' %}"></a></li>
                                 <li class="divider"></li>
                                 {% if user.is_superuser  %}
                                 <li><a href="{% url 'admin:index' %}">Admin</a></li>

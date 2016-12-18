@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="57.331425mm"
+   height="50.537937mm"
+   viewBox="0 0 203.14285 179.07143"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drawing.svg"
+   inkscape:export-filename="/home/rkessler/Desktop/rbe_concepts.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="189.1871"
+     inkscape:cy="28.709934"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="2495"
+     inkscape:window-height="1416"
+     inkscape:window-x="1431"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-55.302398,-309.00342)">
+    <circle
+       style="fill:#8d91da;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4289"
+       cx="158.08887"
+       cy="399.29858"
+       r="85.357887" />
+    <circle
+       style="fill:#91da8d;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4291"
+       cx="218.10631"
+       cy="465.85657"
+       r="21.718279" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:31.50830841px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="159.68414"
+       y="386.88602"
+       id="text4293"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4295"
+         x="159.68414"
+         y="386.88602"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;text-align:center;text-anchor:middle">RBE</tspan><tspan
+         sodipodi:role="line"
+         x="159.68414"
+         y="426.27139"
+         id="tspan4297"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;text-align:center;text-anchor:middle">Concepts</tspan></text>
+    <circle
+       style="fill:#8da8da;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4318"
+       cx="109.90954"
+       cy="472.89627"
+       r="10.892858" />
+    <circle
+       style="fill:#8da8da;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4320"
+       cx="89.373825"
+       cy="345.57483"
+       r="9.2857141" />
+    <circle
+       style="fill:#8da8da;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4322"
+       cx="193.8381"
+       cy="317.53912"
+       r="8.0357141" />
+    <circle
+       style="fill:#787cd3;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4324"
+       cx="68.838112"
+       cy="420.03912"
+       r="13.035714" />
+    <circle
+       style="fill:#787cd3;fill-opacity:1;stroke:#9c9c9c;stroke-opacity:1"
+       id="path4326"
+       cx="246.51668"
+       cy="386.28912"
+       r="11.428572" />
+  </g>
+</svg>
