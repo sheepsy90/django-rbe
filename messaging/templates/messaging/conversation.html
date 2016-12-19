@@ -19,7 +19,7 @@
             <div class="col-xs-12 col-sm-8 col-md-9">
                         <div class="panel {% if error_message %}panel-danger{% else %}panel-success{% endif %}">
                             <div class="panel-heading" id="accordion">
-                                <span class="glyphicon glyphicon-comment"></span> Chat
+                                <span class="fa fa-comment-o"></span> Chat
 
                                 <span class="pull-right">
                                     {% if error_message %}
@@ -51,7 +51,7 @@
                                                                 {% elif message.status == 0%}
                                                                     <span id="status" class="fa fa-envelope"></span>
                                                                 {% endif %}
-                                                                <span class="glyphicon glyphicon-time"></span>{{ message.sent_time }}
+                                                                <span class="fa fa-clock-o"></span> {{ message.sent_time }}
                                                             </small>
                                                             <strong class="pull-right primary-font">
                                                                 {% if message.sender == request.user %}You{% else %}

@@ -17,7 +17,7 @@ from skills.view_obj import CapabilityBreakdown
 def discover(request):
     try:
         rc = RequestContext(request)
-        rc['all_objects'] = SlugPhrase.objects.all().annotate(object_count=Count('userskill')).order_by('-object_count')[:25]
+        rc['all_objects'] = SlugPhrase.objects.all().annotate(object_count=Count('userskill')).order_by('-object_count')[:50]
         return render_to_response('discover.html', rc)
     except Exception as e:
         rbe_logger.exception(e)
