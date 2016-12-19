@@ -36,7 +36,7 @@
                     {% for organization in element.organizations %}
                     <tr>
                         <td class="col-xs-6">
-                            <a href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
+                            <a target='_blank' href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
                         </td>
                         <td class="col-xs-5">{{ organization.display_tags }}</td>
                         <td class="col-xs-1">

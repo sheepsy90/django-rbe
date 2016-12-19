@@ -39,7 +39,7 @@
         <div class="col-xs-12 col-sm-6 col-sm-offset-1 col-md-8 col-md-offset-1">
             <p style="font-size: 24px; font-weight: bold">{{ organization.name }}
                 {% if organization.website_url %}
-                    <a style="font-size: 20px" href="{{ organization.website_url }}">
+                    <a target='_blank' style="font-size: 20px" href="{{ organization.website_url }}">
                         <i class="fa fa-external-link"></i>
                     </a>
                 {% endif %}
