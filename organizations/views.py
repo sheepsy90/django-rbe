@@ -6,11 +6,15 @@ from django.shortcuts import render, redirect
 
 from library.log import rbe_logger
 from organizations.forms import OrganizationDescriptionForm
-from organizations.models import Organization, OrganizationUser, OrganizationDescription, OrganizationCheck
+from organizations.models import Organization, OrganizationUser, OrganizationDescription, OrganizationCheck, \
+    OrganizationCategory
 
 
 def create_organization(name, website_url):
-    org = Organization(name=name, website_url=website_url)
+    org_cat, created = OrganizationCategory.objects.get_or_create(order=1, category_name='Other')
+    org_cat.save()
+
+    org = Organization(category=org_cat, name=name, website_url=website_url)
     org.save()
 
     od = OrganizationDescription(organization=org)
@@ -23,13 +27,17 @@ def create_organization(name, website_url):
 
 
 def overview(request):
+    organizations_categories = OrganizationCategory.objects.all().order_by('order')
     context = {
-        'organizations': Organization.objects.filter(enabled=True).order_by('name')
+        'categories': [
+            {
+                'category_name': c.category_name,
+                'organizations': Organization.objects.filter(category=c, enabled=True).order_by('name')
+            } for c in organizations_categories]
     }
     return render(request, 'organizations/overview.html', context)
 
 
-@login_required
 def details(request, organization_id):
     """ Shows the details of an organization """
     try:
@@ -37,8 +45,12 @@ def details(request, organization_id):
     except Organization.DoesNotExist:
         return render(request, 'general/error_page.html')
 
-    ou = OrganizationUser.objects.filter(user=request.user, organization=organization)
-    view_role = ou.first().level if ou.exists() else None
+    if request.user.is_authenticated():
+        ou = OrganizationUser.objects.filter(user=request.user, organization=organization)
+        view_role = ou.first().level if ou.exists() else None
+    else:
+        view_role = None
+
     context = {
         'view_role': view_role,
         'organization': organization

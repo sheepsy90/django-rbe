@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from core.models import EmailVerification
 from library.mail.SendgridEmailClient import SendgridEmailClient
 from library.mail.VerifyMail import VerifyMail
-from organizations.models import OrganizationTag
+from organizations.models import OrganizationTag, Organization
 from organizations.views import create_organization
 
 initial_orgs = [
@@ -119,6 +119,8 @@ class Command(BaseCommand):
     help = "creates the initial set of organizations"
 
     def handle(self, *args, **options):
+        Organization.objects.all().delete()
+
         for element in initial_orgs:
             ozt = [OrganizationTag.objects.get_or_create(value=e)[0] for e in element[2]]
 

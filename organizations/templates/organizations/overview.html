@@ -11,9 +11,15 @@
                 They are added by the RBE Network and undergo certain objective measures.
                 Furthermore the organizations can request to have a member of the RBE Network
                 as editor giving this person the right to change the custom description of the
-                organization and present themselves. To see the details of the organization
-                please log in. If your organization is not listed here please contact us.
+                organization and present themselves. If your organization is not listed
+                here please contact us.
             </p>
+        </div>
+    </div>
+    {% for element in categories %}
+    <div class="row" style="margin-top: 2em">
+        <div class="col-xs-12 col-md-8 col-md-offset-2" style="font-size: 20px">
+            <i class="fa fa-angle-double-right"></i> {{ element.category_name }}
         </div>
     </div>
     <div class="row" style="margin-top: 2em">
@@ -21,20 +27,16 @@
             <table class="table" style="width: 100%">
                 <thead>
                 <tr>
-                    <th>Organization</th>
-                    <th>Tags</th>
-                    <th>Link</th>
+                    <th style="font-size: 14px">Name</th>
+                    <th style="font-size: 14px">Tags</th>
+                    <th style="font-size: 14px">Link</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for organization in organizations %}
+                    {% for organization in element.organizations %}
                     <tr>
                         <td class="col-xs-6">
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
-                            {% else %}
-                                {{ organization.name }}
-                            {% endif %}
+                            <a href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
                         </td>
                         <td class="col-xs-5">{{ organization.display_tags }}</td>
                         <td class="col-xs-1">
@@ -50,5 +52,6 @@
             </table>
         </div>
     </div>
+    {% endfor %}
 {% endblock %}
 

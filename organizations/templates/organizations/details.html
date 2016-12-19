@@ -137,7 +137,7 @@
                 <div>
                     <span class="social-circle fa fa-question"></span> <span
                         style="font-size: 16px">Self description</span>
-                    {% if view_role == 'Editor' %}
+                    {% if user.is_authenticated and view_role == 'Editor' %}
                         <a href="{% url 'organization-edit' organization.id %}"><span
                                 class="fa fa-pencil pull-right"></span></a>
                     {% endif %}

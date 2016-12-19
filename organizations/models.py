@@ -33,8 +33,17 @@ class OrganizationTag(models.Model):
         return self.value
 
 
+class OrganizationCategory(models.Model):
+    category_name = models.CharField(max_length=512)
+    order = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.category_name
+
+
 class Organization(models.Model):
     """ The model representing an organization """
+    category = models.ForeignKey(OrganizationCategory, null=True)
     name = models.CharField(max_length=256)
     website_url = models.CharField(max_length=255, blank=True, null=True)
     contact_email = models.CharField(max_length=255, default='', blank=True, null=True)
