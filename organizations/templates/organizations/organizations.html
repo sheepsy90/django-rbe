@@ -31,7 +31,7 @@
                     {% for organization in organizations %}
                     <tr>
                         <td class="col-xs-1 hidden-xs">
-                            <img style="height: 48px; width: 48px; border: 1px solid #cce;" src="{{ entry.organization.logo_url|default:'http://placehold.it/50x50' }}">
+                            <img style="height: 48px; width: 48px; border: 1px solid #cce;" src="{{ organization.logo_url|default:'http://placehold.it/50x50' }}">
                         </td>
                         <td class="col-xs-5">
                             <a target='_blank' href="{% url 'organization-details' organization.id %}">{{ organization.name }}</a>
