@@ -56,7 +56,7 @@ def login(request):
                 djauth.login(request, user)
                 next_redirect = request.POST.get('next')
                 if not next_redirect:
-                    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': request.user.id}))
+                    return HttpResponseRedirect(reverse('organization-overview'))
                 else:
                     return HttpResponseRedirect(next_redirect)
 
