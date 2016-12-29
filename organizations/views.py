@@ -29,7 +29,7 @@ def _create_organization(name, website_url):
 
 
 def overview(request):
-    op = OrganizationPost.objects.filter(organization__enabled=True).order_by('-created')[0:10]
+    op = OrganizationPost.objects.filter(organization__enabled=True).order_by('-created')#[0:10]
     context = {
         'organization_posts': op
     }
