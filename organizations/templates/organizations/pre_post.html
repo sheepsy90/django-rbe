@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 3em">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+            {%  if not organizations %}
+                <h4>Sorry, there are no organizations you are an editor of!</h4>
+            {% else %}
+                <table class="table">
+                {% for organization in organizations %}
+                    <tr>
+                    <td>{{ organization.name }}</td>
+                    <td><a href="{% url 'organization-post' organization.id %}">Post for this organization</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,9 @@
 from __future__ import  unicode_literals
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 ROLE_CHOICES = [
     ('Editor', 'Editor'),
@@ -10,18 +13,12 @@ ROLE_CHOICES = [
 """
 The different roles have different rights and responsibilities.
 
-Admin: Someone from the RBE Network
-        - Changes organization details
-        - Changes organization checks
-
 Editor: Someone from the organization
         - Changes organization description
         - Allows people to become editors and allows members
         - Can post on the activity feed
 
-Member: Someone who participates in an organization
 Follower: Someone who is interested in an organization
-
 """
 
 
@@ -33,18 +30,10 @@ class OrganizationTag(models.Model):
         return self.value
 
 
-class OrganizationCategory(models.Model):
-    category_name = models.CharField(max_length=512)
-    order = models.IntegerField(default=0)
-
-    def __unicode__(self):
-        return self.category_name
-
-
 class Organization(models.Model):
     """ The model representing an organization """
-    category = models.ForeignKey(OrganizationCategory, null=True)
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
+    logo_url = models.URLField(blank=True, null=True)
     website_url = models.CharField(max_length=255, blank=True, null=True)
     contact_email = models.CharField(max_length=255, default='', blank=True, null=True)
     enabled = models.BooleanField(default=False, help_text="Whether they are visible on the page.")
@@ -56,6 +45,20 @@ class Organization(models.Model):
 
     def __unicode__(self):
         return "{}, enable={}".format(self.name, self.enabled)
+
+    @property
+    def can_post(self):
+        """ An organization can post every two days """
+        post_delay = timezone.now() - timezone.timedelta(hours=settings.POSTING_TIMEOUT_HOURS)
+        return not OrganizationPost.objects.filter(organization=self, created__gte=post_delay).exists()
+
+
+class OrganizationPost(models.Model):
+    """ Model of a post by the organization """
+    organization = models.ForeignKey(Organization)
+    content = models.TextField(max_length=2000)
+    created = models.DateTimeField()
+    author = models.ForeignKey(User)
 
 
 class OrganizationDescription(models.Model):

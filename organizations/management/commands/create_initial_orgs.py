@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from core.models import EmailVerification
 from library.mail.SendgridEmailClient import SendgridEmailClient
 from library.mail.VerifyMail import VerifyMail
-from organizations.models import OrganizationTag, Organization
+from organizations.models import OrganizationTag, Organization, OrganizationCategory
 from organizations.views import create_organization
 
 initial_orgs = [
@@ -130,5 +130,7 @@ class Command(BaseCommand):
                 org.tags.add(e)
 
             org.save()
+
+
 
 

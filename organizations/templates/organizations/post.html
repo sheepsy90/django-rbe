@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 2em">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+
+            {% if error %}
+                {% if error == 'not_an_editor' %}
+                    <h4>Sorry - you are not an editor for this organization!</h4>
+                {% elif error == 'organization_not_found' %}
+                    <h4>Sorry - the organization doesn't exists!</h4>
+                {% else %}
+                    <h4>Sorry - something went wrong when posting for the organization!</h4>
+                {% endif %}
+            {% else %}
+                <form style="margin-top: 2em" id="post-organization" action="{% url "organization-post" organization.id %}" method="post">
+                    {% csrf_token %}
+                    <h4 style="font-weight: 600; text-align: center; width: 100%" >{{ organization.name }}</h4>
+
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+
+                    {% for field in form %}
+                        <div style="margin-bottom: 2em" class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="alert alert-info" role="alert"><strong>Heads up!</strong> The date and time as well as your name will be added to the post.</div>
+                    <input class="btn btn-success btn-block" type="submit" value="Submit post" style="margin-top: 15px"/>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('textarea').each(function(){
+            var $textarea = $(this);
+            var $charshower = $('<div style="width: 100%; text-align:right"></div>');
+
+            $textarea.after($charshower);
+            var update_char_length = function(){
+                var length = $textarea.val().length;
+                $charshower.html(length + "/" + $textarea.attr('maxlength'))
+            };
+            $textarea.keydown(update_char_length);
+            update_char_length();
+        });
+    })
+</script>
+{% endblock %}

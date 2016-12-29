@@ -173,6 +173,9 @@ SENDGRID_API_KEY = None
 GOOGLE_ANALYTICS_ID = None
 DEFAULT_FROM_EMAIL = None
 
+POSTING_TIMEOUT_HOURS = 24
+ADMIN_EMAIL = 'rbe.heleska@gmail.com'
+
 # Overwrite some of the properties to production parameters
 try:
     from .production_settings import *

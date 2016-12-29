@@ -1,20 +1,22 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from library.log import rbe_logger
-from organizations.forms import OrganizationDescriptionForm
+from library.mail.SendgridEmailClient import SendgridEmailClient
+from organizations.forms import OrganizationDescriptionForm, OrganizationCreateForm, OrganizationPostForm
+from organizations.mail import OrganizationCreateNotification
 from organizations.models import Organization, OrganizationUser, OrganizationDescription, OrganizationCheck, \
-    OrganizationCategory
+     OrganizationPost, ROLE_CHOICES
 
 
-def create_organization(name, website_url):
-    org_cat, created = OrganizationCategory.objects.get_or_create(order=1, category_name='Other')
-    org_cat.save()
-
-    org = Organization(category=org_cat, name=name, website_url=website_url)
+def _create_organization(name, website_url):
+    org = Organization(name=name, website_url=website_url)
     org.save()
 
     od = OrganizationDescription(organization=org)
@@ -27,15 +29,20 @@ def create_organization(name, website_url):
 
 
 def overview(request):
-    organizations_categories = OrganizationCategory.objects.all().order_by('order')
+    op = OrganizationPost.objects.filter(organization__enabled=True).order_by('-created')[0:10]
     context = {
-        'categories': [
-            {
-                'category_name': c.category_name,
-                'organizations': Organization.objects.filter(category=c, enabled=True).order_by('name')
-            } for c in organizations_categories]
+        'organization_posts': op
     }
+
     return render(request, 'organizations/overview.html', context)
+
+
+def organizations(request):
+    organizations = Organization.objects.filter(enabled=True).order_by('name')
+    context = {
+        'organizations': organizations
+    }
+    return render(request, 'organizations/organizations.html', context)
 
 
 def details(request, organization_id):
@@ -88,3 +95,79 @@ def edit(request, organization_id):
         'form': form,
         'organization': organization
     })
+
+
+@login_required
+def create_organization(request):
+    """ Lets a user create an organization """
+
+    if request.method == 'POST':
+        form = OrganizationCreateForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            website_url = form.cleaned_data['website']
+            contact_email = form.cleaned_data['contact_email']
+
+            organization = _create_organization(name, website_url)
+            organization.enabled = False
+            organization.contact_email = contact_email
+            organization.save()
+
+            ou = OrganizationUser(organization=organization, level=ROLE_CHOICES[0][0], user=request.user)
+            ou.save()
+
+            try:
+                sec = SendgridEmailClient()
+                sec.send_mail(OrganizationCreateNotification(organization))
+            except Exception as e:
+                rbe_logger.exception(e)
+
+            return render(request, 'organizations/create.html', {'form': None, 'status': 'created'})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = OrganizationCreateForm()
+
+    return render(request, 'organizations/create.html', {'form': form})
+
+
+@login_required
+def create_post(request, organization_id):
+    """ Lets a user create an post """
+    if organization_id == '':
+        org_list = OrganizationUser.objects.filter(user=request.user, level=ROLE_CHOICES[0][0]).values_list('organization', flat=True)
+        org_list = Organization.objects.filter(id__in=org_list)
+        return render(request, 'organizations/pre_post.html', {'organizations': org_list})
+
+    try:
+        organization = Organization.objects.get(id=organization_id)
+    except Organization.DoesNotExist:
+        return render(request, 'organizations/post.html', {'form': None, 'error': 'organization_not_found'})
+
+    ou_qs = OrganizationUser.objects.filter(organization=organization, user=request.user, level=ROLE_CHOICES[0][0])
+
+    # Check if the user is allowed to post as a representative for an organization
+    if ou_qs.exists():
+        if request.method == 'POST':
+            form = OrganizationPostForm(request.POST)
+            if form.is_valid():
+
+                if not organization.can_post:
+                    form.add_error(None, "Organization posted recently - can only post every {} hours!".format(settings.POSTING_TIMEOUT_HOURS))
+                elif not organization.enabled:
+                    form.add_error(None, "Organization not enabled - cannot post!")
+                else:
+                    content = form.cleaned_data['content']
+                    user = request.user
+                    current_time = timezone.now()
+
+                    op = OrganizationPost(organization=organization, content=content, author=user, created=current_time)
+                    op.save()
+
+                    return redirect('organization-overview')
+        else:
+            form = OrganizationPostForm()
+
+        return render(request, 'organizations/post.html', {'form': form, 'organization': organization})
+    else:
+        return render(request, 'organizations/post.html', {'form': None, 'error': 'not_an_editor'})

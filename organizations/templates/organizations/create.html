@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 3em">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+            {% if status %}
+                <div class="alert alert-success" role="alert"><strong>Thanks!</strong> The organization was submitted and will be enabled after a quick check.
+                    <p>We will just make sure that it has something to do with a Resource Based Economy in a wider sense.<br>
+                        You will receive an email when the organization is enabled and you can edit the information.
+                    </p>
+                </div>
+            {% else %}
+                <form style="margin-top: 2em" id="create-organization" action="{% url "organization-create" %}" method="post">
+                    {% csrf_token %}
+
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+
+                    {% for field in form %}
+                        <div style="margin-bottom: 2em" class="fieldWrapper {% if field.errors %}errors{% endif %}">
+                            <div class='row'>
+                                <label class="col-sm-12" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="col-sm-12">{{ field }}
+                                    {% if field.help_text %}
+                                        <span id="help_{{ field.id_for_label }}"
+                                              class="help-block">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="alert alert-info" role="alert"><strong>Heads up!</strong> You can add information to the organization once it is created and enabled.</div>
+                    <input class="btn btn-success btn-block" type="submit" value="Create organization" style="margin-top: 15px"/>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
