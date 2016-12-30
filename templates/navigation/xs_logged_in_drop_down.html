@@ -1,0 +1,94 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+
+<li id='other' class="visible-xs dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left: -15px">
+        <div style="margin-left: -30px; display: inline; font-size: 12px;">
+          <i style="position: relative; top: -7px; left: 29px;" class="fa fa-tags"></i>
+          <i style="position: relative; top: -7px; left: 29px;" class="fa fa-globe"></i>
+          <i style="position: relative; top: 5px;" class="fa fa-language"></i>
+          <i style="position: relative; top: 5px;" class="fa fa-users"></i>
+        </div> Areas<b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="{% url 'world_map' %}" class="fa-nav-adjust nav-pad" title="World Map">
+                <i class="fa fa-globe green-text"></i> World Map
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'profile-overview' %}" class="fa-nav-adjust nav-pad" title="Other Users">
+                <i class="fa fa-users green-text"></i> Other users
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'language_overview' '' %}" class="fa-nav-adjust nav-pad" title="Languages">
+                <i class="fa fa-language green-text"></i> Languages
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'profile_discover' %}" class="fa-nav-adjust nav-pad" title="Skills">
+                <i class="fa fa-tags green-text"></i> Skills</a>
+        </li>
+    </ul>
+</li>
+
+<li id='other' class="visible-xs dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+<i class="fa fa-puzzle-piece green-text"></i>
+        Integration<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+
+
+        <li><a href="{% url 'associated_overview' %}" class="fa-nav-adjust nav-pad"
+               title="Associated Services"><i class="fa fa-puzzle-piece green-text"></i>
+            Services</a>
+        </li>
+        <li><a href="{% url 'organization-overview' %}" class="fa-nav-adjust nav-pad"
+               title="Organizations"><i class="fa fa-university" aria-hidden="true"></i>
+            Organizations</a>
+        </li>
+        <li>
+            <a href="{% url 'metrics' %}" class="fa-nav-adjust nav-pad" title="Metrics">
+                <i class="fa fa-bar-chart green-text"></i> Metrics
+            </a>
+        </li>
+        <li class="divider"></li>
+                <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
+
+    </ul>
+</li>
+
+
+<li id='other2' class="visible-xs dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle-o"></i> Profile<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="{% url 'profile' user.id %}" class="fa-nav-adjust nav-pad" title="My profile">
+                <i class="fa fa-user-circle-o"></i> My profile
+            </a>
+        </li>
+    <li class="hidden-xs"><a href="{% url 'messages' %}" class="fa-nav-adjust nav-pad" title="Messages"><i
+        class="fa fa-envelope green-text"></i> Messages
+    {% if message_context %}
+        {% if message_context.unread_count %}
+            <span class="badge">{{ message_context.unread_count }}</span>
+        {% endif %}
+    {% endif %}</a>
+</li>
+        <li id='faq'><a href="{% url 'faq' %}"><i class="fa fa-question-circle-o green-text"></i> FAQ</a></li>
+
+        <li class="divider"></li>
+        <li>
+            <a href="https://patreon.com/sheepsy90" class="fa-nav-adjust nav-pad">
+                <img height="16px" src="{% static 'img/patreon_nav.svg' %}"/>
+            </a>
+        </li>
+        <li><a href="{% url 'logout' %}" class="fa-nav-adjust nav-pad"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+        {% if user.is_superuser %}
+            <li class="divider"></li>
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+        {% endif %}
+    </ul>
+</li>

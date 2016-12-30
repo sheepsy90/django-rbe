@@ -1,0 +1,16 @@
+<li id='login'><a href="{% url 'login' %}"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
+
+<li id='other' class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Info<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
+        <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
+        <li class="divider"></li>
+        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
+        <li id='organizations'><a href="{% url 'organization-overview' %}">
+            <i class="fa fa-university green-text"></i> Organizations</a>
+        </li>
+        <li class="divider"></li>
+        <li id='faq'><a href="{% url 'faq' %}"><i class="fa fa-question-circle-o green-text"></i> FAQ</a></li>
+    </ul>
+</li>

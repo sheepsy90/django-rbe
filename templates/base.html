@@ -10,7 +10,7 @@
     <meta name="description"
           content="The main purpose of this page is to connect people who consider themselves advocates for a Resource Based Economy or certain aspects of it.">
     <meta name="revisit-after" content="7 days">
-    <meta name="keywords" content="RBE,TVP,TYM,Resource Based Economy,Social Media,">
+    <meta name="keywords" content="RBE,Auravana Project,Futurist Playground,TVP,TZM,Resource Based Economy,Social Media,">
     <meta name="author" content="Robert Kessler">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
@@ -38,153 +38,31 @@
 <div id="header">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <!-- The navbar -->
             <div class="navbar-header">
                 {% if user.is_authenticated %}
-                    <div class="hidden-sm hidden-md hidden-lg" style="display: inline;">
-                        <a href="{% url 'profile' user.id %}" class="btn" title="My profile"><i
-                                class="fa fa-2x fa-user-circle-o green-text"></i></a>
-                        <a href="{% url 'world_map' %}" class="btn" title="World Map"><i
-                                class="fa fa-2x fa-globe green-text"></i></a>
-                        <a href="{% url 'messages' %}" class="btn" title="Messages"><i
-                                class="fa fa-2x fa-envelope green-text"></i>  {% if message_context %}
-                            {% if message_context.unread_count %}
-                                <span class="badge">{{ message_context.unread_count }}</span>
-                            {% endif %}
-                        {% endif %}</a>
-                    </div>
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand hidden-xs" href="{% url 'index' %}">RBE Network</a>
+                    {% include 'navigation/xs_logged_in_icon_bar.html' %}
+                    <a class="navbar-brand hidden-xs" href="{% url 'organization-overview' %}">RBE Network</a>
                 {% else %}
-                    <a class="navbar-brand" href="{% url 'index' %}">RBE Network</a>
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                    <a class="navbar-brand" href="{% url 'organization-overview' %}">RBE Network</a>
                 {% endif %}
-
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
 
-
-            {% if user.is_authenticated %}
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="hidden-xs"><a href="{% url 'profile' user.id %}" class="fa-nav-adjust"
-                                                 title="My profile"><i class="fa fa-2x fa-user-circle-o green-text"></i></a>
-                        </li>
-                        <li class="hidden-xs"><a href="{% url 'messages' %}" class="fa-nav-adjust" title="Messages"><i
-                                class="fa fa-2x fa-envelope green-text"></i>
-                            {% if message_context %}
-                                {% if message_context.unread_count %}
-                                    <span class="badge">{{ message_context.unread_count }}</span>
-                                {% endif %}
-                            {% endif %}</a>
-                        </li>
-                        <li class="hidden-xs"><a href="{% url 'world_map' %}" class="fa-nav-adjust" title="World Map"><i
-                                class="fa fa-2x fa-globe green-text"></i></a></li>
-                        <li class="hidden-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
-                                                 title="Other Users"><i class="fa fa-2x fa-users green-text"></i></a>
-                        </li>
-
-
-                        <!-- visible on mobile in the navigation -->
-                        <li class="visible-xs"><a href="{% url 'profile-overview' %}" class="fa-nav-adjust"
-                                                  title="Other Users"><i class="fa fa-users green-text"></i> Other Users</a>
-                        </li>
-                        <li class="visible-xs"><a href="{% url 'profile_discover' %}" class="fa-nav-adjust"
-                                                  title="Skills & Interests"><i class="fa fa-tags green-text"></i>
-                            Skills</a></li>
-                        <li class="visible-xs"><a href="{% url 'language_overview'  '' %}" class="fa-nav-adjust"
-                                                  title="Languages"><i class="fa fa-language green-text"></i> Languages</a>
-                        </li>
-                        <li class="visible-xs"><a href="{% url 'associated_overview' %}" class="fa-nav-adjust"
-                                                  title="Associated Services"><i class="fa fa-puzzle-piece"></i>
-                            Associated Services</a>
-                        <li class="visible-xs"><a href="{% url 'organization-overview' %}" class="fa-nav-adjust"
-                                                  title="Organizations"><i class="fa fa-university"
-                                                                           aria-hidden="true"></i> Organizations</a>
-                        </li>
-                        <li class="visible-xs" id='metrics'><a href="{% url 'metrics' %}">
-                            <i class="fa fa-bar-chart green-text"></i> Metrics</a></li>
-                        <li class="visible-xs divider"></li>
-                        <li class="visible-xs"><a href="https://patreon.com/sheepsy90"><img height="20px"
-                                                                                            src="{% static 'img/patreon_nav.svg' %}"></a>
-                        </li>
-                        <li class="visible-xs divider"></li>
-                        <li class="visible-xs" id='developer-info'><a href="{% url 'developer' %}">Developer Info</a>
-                        </li>
-                        <li class="visible-xs" id='general_info'><a href="{% url 'information' %}">General Info</a></li>
-                        <li class="visible-xs divider"></li>
-                        {% if user.is_superuser %}
-                            <li class="visible-xs"><a href="{% url 'admin:index' %}">Admin</a></li>
-                        {% endif %}
-                        <li class="visible-xs"><a href="{% url 'logout' %}">Logout</a></li>
-
-                        <li id='other' class="hidden-xs dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-
-                                <li>
-                                    <a href="{% url 'language_overview' '' %}" class="fa-nav-adjust nav-pad"
-                                       title="Languages">
-                                        <i class="fa fa-language green-text"></i> Languages
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'profile_discover' %}" class="fa-nav-adjust nav-pad" title="Skills">
-                                        <i class="fa fa-tags green-text"></i> Skills</a>
-                                </li>
-                                <li><a href="{% url 'associated_overview' %}" class="fa-nav-adjust nav-pad"
-                                       title="Associated Services"><i class="fa fa-puzzle-piece green-text"></i>
-                                    Services</a>
-                                </li>
-                                <li><a href="{% url 'organization-overview' %}" class="fa-nav-adjust nav-pad"
-                                       title="Organizations"><i class="fa fa-university" aria-hidden="true"></i>
-                                    Organizations</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'metrics' %}" class="fa-nav-adjust nav-pad" title="Metrics">
-                                        <i class="fa fa-bar-chart green-text"></i> Metrics
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li id='developer-info'><a href="{% url 'developer' %}">Developer Info</a></li>
-                                <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
-                                <li class="divider"></li>
-                                <li><a href="https://patreon.com/sheepsy90"><img height="20px"
-                                                                                 src="{% static 'img/patreon_nav.svg' %}"></a>
-                                </li>
-                                <li class="divider"></li>
-                                {% if user.is_superuser %}
-                                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
-                                {% endif %}
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            {% else %}
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li id='general_info'><a href="{% url 'information' %}">General Info</a></li>
-                        <li id='developer_info'><a href="{% url 'developer' %}">Developer Info</a></li>
-                        <li id='metrics'><a href="{% url 'metrics' %}"><i class="fa fa-bar-chart green-text"></i>
-                            Metrics</a></li>
-                        <li id='organizations'><a href="{% url 'organization-overview' %}"><i class="fa fa-university green-text"></i>
-                            Organizations</a></li>
-                    </ul>
-                </div>
-            {% endif %}
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                        {% include 'navigation/large_logged_in.html' %}
+                        {% include 'navigation/xs_logged_in_drop_down.html' %}
+                    {% else %}
+                        {% include 'navigation/nav_not_logged_in.html' %}
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
     {% csrf_token %}
