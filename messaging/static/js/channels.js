@@ -2,8 +2,8 @@
  * Created by rkessler on 2017-01-31.
  */
 
-function connect_socket(uri, onopen) {
-    var socket = new ReconnectingWebSocket("ws://" + window.location.host + uri);
+function connect_socket(protocol, uri, port, onopen) {
+    var socket = new ReconnectingWebSocket(protocol + "://" + window.location.host + ':' + port + uri);
     var message_handlers = {};
 
     socket.onopen = function() {
