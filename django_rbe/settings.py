@@ -30,6 +30,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# In settings.py
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_rabbitmq.RabbitmqChannelLayer',
+        # Change according to your project layout:
+        'ROUTING': 'messaging.routing.channel_routing',
+        'CONFIG': {
+            'url': 'amqp://guest:guest@localhost:5672/',
+        },
+    },
+}
 
 # Application definition
 
@@ -48,7 +59,8 @@ INSTALLED_APPS = [
     'messaging',
     'associated',
     'organizations',
-    'oidc_provider'
+    'oidc_provider',
+    'channels'
 ]
 
 MIDDLEWARE_CLASSES = [

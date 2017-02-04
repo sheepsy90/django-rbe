@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <link rel="stylesheet" type="text/css" href='{% static 'css/conversation.css' %}'>
+    <link rel="stylesheet" type="text/css" href='{% static 'css/chat-sidebar.css' %}'>
+    <script src="{% static 'js/messaging.js' %}"></script>
+    <script src="{% static 'js/channels.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 1em">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <div class="panel {% if error_message %}panel-danger{% else %}panel-success{% endif %}">
+                    <div class="panel-heading" id="accordion">
+                        <span class="fa fa-comment-o"></span> Chat
+                    </div>
+                    <div class="panel-collapse" id="collapseOne">
+                        <div id="chat" class="panel-body">
+                            <ul class="chat">
+                            </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <textarea name="message_text" id="btn-input" class="form-control input-sm" placeholder="Type your message here..." style="width:100%; resize: none" rows="4"></textarea>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success pull-right" style="margin-top: 4px"
+                                        id="btn-chat">Send
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="blueprint" style="display: none">
+        <li class="chat_entry">
+            <div class="chat-body clearfix">
+                <div class="header">
+                    <strong class="pull-right">
+                        <span class="fa fa-clock-o"></span>
+                        <span style="font-size: 10px" class="message_time"></span>
+                    </strong>
+                    <div style="clear: both"></div>
+                </div>
+                <p>
+                    <span style="font-weight: 600" class="message_user"></span>:
+                    <span class="message_text"></span>
+                </p>
+            </div>
+        </li>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var socket_wrapper = connect_socket('/chat/');
+
+            function formatted_now(){
+                var now = new Date();
+
+                var seconds = now.getSeconds();
+                if (seconds < 10){
+                    seconds = '0' + seconds;
+                }
+
+                var hours = now.getHours();
+                if (hours < 10){
+                    hours = '0' + hours;
+                }
+
+                return now.toDateString() + ' ' + hours + ":" + seconds;
+            }
+
+            socket_wrapper.message_handlers.user_joined = function(payload){
+                var $element = $('#blueprint').find('li').clone();
+                $element.find('.message_text').html('User ' + payload.user + ' joined.')
+                $element.find('.message_user').html('ChatRoom')
+                $element.find('.message_time').html(formatted_now())
+
+                $('.chat').prepend($element)
+            };
+
+            socket_wrapper.message_handlers.user_left = function(payload){
+                var $element = $('#blueprint').find('li').clone();
+                $element.find('.message_text').html('User ' + payload.user + ' left.')
+                $element.find('.message_user').html('ChatRoom')
+                $element.find('.message_time').html(formatted_now())
+
+                $('.chat').prepend($element)
+            };
+
+            socket_wrapper.message_handlers.message_received = function(payload){
+                var $element = $('#blueprint').find('li').clone();
+                $element.find('.message_text').html(payload.message)
+                $element.find('.message_user').html(payload.user)
+                $element.find('.message_time').html(formatted_now())
+                $('.chat').prepend($element)
+            };
+
+            $('#btn-chat').click(function(){
+
+                var value = $('#btn-input').val();
+
+                if (value.length != 0){
+                    $('#btn-input').css('border-color', '')
+                    socket_wrapper.socket.send(JSON.stringify({
+                            'type': 'message',
+                            'message': value
+                    }))
+                    $('#btn-input').val('')
+                } else {
+                    $('#btn-input').css('border-color', 'red')
+                }
+            });
+        });
+    </script>
+{% endblock %}

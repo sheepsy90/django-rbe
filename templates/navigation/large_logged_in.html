@@ -71,6 +71,11 @@
                 <i class="fa fa-user-circle-o"></i> My profile
             </a>
         </li>
+        <li>
+            <a href="{% url 'chat' %}" class="fa-nav-adjust nav-pad" title="Chat">
+                <i class="fa fa-comments"></i> Chat
+            </a>
+        </li>
     <li class="hidden-xs"><a href="{% url 'messages' %}" class="fa-nav-adjust nav-pad" title="Messages"><i
         class="fa fa-envelope green-text"></i> Messages
     {% if message_context %}

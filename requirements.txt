@@ -15,3 +15,5 @@ mock
 sendgrid
 pyaml
 werkzeug
+channels
+asgi_rabbitmq

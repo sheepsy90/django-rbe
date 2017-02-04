@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.http.response import JsonResponse, Http404
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.template import RequestContext
 
 from core.models import LastSeen
@@ -26,6 +26,9 @@ def messages(request):
 
     return conversation(request, sender.id)
 
+@login_required()
+def chat(request):
+    return render(request, 'messaging/chat.html', {})
 
 def get_ordered_latest_contact_list(user):
     # TODO add distinct once switching to Postgresql
