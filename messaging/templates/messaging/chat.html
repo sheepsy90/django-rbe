@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href='{% static 'css/conversation.css' %}'>
     <link rel="stylesheet" type="text/css" href='{% static 'css/chat-sidebar.css' %}'>
     <script src="{% static 'js/messaging.js' %}"></script>
+    <script src="{% static 'js/reconnectingwebsocket.js' %}"></script>
     <script src="{% static 'js/channels.js' %}"></script>
 {% endblock %}
 
@@ -22,7 +23,9 @@
                             </ul>
                         </div>
                         <div class="panel-footer">
-                            <textarea name="message_text" id="btn-input" class="form-control input-sm" placeholder="Type your message here..." style="width:100%; resize: none" rows="4"></textarea>
+                            <textarea name="message_text" id="btn-input" class="form-control input-sm"
+                                      placeholder="Type your message here..." style="width:100%; resize: none"
+                                      rows="4"></textarea>
                             <span class="input-group-btn">
                                 <button class="btn btn-success pull-right" style="margin-top: 4px"
                                         id="btn-chat">Send
@@ -44,6 +47,7 @@
                         <span class="fa fa-clock-o"></span>
                         <span style="font-size: 10px" class="message_time"></span>
                     </strong>
+
                     <div style="clear: both"></div>
                 </div>
                 <p>
@@ -53,68 +57,106 @@
             </div>
         </li>
     </div>
+    <div id="socket"></div>
 
     <script>
         $(document).ready(function () {
-            var socket_wrapper = connect_socket('/chat/');
+            // request permission on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+            });
 
-            function formatted_now(){
+            function notify_chat_message(user, message) {
+                if (!Notification) {
+                    alert('Desktop notifications not available in your browser. Try Chromium.');
+                    return;
+                }
+
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+                else {
+                    var notification = new Notification('Notification title', {
+                        icon: 'https://rbe-network.org/static/img/logo.png',
+                        body: user + ": " + message,
+                    });
+                }
+
+            }
+
+            var socket_wrapper = connect_socket('/chat/', function (socket) {
+                $('.chat').empty()
+                $('.chat').prepend('<li>reconnecting</li>')
+            });
+
+            function formatted_now() {
                 var now = new Date();
 
-                var seconds = now.getSeconds();
-                if (seconds < 10){
-                    seconds = '0' + seconds;
+                var minutes = now.getMinutes();
+                if (minutes < 10) {
+                    minutes = '0' + minutes;
                 }
 
                 var hours = now.getHours();
-                if (hours < 10){
+                if (hours < 10) {
                     hours = '0' + hours;
                 }
 
-                return now.toDateString() + ' ' + hours + ":" + seconds;
+                return now.toDateString() + ' ' + hours + ":" + minutes;
             }
 
-            socket_wrapper.message_handlers.user_joined = function(payload){
+            socket_wrapper.on('user_joined', function (payload) {
                 var $element = $('#blueprint').find('li').clone();
-                $element.find('.message_text').html('User ' + payload.user + ' joined.')
-                $element.find('.message_user').html('ChatRoom')
-                $element.find('.message_time').html(formatted_now())
+                $element.find('.message_text').html('User ' + payload.user + ' joined.');
+                $element.find('.message_user').html('ChatRoom');
+                $element.find('.message_time').html(formatted_now());
 
                 $('.chat').prepend($element)
-            };
+            })
 
-            socket_wrapper.message_handlers.user_left = function(payload){
+            socket_wrapper.on('user_left', function (payload) {
                 var $element = $('#blueprint').find('li').clone();
-                $element.find('.message_text').html('User ' + payload.user + ' left.')
-                $element.find('.message_user').html('ChatRoom')
-                $element.find('.message_time').html(formatted_now())
+                $element.find('.message_text').html('User ' + payload.user + ' left.');
+                $element.find('.message_user').html('ChatRoom');
+                $element.find('.message_time').html(formatted_now());
 
                 $('.chat').prepend($element)
-            };
+            });
 
-            socket_wrapper.message_handlers.message_received = function(payload){
+            socket_wrapper.on('message_received', function (payload) {
                 var $element = $('#blueprint').find('li').clone();
                 $element.find('.message_text').html(payload.message)
                 $element.find('.message_user').html(payload.user)
                 $element.find('.message_time').html(formatted_now())
                 $('.chat').prepend($element)
-            };
+                notify_chat_message(payload.user, payload.message);
+            });
 
-            $('#btn-chat').click(function(){
-
+            $('#btn-chat').click(function () {
                 var value = $('#btn-input').val();
 
-                if (value.length != 0){
-                    $('#btn-input').css('border-color', '')
-                    socket_wrapper.socket.send(JSON.stringify({
-                            'type': 'message',
-                            'message': value
-                    }))
-                    $('#btn-input').val('')
+                if (value.length != 0) {
+                    socket_wrapper.send({
+                        'type': 'message',
+                        'message': value
+                    });
+                    $('#btn-input').css('border-color', '').val('');
                 } else {
                     $('#btn-input').css('border-color', 'red')
                 }
             });
+
+
+            {#            function ping_message(){#}
+            {#                console.log('ping')#}
+            {#                window.socket_wrapper.socket.send(JSON.stringify({#}
+            {#                    'type': 'ping'#}
+            {#                }));#}
+            {#                setTimeout(ping_message, 10000)#}
+            {#            }#}
+            {#            ping_message();#}
+
+
         });
     </script>
 {% endblock %}

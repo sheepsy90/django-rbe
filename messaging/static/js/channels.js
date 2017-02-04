@@ -3,7 +3,7 @@
  */
 
 function connect_socket(uri, onopen) {
-    var socket = new WebSocket("ws://" + window.location.host + uri);
+    var socket = new ReconnectingWebSocket("ws://" + window.location.host + uri);
     var message_handlers = {};
 
     socket.onopen = function() {
@@ -17,7 +17,6 @@ function connect_socket(uri, onopen) {
     if (socket.readyState == WebSocket.OPEN) socket.onopen();
 
     socket.onmessage = function(e) {
-
         // Parse server message from JSON
         try {
             var server_content = JSON.parse(e.data);
@@ -30,6 +29,13 @@ function connect_socket(uri, onopen) {
 
     var socket_wrapper = {};
     socket_wrapper.socket = socket;
-    socket_wrapper.message_handlers = message_handlers;
+
+    // Bind a new message handler
+    socket_wrapper.on = function(type, _function){
+        message_handlers[type] = _function;
+    };
+    socket_wrapper.send = function(payload){
+        socket.send(JSON.stringify(payload));
+    };
     return socket_wrapper;
 }

@@ -32,12 +32,19 @@ def ws_message(message):
 
         if payload.get('type', None) == 'message':
             Group("chat-%s" % room).send({
-            "text": json.dumps({
-                'type': 'message_received',
-                'user': message.user.username,
-                'message': payload.get('message')
+                "text": json.dumps({
+                    'type': 'message_received',
+                    'user': message.user.username,
+                    'message': payload.get('message')
+                })
             })
-        })
+        if payload.get('type', None) == 'ping':
+            message.reply_channel.send({
+                "text": json.dumps({
+                    'type': 'pong'
+                })
+            })
+
     except Exception as e:
         print "Exception"
         rbe_logger.exception(e)
