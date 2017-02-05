@@ -29,9 +29,11 @@ def ws_connect(message):
         "text": json.dumps({
             'type': 'user_joined',
             'time': timezone.now().strftime('%Y-%m-%d %H:%M %Z'),
-            'user': message.user.username
+            'user': message.user.username,
+            'user_id': message.user.id
         })
     })
+
 
 @channel_session_user
 def ws_message(message):
@@ -49,6 +51,7 @@ def ws_message(message):
         print "Exception"
         rbe_logger.exception(e)
 
+
 # Connected to websocket.disconnect
 @channel_session_user
 def ws_disconnect(message):
@@ -59,7 +62,8 @@ def ws_disconnect(message):
             "text": json.dumps({
                 'type': 'user_left',
                 'time': timezone.now().strftime('%Y-%m-%d %H:%M %Z'),
-                'user': message.user.username
+                'user': message.user.username,
+                'user_id': message.user.id
             })
         })
 

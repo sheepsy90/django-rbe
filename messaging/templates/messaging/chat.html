@@ -12,7 +12,21 @@
 {% block content %}
     <div class="container">
         <div class="row" style="margin-top: 1em">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+
+            <div class="hidden-xs col-sm-2">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="accordion">
+                        <span class="fa fa-comment-o"></span> Members
+                    </div>
+                    <div class="panel-body">
+                        <div id="online" class="list">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-8">
                 <div class="panel {% if error_message %}panel-danger{% else %}panel-success{% endif %}">
                     <div class="panel-heading" id="accordion">
                         <span class="fa fa-comment-o"></span> Chat
@@ -84,27 +98,17 @@
 
             }
 
-            var socket_wrapper = connect_socket('wss', '/chat/', '8443', function (socket) {
+            var socket_wrapper = connect_socket('ws', '/chat/', '8000', function (socket) {
                 $('.chat').empty()
                 $('.chat').prepend('<li>reconnecting</li>')
             });
 
             socket_wrapper.on('user_joined', function (payload) {
-                var $element = $('#blueprint').find('li').clone();
-                $element.find('.message_text').html('User ' + payload.user + ' joined.');
-                $element.find('.message_user').html('ChatRoom');
-                $element.find('.message_time').html(payload.time);
-
-                $('.chat').prepend($element)
+                $('#online').append("<div id='" + payload.user_id + "'>" + payload.user + "</div>");
             })
 
             socket_wrapper.on('user_left', function (payload) {
-                var $element = $('#blueprint').find('li').clone();
-                $element.find('.message_text').html('User ' + payload.user + ' left.');
-                $element.find('.message_user').html('ChatRoom');
-                $element.find('.message_time').html(payload.time);
-
-                $('.chat').prepend($element)
+                $('#online').find('#' + payload.user_id).remove();
             });
 
             socket_wrapper.on('message_received', function (payload) {
@@ -131,18 +135,6 @@
                     $('#btn-input').css('border-color', 'red')
                 }
             });
-
-
-            {#            function ping_message(){#}
-            {#                console.log('ping')#}
-            {#                window.socket_wrapper.socket.send(JSON.stringify({#}
-            {#                    'type': 'ping'#}
-            {#                }));#}
-            {#                setTimeout(ping_message, 10000)#}
-            {#            }#}
-            {#            ping_message();#}
-
-
         });
     </script>
 {% endblock %}
