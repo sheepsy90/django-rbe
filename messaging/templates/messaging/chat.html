@@ -113,7 +113,9 @@
                 $element.find('.message_user').html(payload.user)
                 $element.find('.message_time').html(payload.sent_time)
                 $('.chat').prepend($element)
-                notify_chat_message(payload.user, payload.message);
+                if (payload.notify) {
+                    notify_chat_message(payload.user, payload.message);
+                }
             });
 
             $('#btn-chat').click(function () {

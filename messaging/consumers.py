@@ -17,7 +17,7 @@ def ws_connect(message):
     cm_qs = ChatMessage.objects.all().order_by('-sent_time')[:30]
 
     # Send the client all old messages
-    x = [cm.as_payload for cm in cm_qs]
+    x = [cm.as_payload(notify=False) for cm in cm_qs]
     x.reverse()
     [message.reply_channel.send(t) for t in x]
 

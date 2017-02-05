@@ -70,13 +70,13 @@ class ChatMessage(models.Model):
     message = models.CharField(max_length=1200, help_text='The actual message text')
     sent_time = models.DateTimeField(blank=True, null=True, help_text='The datetime when the message was sent')
 
-    @property
-    def as_payload(self):
+    def as_payload(self, notify=True):
         return {
             "text": json.dumps({
                 'type': 'message_received',
                 'user': self.author.username,
                 'message': self.message,
+                'notify': notify,
                 'sent_time': self.sent_time.strftime('%Y-%m-%d %H:%M %Z'),
             })
         }
