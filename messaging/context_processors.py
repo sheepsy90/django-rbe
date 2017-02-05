@@ -19,4 +19,3 @@ def languages(request):
         'languages': sorted(LANGUAGES, key=lambda x: x[1])
     }
 
-

@@ -1,4 +1,5 @@
 import datetime
+import json
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -64,4 +65,18 @@ class Message(models.Model):
         return m
 
 
+class ChatMessage(models.Model):
+    author = models.ForeignKey(User, help_text="The user who send the message")
+    message = models.CharField(max_length=1200, help_text='The actual message text')
+    sent_time = models.DateTimeField(blank=True, null=True, help_text='The datetime when the message was sent')
 
+    @property
+    def as_payload(self):
+        return {
+            "text": json.dumps({
+                'type': 'message_received',
+                'user': self.author.username,
+                'message': self.message,
+                'sent_time': self.sent_time.strftime('%Y-%m-%d %H:%M %Z'),
+            })
+        }

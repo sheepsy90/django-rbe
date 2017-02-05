@@ -78,7 +78,7 @@
                 else {
                     var notification = new Notification('Notification title', {
                         icon: 'https://rbe-network.org/static/img/logo.png',
-                        body: user + ": " + message,
+                        body: user + ": " + message
                     });
                 }
 
@@ -89,27 +89,11 @@
                 $('.chat').prepend('<li>reconnecting</li>')
             });
 
-            function formatted_now() {
-                var now = new Date();
-
-                var minutes = now.getMinutes();
-                if (minutes < 10) {
-                    minutes = '0' + minutes;
-                }
-
-                var hours = now.getHours();
-                if (hours < 10) {
-                    hours = '0' + hours;
-                }
-
-                return now.toDateString() + ' ' + hours + ":" + minutes;
-            }
-
             socket_wrapper.on('user_joined', function (payload) {
                 var $element = $('#blueprint').find('li').clone();
                 $element.find('.message_text').html('User ' + payload.user + ' joined.');
                 $element.find('.message_user').html('ChatRoom');
-                $element.find('.message_time').html(formatted_now());
+                $element.find('.message_time').html(payload.time);
 
                 $('.chat').prepend($element)
             })
@@ -118,7 +102,7 @@
                 var $element = $('#blueprint').find('li').clone();
                 $element.find('.message_text').html('User ' + payload.user + ' left.');
                 $element.find('.message_user').html('ChatRoom');
-                $element.find('.message_time').html(formatted_now());
+                $element.find('.message_time').html(payload.time);
 
                 $('.chat').prepend($element)
             });
@@ -127,7 +111,7 @@
                 var $element = $('#blueprint').find('li').clone();
                 $element.find('.message_text').html(payload.message)
                 $element.find('.message_user').html(payload.user)
-                $element.find('.message_time').html(formatted_now())
+                $element.find('.message_time').html(payload.sent_time)
                 $('.chat').prepend($element)
                 notify_chat_message(payload.user, payload.message);
             });

@@ -3,7 +3,9 @@
  */
 
 function connect_socket(protocol, uri, port, onopen) {
-    var socket = new ReconnectingWebSocket(protocol + "://" + window.location.host + ':' + port + uri);
+    var connect_url = protocol + "://" + window.location.hostname + ':' + port + uri;
+    console.log(connect_url)
+    var socket = new ReconnectingWebSocket(connect_url);
     var message_handlers = {};
 
     socket.onopen = function() {
