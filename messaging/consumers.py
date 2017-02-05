@@ -33,7 +33,6 @@ def ws_connect(message):
         })
     })
 
-
 @channel_session_user
 def ws_message(message):
     try:
