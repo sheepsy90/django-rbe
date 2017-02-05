@@ -98,7 +98,7 @@
 
             }
 
-            var socket_wrapper = connect_socket('ws', '/chat/', '8000', function (socket) {
+            var socket_wrapper = connect_socket('wss', '/chat/', '8443', function (socket) {
                 $('.chat').empty()
                 $('.chat').prepend('<li>reconnecting</li>')
             });
