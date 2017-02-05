@@ -44,7 +44,7 @@ def ws_message(message):
             cm = ChatMessage(author=message.user, message=payload.get('message'), sent_time=timezone.now())
             cm.save()
 
-            Group("chat-%s" % room).send(cm.as_payload)
+            Group("chat-%s" % room).send(cm.as_payload())
 
     except Exception as e:
         print "Exception"
